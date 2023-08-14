@@ -1,0 +1,29 @@
+# Maven target directory
+target/
+
+# JetBrains IDE configuration
+.idea/
+
+# Eclipse IDE configuration
+.classpath
+.project
+.settings/
+
+# Spring Boot properties
+application.properties
+
+# IDE specific files
+*.iml
+*.ipr
+*.iws
+
+# Compiled Java classes
+*.class
+
+# Logs
+logs/
+*.log
+
+# Maven Wrapper executable
+mvnw
+mvnw.cmd
