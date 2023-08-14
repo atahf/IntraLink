@@ -2,7 +2,7 @@ package com.atahf.IntraLink.user;
 
 import com.atahf.IntraLink.user.userDto.UserInfoDto;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

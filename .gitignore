@@ -9,9 +9,6 @@ target/
 .project
 .settings/
 
-# Spring Boot properties
-application.properties
-
 # IDE specific files
 *.iml
 *.ipr

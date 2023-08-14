@@ -2,7 +2,7 @@ package com.atahf.IntraLink.ticket;
 
 import com.atahf.IntraLink.ticket.ticketDto.NewAnonTicketDto;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
