@@ -4,4 +4,4 @@ This project aims to provide a web portal to gather and combine all needs of a c
 
 To view backend code of this project you can visit [Backend branch](../../tree/Backend).
 
-To view frontend code of this project you can visit [Backend branch](../../tree/Frontend).
+To view frontend code of this project you can visit [Frontend branch](../../tree/Frontend).
