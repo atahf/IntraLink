@@ -14,7 +14,7 @@
 	<name>IntraLink</name>
 	<description>IntraLink wep portal for companies</description>
 	<properties>
-		<java.version>1.8</java.version>
+		<java.version>11</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
