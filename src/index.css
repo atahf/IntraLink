@@ -9,44 +9,11 @@ code {
 		font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-/*	Home Page	*/
-.home-container {
+/*	Login Page	*/
+.login-container {
 	display: flex;
-	flex-direction: column;
+	justify-content: center;
 	align-items: center;
-	justify-content: flex-start;
-	padding: 20px;
-}
-
-.header {
-	width: 100%;
-	display: flex;
-	justify-content: flex-end;
-	padding: 10px 0;
-	background-color: #f0f0f0;
-}
-
-.nav-list {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
-
-.nav-list li {
-	margin-right: 10px;
-}
-
-.main-content {
-	max-width: 800px;
-	margin: 20px auto;
-	text-align: center;
-}
-
-.main-content h1 {
-	font-size: 2em;
-	margin-bottom: 10px;
-}
-
-.main-content p {
-	font-size: 1.2em;
+	height: 100vh; /* Adjust if needed */
+	background-color: rgb(48, 126, 190);
 }
