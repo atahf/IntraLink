@@ -28,13 +28,7 @@ public class TicketService {
 
     @Transactional
     public void newTicket(NewTicketDto newTicketDto) throws Exception {
-        User user = userDao.findUserById(newTicketDto.getUserID());
-
-        if(user == null) throw new Exception("User Does Not Exist!");
-
-        NewAnonTicketDto newTicket = new NewAnonTicketDto(newTicketDto, user);
-        Ticket newUser = new Ticket(newTicket);
-        ticketDao.save(newUser);
+        // TODO: implement adding new ticket
     }
 
     @Transactional

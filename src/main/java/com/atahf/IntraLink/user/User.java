@@ -1,28 +1,37 @@
 package com.atahf.IntraLink.user;
 
-import com.atahf.IntraLink.user.userDto.UserInfoDto;
-
-import javax.persistence.*;
-
+import com.atahf.IntraLink.security.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import javax.persistence.*;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
-@Getter
 @Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String username;
+    private String password;
+    private String role;
+    private Boolean isAccountNonExpired;
+    private Boolean isAccountNonLocked;
+    private Boolean isCredentialsNonExpired;
+    private Boolean isEnabled;
     private String firstName;
     private String lastName;
     private String email;
@@ -35,28 +44,30 @@ public class User {
     private String address;
     @Lob
     private byte[] profilePicture;
-    private Boolean active;
-    private Boolean passwordIsSet;
-    private String password;
-    private LocalDateTime passwordValid;
-    private String permissions;
+    private LocalDateTime credentialsExpiration;
 
-    public User(UserInfoDto userInfoDto) {
-        this.firstName = userInfoDto.getFirstName();
-        this.lastName = userInfoDto.getLastName();
-        this.email = userInfoDto.getEmail();
-        this.department = userInfoDto.getDepartment();
-        this.title = userInfoDto.getTitle();
-        this.age = userInfoDto.getAge();
-        this.birthdate = userInfoDto.getBirthdate();
-        this.gender = userInfoDto.getGender();
-        this.phoneNumber = userInfoDto.getPhoneNumber();
-        this.address = userInfoDto.getAddress();
-        this.profilePicture = userInfoDto.getProfilePicture();
-        this.active = userInfoDto.getActive();
-        this.passwordIsSet = userInfoDto.getPasswordIsSet();
-        this.password = userInfoDto.getPassword();
-        this.passwordValid = userInfoDto.getPasswordValid();
-        this.permissions = userInfoDto.getPermissions();
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return UserRole.valueOf(role).getGrantedAuthorities();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return isAccountNonExpired;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return isAccountNonLocked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return isCredentialsNonExpired;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return isEnabled;
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
-@RequestMapping("api/v1/user")
+@RequestMapping("/")
 public class UserController {
 
     private final UserService userService;
@@ -16,4 +16,10 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
+
+    @GetMapping("/")
+    public String test1() {
+        return "TEST";
+    }
+
 }

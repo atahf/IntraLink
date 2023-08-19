@@ -1,0 +1,16 @@
+package com.atahf.IntraLink.security;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
+public enum UserPermission {
+    USER_ADD("user:add"),
+    USER_READ("user:read"),
+    USER_EDIT("user:edit"),
+    USER_DELETE("user:delete");
+
+
+    private final String permission;
+}
