@@ -8,6 +8,7 @@ import CustomNavbar from './components/Navbar';
 import Home from './routes/Home';
 import Login from './routes/Login';
 import Profile from './routes/Profile';
+import Ticket from './routes/Ticket';
 
 function App() {
 	const { jwtToken } = useAuthContext();
@@ -29,6 +30,10 @@ function App() {
 						<Route 
 							path="/profile" 
 							element={jwtToken ? <Profile /> : <Navigate to="/login" />}
+						/>
+						<Route 
+							path="/ticket" 
+							element={<Ticket />}
 						/>
 					</Routes>
 				</div>

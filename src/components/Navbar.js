@@ -32,6 +32,7 @@ const CustomNavbar = () => {
 						)}
 						{jwtToken && (
 							<Nav className="ms-auto">
+								<Nav.Link href="/ticket">Ticket</Nav.Link>
 								<Nav.Link href="/profile">{getUsername()}</Nav.Link>
 								<Button onClick={handleLogout}>Logout</Button>
 							</Nav>
@@ -43,7 +44,7 @@ const CustomNavbar = () => {
 						)}
 						{!jwtToken && (
 							<Nav className="ms-auto">
-								<Nav.Link href="#">Support</Nav.Link>
+								<Nav.Link href="/ticket">Ticket</Nav.Link>
 								<Nav.Link href="/login">Login</Nav.Link>
 							</Nav>
 						)}
