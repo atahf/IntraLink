@@ -1,9 +1,8 @@
 package com.atahf.IntraLink.ticket;
 
-import com.atahf.IntraLink.ticket.ticketDto.NewAnonTicketDto;
 import com.atahf.IntraLink.ticket.ticketDto.NewTicketDto;
 
-import com.atahf.IntraLink.user.User;
+import com.atahf.IntraLink.ticket.ticketDto.TicketDto;
 import com.atahf.IntraLink.user.UserDao;
 
 import org.springframework.stereotype.Service;
@@ -21,23 +20,33 @@ public class TicketService {
     }
 
     @Transactional
-    public void newAnonTicket(NewAnonTicketDto newAnonTicketDto) {
-        Ticket newUser = new Ticket(newAnonTicketDto);
-        ticketDao.save(newUser);
+    public void addTicket(NewTicketDto newTicketDto) throws Exception {
+        Ticket newTicket = new Ticket(newTicketDto);
+
+        Ticket dup = ticketDao.findTicketBySubjectAndAndDescriptionAndUsername(
+                newTicket.getSubject(),
+                newTicket.getDescription(),
+                newTicket.getUsername());
+        if(dup != null) throw new Exception("This Ticket Already Exists!");
+
+        ticketDao.save(newTicket);
     }
 
     @Transactional
-    public void newTicket(NewTicketDto newTicketDto) throws Exception {
-        // TODO: implement adding new ticket
-    }
-
-    @Transactional
-    public void remove_ticket(Long ticketID) throws Exception {
+    public void removeTicket(Long ticketID) throws Exception {
         Ticket ticket = ticketDao.findTicketById(ticketID);
 
         if(ticket == null) throw new Exception("Ticket Not Found!");
 
         ticketDao.delete(ticket);
+    }
+
+    public TicketDto getTicket(Long ticketID) throws Exception {
+        Ticket ticket = ticketDao.findTicketById(ticketID);
+
+        if(ticket == null) throw new Exception("Ticket Not Found!");
+
+        return new TicketDto(ticket);
     }
 
 }

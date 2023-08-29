@@ -1,6 +1,7 @@
 package com.atahf.IntraLink.user;
 
 import com.atahf.IntraLink.security.UserRole;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,6 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -42,8 +42,7 @@ public class User implements UserDetails {
     private String gender;
     private String phoneNumber;
     private String address;
-    @Lob
-    private byte[] profilePicture;
+    private String profilePicture;
     private LocalDateTime credentialsExpiration;
 
     @Override

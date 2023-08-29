@@ -12,8 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class NewTicketDto {
-
-    private Long userID;
+    private String username;
     private String subject;
     private String description;
     private LocalDateTime submission_date;

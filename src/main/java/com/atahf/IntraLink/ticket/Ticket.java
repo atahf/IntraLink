@@ -1,9 +1,8 @@
 package com.atahf.IntraLink.ticket;
 
-import com.atahf.IntraLink.ticket.ticketDto.NewAnonTicketDto;
-
 import javax.persistence.*;
 
+import com.atahf.IntraLink.ticket.ticketDto.NewTicketDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,22 +21,17 @@ public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String firstName;
-    private String lastName;
-    private String phoneNumber;
-    private String email;
+    private String username;
     private String subject;
     private String description;
     private LocalDateTime submission_date;
+    private boolean handled;
 
-    Ticket(NewAnonTicketDto newAnonTicketDto) {
-        this.firstName = newAnonTicketDto.getFirstName();
-        this.lastName = newAnonTicketDto.getLastName();
-        this.phoneNumber = newAnonTicketDto.getPhoneNumber();
-        this.email = newAnonTicketDto.getEmail();
-        this.subject = newAnonTicketDto.getSubject();
-        this.description = newAnonTicketDto.getDescription();
-        this.submission_date = newAnonTicketDto.getSubmission_date();
+    public Ticket(NewTicketDto newTicketDto) {
+        this.username = newTicketDto.getUsername();
+        this.subject = newTicketDto.getSubject();
+        this.description = newTicketDto.getDescription();
+        this.submission_date = newTicketDto.getSubmission_date();
+        this.handled = false;
     }
 }

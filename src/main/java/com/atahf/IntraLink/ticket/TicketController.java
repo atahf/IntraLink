@@ -1,8 +1,8 @@
 package com.atahf.IntraLink.ticket;
 
+import com.atahf.IntraLink.ticket.ticketDto.TicketDto;
 import com.atahf.IntraLink.utils.GeneralHttpResponse;
 
-import com.atahf.IntraLink.ticket.ticketDto.NewAnonTicketDto;
 import com.atahf.IntraLink.ticket.ticketDto.NewTicketDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,37 +20,24 @@ public class TicketController {
         this.ticketService = ticketService;
     }
 
-    @PostMapping("/anon_ticket")
-    public GeneralHttpResponse<String> submitAnonTicket(@RequestBody NewAnonTicketDto newAnonTicketDto) {
-        GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", "Successfully Submitted new Ticket!");
+    @GetMapping("{ticketId}")
+    public GeneralHttpResponse<TicketDto> getTicket(@PathVariable Long ticketId) {
+        GeneralHttpResponse<TicketDto> response = new GeneralHttpResponse<>("200", null);
         try {
-            ticketService.newAnonTicket(newAnonTicketDto);
+            response.setReturnObject(ticketService.getTicket(ticketId));
         }
         catch (Exception e) {
-            response.setStatus("400");
-            response.setReturnObject(e.getMessage());
+            response.setStatus("400: " + e.getMessage());
         }
         return response;
     }
 
-    @PostMapping("/ticket")
-    public GeneralHttpResponse<String> submitAnonTicket(@RequestBody NewTicketDto newTicketDto) {
-        GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", "Successfully Submitted new Ticket!");
+    @PostMapping("submit")
+    public GeneralHttpResponse<String> submitTicket(@RequestBody NewTicketDto newTicketDto) {
+        GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", null);
         try {
-            ticketService.newTicket(newTicketDto);
-        }
-        catch (Exception e) {
-            response.setStatus("400");
-            response.setReturnObject(e.getMessage());
-        }
-        return response;
-    }
-
-    @PostMapping("/rem_ticket")
-    public GeneralHttpResponse<String> removeTicket(@RequestBody Long userID) {
-        GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", "Successfully Removed the Ticket!");
-        try {
-            ticketService.remove_ticket(userID);
+            ticketService.addTicket(newTicketDto);
+            response.setReturnObject("Successfully Submitted new Ticket!");
         }
         catch (Exception e) {
             response.setStatus("400");

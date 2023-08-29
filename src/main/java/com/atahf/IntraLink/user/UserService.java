@@ -1,11 +1,15 @@
 package com.atahf.IntraLink.user;
 
+import com.atahf.IntraLink.user.UserDto.ChangePassword;
+import com.atahf.IntraLink.user.UserDto.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 
@@ -28,5 +32,63 @@ public class UserService implements UserDetailsService {
         if(user == null) throw new UsernameNotFoundException(String.format("Username %s not found", username));
 
         return user;
+    }
+
+    public UserInfo getUser(String username) throws Exception {
+        User user = userDao.findUserByUsername(username);
+        if(user == null) throw new Exception("User Does Not Exist!");
+
+        return new UserInfo(user);
+    };
+
+    @Transactional
+    public void changePassword(ChangePassword changePassword) throws Exception {
+        User user = userDao.findUserByUsername(changePassword.getUsername());
+        if(user == null) throw new Exception("User Does Not Exist!");
+
+        user.setPassword(passwordEncoder.encode(changePassword.getPassword()));
+    }
+
+    @Transactional
+    public void resetPassword(String username) throws Exception {
+        User user = userDao.findUserByUsername(username);
+        if(user == null) throw new Exception("User Does Not Exist!");
+
+        // TODO: send email to user for accepting temporary password
+    }
+
+    @Transactional
+    public void setProfilePicture(String username, String fileName) throws Exception {
+        User user = userDao.findUserByUsername(username);
+        if(user == null) throw new Exception("User Does Not Exist!");
+
+        user.setProfilePicture(fileName);
+    }
+
+    @Transactional
+    public void removeProfilePicture(String username) throws Exception {
+        User user = userDao.findUserByUsername(username);
+        if(user == null) throw new Exception("User Does Not Exist!");
+
+        user.setProfilePicture(null);
+    }
+
+    public String getProfilePicture(String username) throws Exception {
+        User user = userDao.findUserByUsername(username);
+        if(user == null) throw new Exception("User Does Not Exist!");
+
+        return user.getProfilePicture();
+    }
+
+    @Transactional
+    @PostConstruct
+    public void testRun() {
+        User ata = new User();
+        ata.setIsEnabled(true);
+        ata.setIsCredentialsNonExpired(true);
+        ata.setIsAccountNonExpired(true);
+        ata.setIsAccountNonExpired(true);
+        ata.setPassword(passwordEncoder.encode("atta2001"));
+        ata.setUsername("atahf");
     }
 }

@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 public interface TicketDao extends JpaRepository<Ticket,Long> {
 
     Ticket findTicketById(Long id);
+
+    Ticket findTicketBySubjectAndAndDescriptionAndUsername(String subject, String description, String username);
 }
