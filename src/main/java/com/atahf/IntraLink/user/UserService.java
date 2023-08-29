@@ -83,12 +83,17 @@ public class UserService implements UserDetailsService {
     @Transactional
     @PostConstruct
     public void testRun() {
-        User ata = new User();
-        ata.setIsEnabled(true);
-        ata.setIsCredentialsNonExpired(true);
-        ata.setIsAccountNonExpired(true);
-        ata.setIsAccountNonExpired(true);
-        ata.setPassword(passwordEncoder.encode("atta2001"));
-        ata.setUsername("atahf");
+        User user = userDao.findUserByUsername("atahf");
+        if(user == null) {
+            User ata = new User();
+            ata.setIsEnabled(true);
+            ata.setIsCredentialsNonExpired(true);
+            ata.setIsAccountNonExpired(true);
+            ata.setIsAccountNonExpired(true);
+            ata.setPassword(passwordEncoder.encode("atta2001"));
+            ata.setUsername("atahf");
+
+            userDao.save(ata);
+        }
     }
 }
