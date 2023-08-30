@@ -1,7 +1,17 @@
+const herokuURL = 'https://intralinkk-4f8233098a40.herokuapp.com';
+
 export const getLoginURL = () => {
-    return 'https://intralinkk-4f8233098a40.herokuapp.com/login';
+    return herokuURL + '/login';
 };
 
-export const getAnonTicketURL = () => {
-    return '';
+export const getUserDataURL = (username) => {
+    return herokuURL + '/api/v1/user/' + username;
+};
+
+export const getUploadURL = () => {
+    return herokuURL + '/upload';
+};
+
+export const getDownloadURL = (fileName) => {
+    return herokuURL + '/download/' + fileName;
 };
