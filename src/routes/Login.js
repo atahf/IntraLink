@@ -31,7 +31,7 @@ const Login = () => {
                             type="text" 
                             placeholder="Enter username" 
                             required 
-                            autoComplete='true' 
+                            autoComplete='true'
                             value={username} 
                             onChange={(e) => {setUsername(e.target.value)}}
                         />

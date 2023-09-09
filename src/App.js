@@ -6,6 +6,7 @@ import { useAuthContext } from './hooks/useAuthContext';
 import CustomNavbar from './components/Navbar';
 
 import Home from './routes/Home';
+import UserHome from './routes/UserHome';
 import Login from './routes/Login';
 import Profile from './routes/Profile';
 import Ticket from './routes/Ticket';
@@ -21,7 +22,7 @@ function App() {
 					<Routes>
 						<Route 
 							path="/" 
-							element={<Home />}
+							element={jwtToken ? <UserHome /> : <Home />}
 						/>
 						<Route 
 							path="/login" 
@@ -33,7 +34,7 @@ function App() {
 						/>
 						<Route 
 							path="/ticket" 
-							element={<Ticket />}
+							element={jwtToken ? <Ticket /> : <Navigate to="/" />}
 						/>
 					</Routes>
 				</div>

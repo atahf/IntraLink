@@ -74,10 +74,6 @@
 	max-height: 100%;
 }
 
-.profile-container {
-    max-width: 400px;
-}
-
 .profile-spinner {
     display: flex;
     justify-content: center;
@@ -89,6 +85,17 @@
 	color: var(--text-secondary);
 	font-size: large;
 	margin-left: 5px;
+}
+
+.profile-changepassword{
+	background: var(--text-secondary);
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    border-radius: 5px;
+    margin: 0 auto;
 }
 
 /* Ticket.js */
