@@ -155,7 +155,7 @@ const Profile = () => {
                                     )}
                                 </Card.Body>
                                 <Pagination style={{margin: '15px', display: 'flex', justifyContent: 'center' }}>
-                                    <Pagination.First onClick={() => {setTaskNum(0)}}/>
+                                    <Pagination.First onClick={() => {setTaskNum(0)}} disabled={taskNum === 0}/>
                                     <Pagination.Prev onClick={() => {setTaskNum(taskNum-1)}} disabled={taskNum-1 < 0}/>
 
                                     {tasks.map((task, index) => {
@@ -178,7 +178,7 @@ const Profile = () => {
                                     })}
 
                                     <Pagination.Next onClick={() => {setTaskNum(taskNum+1)}} disabled={taskNum+1 > tasks.length-1}/>
-                                    <Pagination.Last onClick={() => {setTaskNum(tasks.length-1)}}/>
+                                    <Pagination.Last onClick={() => {setTaskNum(tasks.length-1)}} disabled={taskNum === tasks.length-1}/>
                                 </Pagination>
                             </Card>
                         </Col>
@@ -190,36 +190,3 @@ const Profile = () => {
 }
  
 export default Profile;
-
-
-/*
-                            <Accordion defaultActiveKey="0">
-                                {tasks.map((task, index) => (
-                                    <Accordion.Item eventKey={index} key={index}>
-                                    <Accordion.Header>
-                                        {task.subject}
-                                    </Accordion.Header>
-                                    <Accordion.Body>
-                                        Issued By: {task.issuer} <br />
-                                        Issued Date: {task.issueDate} <br />
-                                        Deadline Date: {task.deadlineDate} <br /><br />
-                                        {task.text}
-                                    </Accordion.Body>
-                                    </Accordion.Item>
-                                ))}
-                            </Accordion>
-*/
-
-
-/*
-                            {tasks[taskNum] && (
-                                <card>
-                                    <Card.Body>
-                                        Issued By: {tasks[taskNum].issuer} <br />
-                                        Issued Date: {tasks[taskNum].issueDate} <br />
-                                        Deadline Date: {tasks[taskNum].deadlineDate} <br /><br />
-                                        {tasks[taskNum].text}
-                                    </Card.Body>
-                                </card>
-                            )}
-*/
