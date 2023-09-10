@@ -3,6 +3,8 @@ package com.atahf.IntraLink.user;
 import com.atahf.IntraLink.user.UserDto.ChangePassword;
 import com.atahf.IntraLink.user.UserDto.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -34,15 +36,25 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public UserInfo getUser(String username) throws Exception {
+    public UserInfo getUser(String username, String submitter) throws Exception {
         User user = userDao.findUserByUsername(username);
         if(user == null) throw new Exception("User Does Not Exist!");
+
+        if(!username.equals(submitter)) {
+            User submitterUser = userDao.findUserByUsername(submitter);
+            if(submitterUser == null) throw new Exception("Submitter User Does Not Exist!");
+
+            if(!submitterUser.getAuthorities().contains(new SimpleGrantedAuthority("user:read"))) throw new Exception("Submitter User Does Not Have Permission!");
+        }
+        else{
+            System.out.println("permissions: |" + user.getAuthorities() + "|");
+        }
 
         return new UserInfo(user);
     };
 
     @Transactional
-    public void changePassword(ChangePassword changePassword) throws Exception {
+    public void changePassword(ChangePassword changePassword, String submitter) throws Exception {
         User user = userDao.findUserByUsername(changePassword.getUsername());
         if(user == null) throw new Exception("User Does Not Exist!");
 
@@ -80,7 +92,7 @@ public class UserService implements UserDetailsService {
         return user.getProfilePicture();
     }
 
-    @Transactional
+    /*@Transactional
     @PostConstruct
     public void testRun() {
         User user = userDao.findUserByUsername("atahf");
@@ -95,5 +107,5 @@ public class UserService implements UserDetailsService {
 
             userDao.save(ata);
         }
-    }
+    }*/
 }

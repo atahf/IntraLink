@@ -25,8 +25,7 @@ public class UserController {
     public GeneralHttpResponse<UserInfo> getUser(@PathVariable String username, Authentication authentication) {
         GeneralHttpResponse<UserInfo> userInfo = new GeneralHttpResponse<>("200", null);
         try{
-            userInfo.setReturnObject(userService.getUser(username));
-            System.out.println("username: " + authentication.getName());
+            userInfo.setReturnObject(userService.getUser(username, authentication.getName()));
         }
         catch(Exception e) {
             userInfo.setStatus("400: " + e.getMessage());
@@ -35,25 +34,11 @@ public class UserController {
     }
 
     @PostMapping("change-password")
-    public GeneralHttpResponse<String> changePassword(@RequestBody ChangePassword changePassword) {
+    public GeneralHttpResponse<String> changePassword(@RequestBody ChangePassword changePassword, Authentication authentication) {
         GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", null);
         try {
-            userService.changePassword(changePassword);
+            userService.changePassword(changePassword, authentication.getName());
             response.setReturnObject("Password Successfully Changed!");
-        }
-        catch (Exception e) {
-            response.setStatus("400");
-            response.setReturnObject(e.getMessage());
-        }
-        return response;
-    }
-
-    @PostMapping("reset-password")
-    public GeneralHttpResponse<String> resetPassword(@RequestBody String username) {
-        GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", null);
-        try {
-            userService.resetPassword(username);
-            response.setReturnObject("Password Reset Request Received!");
         }
         catch (Exception e) {
             response.setStatus("400");
