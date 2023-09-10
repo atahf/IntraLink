@@ -8,6 +8,10 @@ export const getUserDataURL = (username) => {
     return herokuURL + '/api/v1/user/' + username;
 };
 
+export const getAllTicketsDataURL = () => {
+    return herokuURL + '/api/v1/ticket/all';
+};
+
 export const getUploadURL = () => {
     return herokuURL + '/upload';
 };

@@ -1,34 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Spinner, Card, Col, Row, Button, Pagination, Form, FloatingLabel,  Modal } from 'react-bootstrap';
-import { useGetUserInfo } from '../hooks/useGet';
 import UserProfileAvatar from '../assets/user.jpg';
+import { getToken, decodeJwtToken } from '../utils/jwtTools';
+import { getUserDataURL, getDownloadURL, getAllTicketsDataURL } from '../utils/urlTools';
 
 const Profile = () => {
-    const { GET, data, picture, isLoading, error } = useGetUserInfo();
-    const [taskNum, setTaskNum] = useState(0);
-    const tasks = [
-        {
-            subject: "task1",
-            issuer: "ata",
-            issueDate: "05/09/2023",
-            deadlineDate: "10/09/2023",
-            text: "Solve Uploading Problem of File Upload System"
-        },
-        {
-            subject: "task2",
-            issuer: "ata",
-            issueDate: "05/09/2023",
-            deadlineDate: "13/09/2023",
-            text: "Design and Implement Messaging System"
-        },
-        {
-            subject: "task3",
-            issuer: "ata",
-            issueDate: "05/09/2023",
-            deadlineDate: "22/09/2023",
-            text: "Prepare and Submit Report"
-        },
-    ];
+    const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(null);
+    const [data, setData] = useState(null);
+    const [picture, setPicture] = useState(null);
+
+    const [ticketNum, setTicketNum] = useState(0);
+    const [tickets, setTickets] = useState(null);
 
     const [show, setShow] = useState(false);
     const [showPass, setShowPass] = useState(false);
@@ -45,12 +28,72 @@ const Profile = () => {
     }
     const handleShow = () => setShow(true);
 
-    const getUserData = async () => {
-        await GET();
+    const loadData = async () => {
+        setIsLoading(true);
+        const token = getToken();
+        const username = decodeJwtToken(token).sub
+        fetch(getUserDataURL(username), {
+            method: 'GET',
+            headers: {
+                'Authorization': token
+            }
+        })
+            .then(response => response.json())
+            .then(jsonData => {
+                setData(jsonData.returnObject);
+                
+                /*if(!data.profilePicture) {
+                    setIsLoading(false);
+                    return;
+                }*/
+
+                fetch(getAllTicketsDataURL(), {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': token
+                    }
+                })
+                    .then(response => response.json())
+                    .then(jsonData => {
+                        setTickets(jsonData.returnObject);
+                        setIsLoading(false);
+                        return;
+                    })
+                    .catch(error => {
+                        setError(error);
+                        setIsLoading(false);
+                        return;
+                    });
+                        
+
+                /*fetch(getDownloadURL(data.profilePicture), {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': token
+                    }
+                })
+                
+                    .then(response => response.blob())
+                    .then(imageResponse => {
+                        setPicture(imageResponse);
+                        setIsLoading(false);
+                        return;
+                    })
+                    .catch(error => {
+                        setError(error);
+                        setIsLoading(false);
+                        return;
+                    });*/
+            })
+            .catch(error => {
+                setError(error);
+                setIsLoading(false);
+                return;
+            });
     };
 
     useEffect(() => {
-        getUserData();
+        loadData();
     }, []);
 
     return (
@@ -122,7 +165,7 @@ const Profile = () => {
                         <div className='profile-sprinner-text'>Loading...</div>
                     </div>
                 )}
-                {!isLoading && data && (
+                {!isLoading && data && tickets && (
                     <Row>
                         <Col xs={6} md={4}>
                             <Card>
@@ -143,31 +186,33 @@ const Profile = () => {
                         <Col xs={6} md={8}>
                             <Card style={{ height: '100%' }}>
                                 <Card.Body>
-                                    {tasks[taskNum] && (
+                                    {tickets[ticketNum] && (
                                         <Card.Text style={{ padding: '0px 40px', textTransform: 'capitalize' }}>
                                             <Container>
-                                                Issued By: {tasks[taskNum].issuer} <br />
-                                                Issued Date: {tasks[taskNum].issueDate} <br />
-                                                Deadline Date: {tasks[taskNum].deadlineDate} <br /><br />
-                                                {tasks[taskNum].text}
+                                                Submitted By: {tickets[ticketNum].username} <br />
+                                                Submission Date: {tickets[ticketNum].submissionDate} <br />
+                                                Ticket ID: {tickets[ticketNum].id} <br />
+                                                Status: {tickets[ticketNum].handled} <br />
+                                                Subject: {tickets[ticketNum].subject} <br /><br />
+                                                {tickets[ticketNum].description}
                                             </Container>
                                         </Card.Text>
                                     )}
                                 </Card.Body>
                                 <Pagination style={{margin: '15px', display: 'flex', justifyContent: 'center' }}>
-                                    <Pagination.First onClick={() => {setTaskNum(0)}} disabled={taskNum === 0}/>
-                                    <Pagination.Prev onClick={() => {setTaskNum(taskNum-1)}} disabled={taskNum-1 < 0}/>
+                                    <Pagination.First onClick={() => {setTicketNum(0)}} disabled={ticketNum === 0}/>
+                                    <Pagination.Prev onClick={() => {setTicketNum(ticketNum-1)}} disabled={ticketNum-1 < 0}/>
 
-                                    {tasks.map((task, index) => {
-                                        const startIndex = Math.max(0, taskNum - 2);
-                                        const endIndex = Math.min(tasks.length, taskNum + 3);
+                                    {tickets.map((task, index) => {
+                                        const startIndex = Math.max(0, ticketNum - 2);
+                                        const endIndex = Math.min(tickets.length, ticketNum + 3);
 
                                         if (index >= startIndex && index < endIndex) {
                                             return (
                                                 <Pagination.Item
                                                     key={index}
-                                                    active={index === taskNum}
-                                                    onClick={() => setTaskNum(index)}
+                                                    active={index === ticketNum}
+                                                    onClick={() => setTicketNum(index)}
                                                 >
                                                     {index+1}
                                                 </Pagination.Item>
@@ -177,8 +222,8 @@ const Profile = () => {
                                         return null;
                                     })}
 
-                                    <Pagination.Next onClick={() => {setTaskNum(taskNum+1)}} disabled={taskNum+1 > tasks.length-1}/>
-                                    <Pagination.Last onClick={() => {setTaskNum(tasks.length-1)}} disabled={taskNum === tasks.length-1}/>
+                                    <Pagination.Next onClick={() => {setTicketNum(ticketNum+1)}} disabled={ticketNum+1 > tickets.length-1}/>
+                                    <Pagination.Last onClick={() => {setTicketNum(tickets.length-1)}} disabled={ticketNum === tickets.length-1}/>
                                 </Pagination>
                             </Card>
                         </Col>
