@@ -1,6 +1,6 @@
 package com.atahf.IntraLink.user;
 
-import com.atahf.IntraLink.logs.LogService;
+import com.atahf.IntraLink.userLogs.LogService;
 import com.atahf.IntraLink.user.UserDto.ChangePassword;
 import com.atahf.IntraLink.user.UserDto.UserInfo;
 import com.atahf.IntraLink.utils.GeneralHttpResponse;

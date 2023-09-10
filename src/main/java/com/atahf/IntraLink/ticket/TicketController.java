@@ -1,6 +1,6 @@
 package com.atahf.IntraLink.ticket;
 
-import com.atahf.IntraLink.logs.LogService;
+import com.atahf.IntraLink.userLogs.LogService;
 import com.atahf.IntraLink.user.UserService;
 import com.atahf.IntraLink.utils.GeneralHttpResponse;
 import org.springframework.security.core.Authentication;
