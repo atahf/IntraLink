@@ -4,6 +4,7 @@ import com.atahf.IntraLink.ticket.ticketDto.NewTicketDto;
 import com.atahf.IntraLink.user.UserDto.ChangePassword;
 import com.atahf.IntraLink.user.UserDto.UserInfo;
 import com.atahf.IntraLink.utils.GeneralHttpResponse;
+import org.springframework.security.core.Authentication;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +22,11 @@ public class UserController {
     }
 
     @GetMapping("{username}")
-    public GeneralHttpResponse<UserInfo> getUser(@PathVariable String username) {
+    public GeneralHttpResponse<UserInfo> getUser(@PathVariable String username, Authentication authentication) {
         GeneralHttpResponse<UserInfo> userInfo = new GeneralHttpResponse<>("200", null);
         try{
             userInfo.setReturnObject(userService.getUser(username));
+            System.out.println("username: " + authentication.getName());
         }
         catch(Exception e) {
             userInfo.setStatus("400: " + e.getMessage());
