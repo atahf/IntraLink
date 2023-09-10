@@ -27,6 +27,17 @@ public class UserService implements UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    public boolean hasPermission(String username, String permission) throws Exception {
+        User user = userDao.findUserByUsername(username);
+        if(user == null) throw new Exception("User Does Not Exist!");
+
+        return user.getAuthorities().contains(new SimpleGrantedAuthority(permission));
+    }
+
+    public boolean userExist(String username) {
+        return null != userDao.findUserByUsername(username);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userDao.findUserByUsername(username);
@@ -40,15 +51,7 @@ public class UserService implements UserDetailsService {
         User user = userDao.findUserByUsername(username);
         if(user == null) throw new Exception("User Does Not Exist!");
 
-        if(!username.equals(submitter)) {
-            User submitterUser = userDao.findUserByUsername(submitter);
-            if(submitterUser == null) throw new Exception("Submitter User Does Not Exist!");
-
-            if(!submitterUser.getAuthorities().contains(new SimpleGrantedAuthority("user:read"))) throw new Exception("Submitter User Does Not Have Permission!");
-        }
-        else{
-            System.out.println("permissions: |" + user.getAuthorities() + "|");
-        }
+        if(!username.equals(submitter) && !hasPermission(submitter, "user:read")) throw new Exception("Submitter User Does Not Have Permission!");
 
         return new UserInfo(user);
     };
@@ -57,6 +60,8 @@ public class UserService implements UserDetailsService {
     public void changePassword(ChangePassword changePassword, String submitter) throws Exception {
         User user = userDao.findUserByUsername(changePassword.getUsername());
         if(user == null) throw new Exception("User Does Not Exist!");
+
+        if(!changePassword.getUsername().equals(submitter) && hasPermission(submitter, "user:edit")) throw new Exception("Submitter User Does Not Have Permission!");
 
         user.setPassword(passwordEncoder.encode(changePassword.getPassword()));
     }

@@ -9,7 +9,12 @@ public enum UserPermission {
     USER_ADD("user:add"),
     USER_READ("user:read"),
     USER_EDIT("user:edit"),
-    USER_DELETE("user:delete");
+    USER_DELETE("user:delete"),
+    TICKET_ADD("ticket:add"),
+    TICKET_READ("ticket:read"),
+    TICKET_HANDLE("ticket:handle"),
+    TICKET_REMOVE("ticket:remove"),
+    LOG_READ("log:read");
 
 
     private final String permission;

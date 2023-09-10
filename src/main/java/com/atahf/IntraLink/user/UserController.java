@@ -1,6 +1,6 @@
 package com.atahf.IntraLink.user;
 
-import com.atahf.IntraLink.ticket.ticketDto.NewTicketDto;
+import com.atahf.IntraLink.logs.LogService;
 import com.atahf.IntraLink.user.UserDto.ChangePassword;
 import com.atahf.IntraLink.user.UserDto.UserInfo;
 import com.atahf.IntraLink.utils.GeneralHttpResponse;
@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final LogService logService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, LogService logService) {
         this.userService = userService;
+        this.logService = logService;
     }
 
     @GetMapping("{username}")
@@ -26,6 +28,8 @@ public class UserController {
         GeneralHttpResponse<UserInfo> userInfo = new GeneralHttpResponse<>("200", null);
         try{
             userInfo.setReturnObject(userService.getUser(username, authentication.getName()));
+
+            logService.addLog(authentication.getName(), "accessed User Info with username of " + username);
         }
         catch(Exception e) {
             userInfo.setStatus("400: " + e.getMessage());
@@ -39,6 +43,8 @@ public class UserController {
         try {
             userService.changePassword(changePassword, authentication.getName());
             response.setReturnObject("Password Successfully Changed!");
+
+            logService.addLog(authentication.getName(), "changed password of user with username of " + changePassword.getUsername());
         }
         catch (Exception e) {
             response.setStatus("400");

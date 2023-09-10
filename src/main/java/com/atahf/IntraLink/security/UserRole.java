@@ -10,10 +10,11 @@ import java.util.stream.Collectors;
 import static com.atahf.IntraLink.security.UserPermission.*;
 
 public enum UserRole {
-    SUPER(Sets.newHashSet(USER_ADD, USER_READ, USER_EDIT, USER_DELETE)),
-    IT(Sets.newHashSet(USER_READ, USER_EDIT)),
-    HR(Sets.newHashSet(USER_ADD, USER_READ, USER_EDIT, USER_DELETE)),
-    EMPLOYEE(Sets.newHashSet());
+    SUPER(Sets.newHashSet(USER_ADD, USER_READ, USER_EDIT, USER_DELETE, TICKET_ADD, TICKET_READ, TICKET_HANDLE, TICKET_REMOVE, LOG_READ)),
+    IT(Sets.newHashSet(USER_READ, USER_EDIT, TICKET_ADD, TICKET_READ, TICKET_HANDLE)),
+    IT_ADMIN(Sets.newHashSet(USER_READ, USER_EDIT, TICKET_ADD, TICKET_READ, TICKET_HANDLE, TICKET_REMOVE, LOG_READ)),
+    HR(Sets.newHashSet(USER_ADD, USER_READ, USER_EDIT, USER_DELETE, TICKET_ADD)),
+    EMPLOYEE(Sets.newHashSet(TICKET_ADD));
 
     private final Set<UserPermission> permissions;
 
