@@ -10,5 +10,5 @@ public interface LogDao extends JpaRepository<Log,Long> {
 
     Log findLogById(Long id);
 
-    List<Log> findAllByOrderBySubmission_date();
+    List<Log> findAllByOrderBySubmissionDate();
 }

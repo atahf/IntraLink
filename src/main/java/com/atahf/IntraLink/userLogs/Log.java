@@ -20,11 +20,11 @@ public class Log {
     private Long id;
     private String username;
     private String description;
-    private LocalDateTime submission_date;
+    private LocalDateTime submissionDate;
 
     public Log(String username, String description) {
         this.username = username;
         this.description = description;
-        this.submission_date = LocalDateTime.now();
+        this.submissionDate = LocalDateTime.now();
     }
 }

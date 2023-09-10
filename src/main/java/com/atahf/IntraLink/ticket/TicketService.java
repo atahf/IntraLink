@@ -57,7 +57,7 @@ public class TicketService {
     }
 
     public List<Ticket> getTickets() throws Exception {
-        return ticketDao.findAllByOrderBySubmission_date();
+        return ticketDao.findAllByOrderBySubmissionDate();
     }
 
 }

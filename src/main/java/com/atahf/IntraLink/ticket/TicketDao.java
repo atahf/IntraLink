@@ -10,7 +10,7 @@ public interface TicketDao extends JpaRepository<Ticket,Long> {
 
     Ticket findTicketById(Long id);
 
-    List<Ticket> findAllByOrderBySubmission_date();
+    List<Ticket> findAllByOrderBySubmissionDate();
 
     Ticket findTicketBySubjectAndAndDescriptionAndUsername(String subject, String description, String username);
 }

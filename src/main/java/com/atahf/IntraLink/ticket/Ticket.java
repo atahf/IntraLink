@@ -24,14 +24,14 @@ public class Ticket {
     private String username;
     private String subject;
     private String description;
-    private LocalDateTime submission_date;
+    private LocalDateTime submissionDate;
     private boolean handled;
 
     public Ticket(NewTicketDto newTicketDto) {
         this.username = newTicketDto.getUsername();
         this.subject = newTicketDto.getSubject();
         this.description = newTicketDto.getDescription();
-        this.submission_date = newTicketDto.getSubmission_date();
+        this.submissionDate = newTicketDto.getSubmission_date();
         this.handled = false;
     }
 }

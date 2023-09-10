@@ -21,7 +21,7 @@ public class LogService {
     }
 
     public List<Log> getLogs() {
-        return logDao.findAllByOrderBySubmission_date();
+        return logDao.findAllByOrderBySubmissionDate();
     }
 
     public Log getLog(Long logId) {
