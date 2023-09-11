@@ -59,7 +59,7 @@ const Tickets = (props) => {
                                 Submitted By: {tickets[ticketNum].username} <br />
                                 Submission Date: {tickets[ticketNum].submissionDate} <br />
                                 Ticket ID: {tickets[ticketNum].id} <br />
-                                Status: {tickets[ticketNum].handled} <br />
+                                Status: {tickets[ticketNum].handled ? "" : "Not"} Resolved <br />
                                 Subject: {tickets[ticketNum].subject} <br /><br />
                                 {tickets[ticketNum].description}
                             </Container>
