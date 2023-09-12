@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Spinner, Card, Pagination } from 'react-bootstrap';
 import { getToken } from '../utils/jwtTools';
 import {  getAllTicketsDataURL } from '../utils/urlTools';
+import Loading from '../components/Loading';
 
 const Tickets = (props) => {
     const [error, setError] = useState(null);
@@ -46,10 +47,7 @@ const Tickets = (props) => {
     return (
         <Card style={style}>
             {isLoading && (
-                <div className='loading-spinner'>
-                    <Spinner animation="border" variant="light"/>
-                    <div className='loading-sprinner-text'>Loading...</div>
-                </div>
+                <Loading />
             )}
             {!isLoading && tickets && (<>
                 <Card.Body>

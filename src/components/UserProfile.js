@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Spinner, Card, Button, Form, FloatingLabel,  Modal } from 'react-bootstrap';
+import { Card, Button, Form, FloatingLabel,  Modal } from 'react-bootstrap';
 import UserProfileAvatar from '../assets/user.jpg';
 import { getToken, decodeJwtToken } from '../utils/jwtTools';
 import { getUserDataURL, getDownloadURL } from '../utils/urlTools';
+import Loading from '../components/Loading';
 
 const UserProfile = (props) => {
     const [error, setError] = useState(null);
@@ -143,10 +144,7 @@ const UserProfile = (props) => {
 
             <Card style={style}>
                 {isLoading && (
-                    <div className='loading-spinner'>
-                        <Spinner animation="border" variant="light"/>
-                        <div className='loading-sprinner-text'>Loading...</div>
-                    </div>
+                    <Loading />
                 )}
                 {!isLoading && data && (<>
                     <Card.Img variant="top" src={picture ? picture : UserProfileAvatar} alt='UserProfileAvatar' />

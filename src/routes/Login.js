@@ -1,20 +1,17 @@
 import React, { useState } from 'react';
-import { Container, Form, FloatingLabel, Button, Alert, Offcanvas } from 'react-bootstrap';
+import { Container, Form, FloatingLabel, Button, Alert, Modal } from 'react-bootstrap';
 import { useLogin } from '../hooks/useLogin';
-import { useNavigate } from 'react-router-dom';
+import Loading from '../components/Loading';
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showPass, setShowPass] = useState(false);
-    const {login, error, isLoading} = useLogin();
-    const navigate = useNavigate();
+    const [usernameModal, setUsernameModal] = useState('');
+    const [show, setShow] = useState(false);
+    const [show2, setShow2] = useState(false);
 
-    
-    const [showHint, setShowHint] = useState(false);
-    const handleCloseHint = () => setShowHint(false);
-    const handleShowHint = () => setShowHint(true);
-    const handleRedirection = () => navigate('/ticket');
+    const {login, error, isLoading} = useLogin();
 
     const handleLogin = async (event) => {
         event.preventDefault();
@@ -22,8 +19,54 @@ const Login = () => {
         await login(username, password);
     };
 
+    const handleClose = () => {
+        setUsernameModal('');
+        setShow(false);
+    }
+    const handleShow = () => setShow(true);
+
     return (
         <div className='login-page'>
+            <Modal
+                show={show}
+                onHide={handleClose}
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        Change Password
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Container>
+                        {show2 && (
+                            <Loading />
+                        )}
+                        {!show2 && (
+                            <Form onSubmit={() => {setShow2(true)}}>
+                                <Form.Group className="mb-3" controlId="login.reset-pass">
+                                    <Form.Label>
+                                        To reset your password please enter your username!
+                                    </Form.Label>
+
+                                    <Form.Control 
+                                        type="text" 
+                                        placeholder="username" 
+                                        value={usernameModal} 
+                                        onChange={(e) => {setUsernameModal(e.target.value)}}
+                                        required 
+                                            autoComplete='true'
+                                    />
+                                </Form.Group>
+
+                                <Button type='submit' onClick={() => {}}>Change</Button>
+                            </Form>
+                        )}
+                    </Container>
+                </Modal.Body>
+            </Modal>
+
             <Container fluid className='login-container'>
                 <Form className='login-form' onSubmit={handleLogin}>
                     <FloatingLabel className="mb-3" controlId="login.username" label="Username">
@@ -60,16 +103,7 @@ const Login = () => {
                         Login
                     </Button>
 
-                    <a className='login-visible-links' onClick={handleShowHint}>Forgot Password</a>
-                    <Offcanvas show={showHint} onHide={handleCloseHint} placement='bottom'>
-                        <Offcanvas.Header closeButton>
-                        </Offcanvas.Header>
-                        <Offcanvas.Body style={{textAlign:'center'}}>
-                            If you have forgotten your password, you may submit a ticket to change your password.
-                            <br/>
-                            Click <a className='login-visible-links' onClick={handleRedirection}>here</a> to go ticket page.
-                        </Offcanvas.Body>
-                    </Offcanvas>
+                    <a className='login-visible-links' onClick={handleShow}>Forgot Password</a>
 
                     {error && (
                         <Alert className='login-error' variant='danger'>{error}</Alert>
