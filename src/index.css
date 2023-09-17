@@ -144,3 +144,27 @@
 	border: 1px solid black;
 	border-radius: 10px;
 }
+
+/* Navbar.js */
+.dropdown-button {
+	position: relative;
+	display: inline-block;
+}
+
+.dropdown-content {
+	display: none;
+	position: absolute;
+	background-color: #f9f9f9;
+	min-width: 100%;
+	max-width: -moz-fit-content;
+	max-width: fit-content;
+	padding: 3px 5px;
+	margin: 5px auto;
+	white-space: nowrap;
+	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+	z-index: 1;
+}
+
+.dropdown-button.hovered .dropdown-content {
+	display: block;
+}

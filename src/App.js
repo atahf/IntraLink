@@ -3,7 +3,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthContext } from './hooks/useAuthContext';
 
-import { decodeJwtToken } from './utils/jwtTools';
+import { decodeJwtToken, hasPermission } from './utils/jwtTools';
 
 import CustomNavbar from './components/Navbar';
 
@@ -17,26 +17,10 @@ import NewUser from './routes/NewUser';
 function App() {
 	const { jwtToken } = useAuthContext();
 
-	const hasPermission = (neededPerm) => {
-		if(!jwtToken) {
-			return false;
-		}
-
-		const userPerms = decodeJwtToken(jwtToken).authorities;
-		
-		for(var i in userPerms) {
-			if(userPerms[i].authority === neededPerm) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
 	return (
 		<div className='App'>
 			<BrowserRouter>
-				<CustomNavbar />
+				<CustomNavbar perms={jwtToken ? decodeJwtToken(jwtToken).authorities : null}/>
 				<div className='pages'>
 					<Routes>
 						<Route 
@@ -57,7 +41,7 @@ function App() {
 						/>
 						<Route 
 							exact path="/new-user" 
-							element={hasPermission("user:add") ? <NewUser /> : <Navigate to="/" />}
+							element={hasPermission("user:add", jwtToken) ? <NewUser /> : <Navigate to="/" />}
 						/>
 					</Routes>
 				</div>

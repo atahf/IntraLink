@@ -1,4 +1,7 @@
 export const decodeJwtToken = (jwtToken) => {
+    if(!jwtToken) {
+        return null;
+    }
     const base64Url = jwtToken.split('.')[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
@@ -43,3 +46,19 @@ export const getToken = () => {
 export const deleteToken = () => {
     localStorage.removeItem('jwtToken');
 };
+
+export const hasPermission = (neededPerm, jwtToken) => {
+    if(!jwtToken) {
+        return false;
+    }
+
+    const userPerms = decodeJwtToken(jwtToken).authorities;
+    
+    for(var i in userPerms) {
+        if(userPerms[i].authority === neededPerm) {
+            return true;
+        }
+    }
+
+    return false;
+}
