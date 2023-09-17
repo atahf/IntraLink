@@ -3,6 +3,8 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthContext } from './hooks/useAuthContext';
 
+import { decodeJwtToken } from './utils/jwtTools';
+
 import CustomNavbar from './components/Navbar';
 
 import Home from './routes/Home';
@@ -15,6 +17,22 @@ import NewUser from './routes/NewUser';
 function App() {
 	const { jwtToken } = useAuthContext();
 
+	const hasPermission = (neededPerm) => {
+		if(!jwtToken) {
+			return false;
+		}
+
+		const userPerms = decodeJwtToken(jwtToken).authorities;
+		
+		for(var i in userPerms) {
+			if(userPerms[i].authority === neededPerm) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	return (
 		<div className='App'>
 			<BrowserRouter>
@@ -22,24 +40,24 @@ function App() {
 				<div className='pages'>
 					<Routes>
 						<Route 
-							path="/" 
+							exact path="/" 
 							element={jwtToken ? <UserHome /> : <Home />}
 						/>
 						<Route 
-							path="/login" 
+							exact path="/login" 
 							element={!jwtToken ? <Login /> : <Navigate to="/" />} 
 						/>
 						<Route 
-							path="/profile" 
+							exact path="/profile" 
 							element={jwtToken ? <Profile /> : <Navigate to="/login" />}
 						/>
 						<Route 
-							path="/ticket" 
-							element={jwtToken ? <Ticket /> : <Navigate to="/" />}
+							exact path="/ticket" 
+							element={hasPermission("ticket:add") ? <Ticket /> : <Navigate to="/" />}
 						/>
 						<Route 
-							path="/new-user" 
-							element={<NewUser />}
+							exact path="/new-user" 
+							element={hasPermission("user:add") ? <NewUser /> : <Navigate to="/" />}
 						/>
 					</Routes>
 				</div>

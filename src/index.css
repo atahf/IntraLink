@@ -137,3 +137,10 @@
 .login-visible-links:hover{
 	color: var(--primary);
 }
+
+.new-user-input-box{
+	background-color: white;
+	padding: 10px;
+	border: 1px solid black;
+	border-radius: 10px;
+}

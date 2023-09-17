@@ -55,7 +55,7 @@ const Tickets = (props) => {
                         <Card.Text style={{ padding: '0px 40px', textTransform: 'capitalize' }}>
                             <Container>
                                 Submitted By: {tickets[ticketNum].username} <br />
-                                Submission Date: {tickets[ticketNum].submissionDate} <br />
+                                Submission Date: {tickets[ticketNum].submissionDate.replace("T", " ")} <br />
                                 Ticket ID: {tickets[ticketNum].id} <br />
                                 Status: {tickets[ticketNum].handled ? "" : "Not"} Resolved <br />
                                 Subject: {tickets[ticketNum].subject} <br /><br />
