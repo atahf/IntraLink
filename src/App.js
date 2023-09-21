@@ -37,7 +37,7 @@ function App() {
 						/>
 						<Route 
 							exact path="/ticket" 
-							element={hasPermission("ticket:add") ? <Ticket /> : <Navigate to="/" />}
+							element={hasPermission("ticket:add", jwtToken) ? <Ticket /> : <Navigate to="/" />}
 						/>
 						<Route 
 							exact path="/new-user" 
