@@ -35,8 +35,6 @@ public class TicketController {
             if(!userService.hasPermission(authentication.getName(), "ticket:read")) throw new Exception("User Does Not Have Permission!");
 
             response.setReturnObject(ticketService.getTickets());
-
-            logService.addLog(authentication.getName(), "accessed all Tickets");
         }
         catch (Exception e) {
             response.setStatus("400: " + e.getMessage());
@@ -51,8 +49,6 @@ public class TicketController {
             if(!userService.hasPermission(authentication.getName(), "ticket:read")) throw new Exception("User Does Not Have Permission!");
 
             response.setReturnObject(ticketService.getTicket(ticketId));
-
-            logService.addLog(authentication.getName(), "accessed Ticket with ID of " + ticketId.toString());
         }
         catch (Exception e) {
             response.setStatus("400: " + e.getMessage());

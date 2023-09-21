@@ -29,7 +29,9 @@ public class UserController {
         try{
             userInfo.setReturnObject(userService.getUser(username, authentication.getName()));
 
-            logService.addLog(authentication.getName(), "accessed User Info with username of " + username);
+            if(!username.equals(authentication.getName())) {
+                logService.addLog(authentication.getName(), "accessed User Info with username of " + username);
+            }
         }
         catch(Exception e) {
             userInfo.setStatus("400: " + e.getMessage());
