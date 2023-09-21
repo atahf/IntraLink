@@ -54,7 +54,7 @@ const CustomNavbar = (props) => {
 									Signed in as: <b>{getUsername()}</b>
 									{isHovered && (
 										<div className="dropdown-content">
-											<Nav.Link className="dropdown-content-link" href="/profie">Profile</Nav.Link>
+											<Nav.Link className="dropdown-content-link" href="/profile">Profile</Nav.Link>
 											<Nav.Link className="dropdown-content-link" href="#">Account Settings</Nav.Link>
 											<Nav.Link className="dropdown-content-link" onClick={logout}>Log Out</Nav.Link>
 										</div>

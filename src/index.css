@@ -143,6 +143,7 @@
 	padding: 10px;
 	border: 1px solid black;
 	border-radius: 10px;
+	flex-grow: 1;
 }
 
 /* Navbar.js */
@@ -179,3 +180,14 @@
 .dropdown-content-link:hover{
 	background-color: #c0c0c0;
 }
+
+.datepicker-custom-style{
+	display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.input-container {
+	display: flex;
+	flex-direction: column;
+}  

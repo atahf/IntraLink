@@ -43,6 +43,10 @@ function App() {
 							exact path="/new-user" 
 							element={hasPermission("user:add", jwtToken) ? <NewUser /> : <Navigate to="/" />}
 						/>
+						<Route 
+							path="*" 
+							element={<Navigate to="/" />} 
+						/>
 					</Routes>
 				</div>
 			</BrowserRouter>
