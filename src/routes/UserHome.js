@@ -19,12 +19,10 @@ const UserHome = () => {
                 <div className="box" onClick={() => setUrl("/tickets")}>Tickets</div>
                 <div className="box" onClick={() => setUrl("/new-user")}>New User</div>
 
-                <div className="box" onClick={() => setUrl("#")}>Box</div>
-                <div className="box" onClick={() => setUrl("#")}>Box</div>
-                <div className="box" onClick={() => setUrl("#")}>Box</div>
-                <div className="box" onClick={() => setUrl("#")}>Box</div>
-                <div className="box" onClick={() => setUrl("#")}>Box</div>
-                <div className="box" onClick={() => setUrl("#")}>Box</div>
+                <div className="box" onClick={() => setUrl("#")}>Users</div>
+                <div className="box" onClick={() => setUrl("#")}>Tasks</div>
+                <div className="box" onClick={() => setUrl("#")}>Messages</div>
+                <div className="box" onClick={() => setUrl("#")}>Files</div>
             </div>
         </Container>
     );

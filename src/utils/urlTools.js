@@ -12,6 +12,10 @@ export const getAllTicketsDataURL = () => {
     return herokuURL + '/api/v1/ticket/all';
 };
 
+export const getSubmissionTicketsURL = () => {
+    return herokuURL + '/api/v1/ticket/submit';
+};
+
 export const getUploadURL = () => {
     return herokuURL + '/upload';
 };

@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
-import { Container, Form, FloatingLabel, Button, Offcanvas } from 'react-bootstrap';
+import { Container, Form, FloatingLabel, Button } from 'react-bootstrap';
+import { useTicket } from '../hooks/useTicket';
 
 const NewTicket = () => {
     const [subject, setSubject] = useState('');
     const [description, setDescription] = useState('');
+    const { submit, isLoading, error } = useTicket();
 
     const handleTicket = async (event) => {
         event.preventDefault();
+
+        await submit(subject, description);
     };
 
     return (
@@ -38,8 +42,8 @@ const NewTicket = () => {
                         />
                     </FloatingLabel>
 
-                    <Button className='ticket-btn' variant="primary" type="submit">
-                        Login
+                    <Button className='ticket-btn' variant="primary" type="submit" disabled={isLoading}>
+                        Submit
                     </Button>
                 </Form>
             </Container>

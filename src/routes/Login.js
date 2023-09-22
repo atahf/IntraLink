@@ -35,7 +35,7 @@ const Login = () => {
             >
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
-                        Change Password
+                        Reset Password
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -47,7 +47,7 @@ const Login = () => {
                             <Form onSubmit={() => {setShow2(true)}}>
                                 <Form.Group className="mb-3" controlId="login.reset-pass">
                                     <Form.Label>
-                                        To reset your password please enter your username!
+                                        Enter Your Username
                                     </Form.Label>
 
                                     <Form.Control 
@@ -60,7 +60,7 @@ const Login = () => {
                                     />
                                 </Form.Group>
 
-                                <Button type='submit' onClick={() => {}}>Change</Button>
+                                <Button type='submit' onClick={() => {}}>Reset</Button>
                             </Form>
                         )}
                     </Container>
