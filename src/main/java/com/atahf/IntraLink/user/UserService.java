@@ -1,6 +1,7 @@
 package com.atahf.IntraLink.user;
 
 import com.atahf.IntraLink.user.UserDto.ChangePassword;
+import com.atahf.IntraLink.user.UserDto.NewUser;
 import com.atahf.IntraLink.user.UserDto.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,6 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.security.SecureRandom;
+import java.time.LocalDateTime;
+import java.util.Base64;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -47,6 +51,13 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
+    public static String generateRandomString(int length) {
+        SecureRandom random = new SecureRandom();
+        byte[] bytes = new byte[length];
+        random.nextBytes(bytes);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes).substring(0, length);
+    }
+
     public UserInfo getUser(String username, String submitter) throws Exception {
         User user = userDao.findUserByUsername(username);
         if(user == null) throw new Exception("User Does Not Exist!");
@@ -55,6 +66,20 @@ public class UserService implements UserDetailsService {
 
         return new UserInfo(user);
     };
+
+    @Transactional
+    public void addUser(NewUser newUserData, String submitter) throws Exception {
+        User user = userDao.findUserByUsername(newUserData.getUsername());
+        if(user != null) throw new Exception("Username Already Exists!");
+
+        if(hasPermission(submitter, "user:add")) throw new Exception("Submitter User Does Not Have Permission!");
+
+       User newUser = new User(newUserData);
+       newUser.setPassword(passwordEncoder.encode(generateRandomString(10)));
+       newUser.setCredentialsExpiration(LocalDateTime.now().plusWeeks(1));
+
+       userDao.save(newUser);
+    }
 
     @Transactional
     public void changePassword(ChangePassword changePassword, String submitter) throws Exception {

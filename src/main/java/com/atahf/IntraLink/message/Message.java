@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Table(name = "messages")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Message {
 
     @Id

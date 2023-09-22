@@ -2,6 +2,7 @@ package com.atahf.IntraLink.user;
 
 import com.atahf.IntraLink.security.UserRole;
 
+import com.atahf.IntraLink.user.UserDto.NewUser;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ import javax.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 
 @Entity
@@ -68,5 +70,27 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return isEnabled;
+    }
+
+    public User(NewUser newUser) {
+        this.username = newUser.getUsername();
+        this.password = "";
+        this.role = newUser.getRole();
+        this.isAccountNonExpired = true;
+        this.isAccountNonLocked = true;
+        this.isCredentialsNonExpired = true;
+        this.isEnabled = true;
+        this.firstName = getFirstName();
+        this.lastName = newUser.getLastName();
+        this.email = newUser.getEmail();
+        this.department = newUser.getDepartment();
+        this.title = newUser.getTitle();
+        this.age = (int)ChronoUnit.YEARS.between(newUser.getBirthdate(), LocalDateTime.now());
+        this.birthdate = newUser.getBirthdate();
+        this.gender = newUser.getGender();
+        this.phoneNumber = newUser.getPhoneNumber();
+        this.address = newUser.getAddress();
+        this.profilePicture = null;
+        this.credentialsExpiration = null;
     }
 }

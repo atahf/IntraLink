@@ -1,5 +1,6 @@
 package com.atahf.IntraLink.user;
 
+import com.atahf.IntraLink.user.UserDto.NewUser;
 import com.atahf.IntraLink.userLogs.LogService;
 import com.atahf.IntraLink.user.UserDto.ChangePassword;
 import com.atahf.IntraLink.user.UserDto.UserInfo;
@@ -37,6 +38,23 @@ public class UserController {
             userInfo.setStatus("400: " + e.getMessage());
         }
         return userInfo;
+    }
+
+    @PostMapping("new-user")
+    public GeneralHttpResponse<String> addUser(@RequestBody NewUser newUser, Authentication authentication) {
+        GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", null);
+        try{
+            if(!userService.hasPermission(authentication.getName(), "user:add")) throw new Exception("User Does Not Have Permission!");
+
+            userService.addUser(newUser, authentication.getName());
+
+            logService.addLog(authentication.getName(), "Added new User with username of " + "");
+        }
+        catch (Exception e) {
+            response.setStatus("400");
+            response.setReturnObject(e.getMessage());
+        }
+        return response;
     }
 
     @PostMapping("change-password")
