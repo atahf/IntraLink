@@ -31,20 +31,12 @@ const CustomNavbar = (props) => {
 	return (
 		<header>
 			<Navbar expand="lg" className="bg-body-tertiary">
-				<Container fluid>
+				<Container fluid style={{margin: "auto 25px"}}>
 					<Navbar.Brand href="/">IntraLink</Navbar.Brand>
 					<Navbar.Toggle aria-controls="basic-navbar-nav" />
 					<Navbar.Collapse id="basic-navbar-nav">
-						{jwtToken && (
-							<Nav className="me-auto">
-								<Nav.Link href="/ticket">Ticket</Nav.Link>
-								{hasPermission("user:add", jwtToken) && (
-									<Nav.Link href="/new-user">Add User</Nav.Link>
-								)}
-							</Nav>
-						)}
-						{jwtToken && (
-							<Nav className="ms-auto">
+						<Nav className="ms-auto">
+							{jwtToken && (
 								<Navbar.Text
 									className={`dropdown-button ${isHovered ? 'hovered' : ''}`}
 									onMouseEnter={handleMouseEnter}
@@ -60,17 +52,11 @@ const CustomNavbar = (props) => {
 										</div>
 									)}
 								</Navbar.Text>
-							</Nav>
-						)}
-						{!jwtToken && (
-							<Nav className="me-auto">
-							</Nav>
-						)}
-						{!jwtToken && (
-							<Nav className="ms-auto">
+							)}
+							{!jwtToken && (
 								<Nav.Link href="/login">Login</Nav.Link>
-							</Nav>
-						)}
+							)}
+						</Nav>
 					</Navbar.Collapse>
 				</Container>
 			</Navbar>
