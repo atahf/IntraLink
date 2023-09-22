@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Spinner, Card, Pagination } from 'react-bootstrap';
+import { Container, Card, Pagination } from 'react-bootstrap';
 import { getToken } from '../utils/jwtTools';
 import {  getAllTicketsDataURL } from '../utils/urlTools';
-import Loading from '../components/Loading';
+import Loading from './Loading';
 
-const Tickets = (props) => {
+const TicketsBox = (props) => {
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(null);
     const [tickets, setTickets] = useState(null);
@@ -95,4 +95,4 @@ const Tickets = (props) => {
     );
 }
  
-export default Tickets;
+export default TicketsBox;

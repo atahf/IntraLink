@@ -11,7 +11,8 @@ import Home from './routes/Home';
 import UserHome from './routes/UserHome';
 import Login from './routes/Login';
 import Profile from './routes/Profile';
-import Ticket from './routes/Ticket';
+import NewTicket from './routes/NewTicket';
+import Tickets from './routes/Tickets';
 import NewUser from './routes/NewUser';
 
 function App() {
@@ -36,8 +37,12 @@ function App() {
 							element={jwtToken ? <Profile /> : <Navigate to="/login" />}
 						/>
 						<Route 
-							exact path="/ticket" 
-							element={hasPermission("ticket:add", jwtToken) ? <Ticket /> : <Navigate to="/" />}
+							exact path="/tickets" 
+							element={hasPermission("ticket:read", jwtToken) ? <Tickets /> : <Navigate to="/" />}
+						/>
+						<Route 
+							exact path="/new-ticket" 
+							element={hasPermission("ticket:add", jwtToken) ? <NewTicket /> : <Navigate to="/" />}
 						/>
 						<Route 
 							exact path="/new-user" 

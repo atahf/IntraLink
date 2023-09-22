@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Form, FloatingLabel, Button, Offcanvas } from 'react-bootstrap';
 
-const Ticket = () => {
+const NewTicket = () => {
     const [subject, setSubject] = useState('');
     const [description, setDescription] = useState('');
 
@@ -47,4 +47,4 @@ const Ticket = () => {
     );
 }
  
-export default Ticket;
+export default NewTicket;
