@@ -4,6 +4,7 @@ import com.atahf.IntraLink.user.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
 
 @CrossOrigin
 @RestController

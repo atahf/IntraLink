@@ -1,10 +1,14 @@
 package com.atahf.IntraLink.user;
 
+import com.atahf.IntraLink.mailSender.MailService;
+import com.atahf.IntraLink.user.ConfirmationToken.ConfirmationToken;
+import com.atahf.IntraLink.user.ConfirmationToken.ConfirmationTokenDao;
+import com.atahf.IntraLink.user.ConfirmationToken.ConfirmationTokenDto.ConfirmationTokenDto;
 import com.atahf.IntraLink.user.UserDto.ChangePassword;
+import com.atahf.IntraLink.user.UserDto.EditUser;
 import com.atahf.IntraLink.user.UserDto.NewUser;
 import com.atahf.IntraLink.user.UserDto.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,21 +18,27 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService {
 
     private final UserDao userDao;
     private final PasswordEncoder passwordEncoder;
+    private final MailService mailService;
+
+    private final ConfirmationTokenDao confirmationTokenDao;
 
     @Autowired
-    public UserService(UserDao userDao, PasswordEncoder passwordEncoder) {
+    public UserService(UserDao userDao, PasswordEncoder passwordEncoder, MailService mailService, ConfirmationTokenDao confirmationTokenDao) {
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
+        this.mailService = mailService;
+        this.confirmationTokenDao = confirmationTokenDao;
     }
 
     public boolean hasPermission(String username, String permission) throws Exception {
@@ -65,20 +75,67 @@ public class UserService implements UserDetailsService {
         if(!username.equals(submitter) && !hasPermission(submitter, "user:read")) throw new Exception("Submitter User Does Not Have Permission!");
 
         return new UserInfo(user);
-    };
+    }
+
+    public List<UserInfo> getAllUser(String submitter) throws Exception {
+        if(!hasPermission(submitter, "user:read")) throw new Exception("Submitter User Does Not Have Permission!");
+
+        List<User> users = userDao.findAll();
+        List<UserInfo> userInfos = new ArrayList<>();
+
+        for(User user:users) {
+            UserInfo userInfo = new UserInfo(user);
+            userInfos.add(userInfo);
+        }
+
+        return userInfos;
+    }
 
     @Transactional
     public void addUser(NewUser newUserData, String submitter) throws Exception {
         User user = userDao.findUserByUsername(newUserData.getUsername());
         if(user != null) throw new Exception("Username Already Exists!");
 
-        if(hasPermission(submitter, "user:add")) throw new Exception("Submitter User Does Not Have Permission!");
+        if(!hasPermission(submitter, "user:add")) throw new Exception("Submitter User Does Not Have Permission!");
 
        User newUser = new User(newUserData);
-       newUser.setPassword(passwordEncoder.encode(generateRandomString(10)));
+       String tmpPass = generateRandomString(10);
+       newUser.setPassword(passwordEncoder.encode(tmpPass));
        newUser.setCredentialsExpiration(LocalDateTime.now().plusWeeks(1));
 
        userDao.save(newUser);
+
+        ConfirmationToken confirmationToken = new ConfirmationToken(newUser);
+        confirmationTokenDao.save(confirmationToken);
+
+        String confirmationUrl = "https://tfb308.herokuapp.com/api/v1/user/activation?token="+confirmationToken.getToken();
+        ConfirmationTokenDto confirmationMail = new ConfirmationTokenDto(newUser.getEmail(), confirmationUrl, tmpPass);
+
+        mailService.sendSignupConfirmation(confirmationMail);
+    }
+
+    @Transactional
+    public void editUser(EditUser editUser, String submitter) throws Exception {
+        User user = userDao.findUserByUsername(editUser.getUsername());
+        if(user == null) throw new Exception("User Does Not Exist!");
+
+        if(!hasPermission(submitter, "user:edit") && !editUser.getUsername().equals(submitter)) throw new Exception("Submitter User Does Not Have Permission!");
+
+        if(!editUser.getRole().equals("-")) {
+            user.setRole(editUser.getRole());
+        }
+        if(!editUser.getDepartment().equals("-")) {
+            user.setDepartment(editUser.getDepartment());
+        }
+        if(!editUser.getTitle().equals("-")) {
+            user.setTitle(editUser.getTitle());
+        }
+        if(!editUser.getPhoneNumber().equals("-")) {
+            user.setProfilePicture(editUser.getPhoneNumber());
+        }
+        if(!editUser.getAddress().equals("-")) {
+            user.setAddress(editUser.getAddress());
+        }
     }
 
     @Transactional

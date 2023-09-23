@@ -79,7 +79,7 @@ public class User implements UserDetails {
         this.isAccountNonExpired = true;
         this.isAccountNonLocked = true;
         this.isCredentialsNonExpired = true;
-        this.isEnabled = true;
+        this.isEnabled = false;
         this.firstName = getFirstName();
         this.lastName = newUser.getLastName();
         this.email = newUser.getEmail();
