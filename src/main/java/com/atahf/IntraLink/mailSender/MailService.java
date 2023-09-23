@@ -1,6 +1,7 @@
 package com.atahf.IntraLink.mailSender;
 
 import com.atahf.IntraLink.user.ConfirmationToken.ConfirmationTokenDto.ConfirmationTokenDto;
+import com.atahf.IntraLink.user.ResetConfirmationToken.ResetConfirmationTokenDto.ResetConfirmationTokenDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.mail.MailException;
@@ -39,6 +40,16 @@ public class MailService {
                             "\nActivation link is only valid for 15 minutes, please do not forget to activate your account!\n" +
                             "\nYour temporary password is " + confirmationMail.getTmpPass() +
                             "\nThis password is valid for 1 week, please after logging in change your password!");
+        mailSender.send(mailMessage);
+    }
+
+    public void sendResetPasswordConfirmation(ResetConfirmationTokenDto resetConfirmationMail){
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+        mailMessage.setFrom(email);
+        mailMessage.setTo(resetConfirmationMail.getMail());
+        mailMessage.setSubject("Intralink Reset Password");
+        mailMessage.setText(resetConfirmationMail.getBody());
         mailSender.send(mailMessage);
     }
 }

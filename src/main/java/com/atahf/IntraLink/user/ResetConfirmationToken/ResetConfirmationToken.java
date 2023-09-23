@@ -29,16 +29,15 @@ public class ResetConfirmationToken {
     private boolean isConfirmed;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "username")
     private User user;
 
 
-    public ResetConfirmationToken(User user){
+    public ResetConfirmationToken(User user, String tmpPass){
         this.isConfirmed = false;
         this.expiresAt = LocalDateTime.now().plusMinutes(15);
         this.token = UUID.randomUUID().toString();
-        String tmp = UUID.randomUUID().toString().replace("-", "");
-        this.tmpPass = tmp.substring(0, 9);
+        this.tmpPass = tmpPass;
         this.user = user;
     }
 }

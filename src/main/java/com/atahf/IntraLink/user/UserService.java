@@ -4,6 +4,9 @@ import com.atahf.IntraLink.mailSender.MailService;
 import com.atahf.IntraLink.user.ConfirmationToken.ConfirmationToken;
 import com.atahf.IntraLink.user.ConfirmationToken.ConfirmationTokenDao;
 import com.atahf.IntraLink.user.ConfirmationToken.ConfirmationTokenDto.ConfirmationTokenDto;
+import com.atahf.IntraLink.user.ResetConfirmationToken.ResetConfirmationToken;
+import com.atahf.IntraLink.user.ResetConfirmationToken.ResetConfirmationTokenDao;
+import com.atahf.IntraLink.user.ResetConfirmationToken.ResetConfirmationTokenDto.ResetConfirmationTokenDto;
 import com.atahf.IntraLink.user.UserDto.ChangePassword;
 import com.atahf.IntraLink.user.UserDto.EditUser;
 import com.atahf.IntraLink.user.UserDto.NewUser;
@@ -30,15 +33,16 @@ public class UserService implements UserDetailsService {
     private final UserDao userDao;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
-
     private final ConfirmationTokenDao confirmationTokenDao;
+    private final ResetConfirmationTokenDao resetConfirmationTokenDao;
 
     @Autowired
-    public UserService(UserDao userDao, PasswordEncoder passwordEncoder, MailService mailService, ConfirmationTokenDao confirmationTokenDao) {
+    public UserService(UserDao userDao, PasswordEncoder passwordEncoder, MailService mailService, ConfirmationTokenDao confirmationTokenDao, ResetConfirmationTokenDao resetConfirmationTokenDao) {
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
         this.mailService = mailService;
         this.confirmationTokenDao = confirmationTokenDao;
+        this.resetConfirmationTokenDao = resetConfirmationTokenDao;
     }
 
     public boolean hasPermission(String username, String permission) throws Exception {
@@ -108,7 +112,7 @@ public class UserService implements UserDetailsService {
         ConfirmationToken confirmationToken = new ConfirmationToken(newUser);
         confirmationTokenDao.save(confirmationToken);
 
-        String confirmationUrl = "https://tfb308.herokuapp.com/api/v1/user/activation?token="+confirmationToken.getToken();
+        String confirmationUrl = "https://intralinkk-4f8233098a40.herokuapp.com/api/v1/user/activation?token="+confirmationToken.getToken();
         ConfirmationTokenDto confirmationMail = new ConfirmationTokenDto(newUser.getEmail(), confirmationUrl, tmpPass);
 
         mailService.sendSignupConfirmation(confirmationMail);
@@ -153,7 +157,37 @@ public class UserService implements UserDetailsService {
         User user = userDao.findUserByUsername(username);
         if(user == null) throw new Exception("User Does Not Exist!");
 
-        // TODO: send email to user for accepting temporary password
+        ResetConfirmationToken resetConfirmationToken = resetConfirmationTokenDao.findResetConfirmationTokenByUser(user);
+        String tmpPass = generateRandomString(10);
+        if(resetConfirmationToken == null) {
+            resetConfirmationToken = new ResetConfirmationToken(user, tmpPass);
+            resetConfirmationTokenDao.save(resetConfirmationToken);
+        }
+        else {
+            if(resetConfirmationToken.isConfirmed()) {
+                ResetConfirmationToken tmp = new ResetConfirmationToken(user, tmpPass);
+
+                resetConfirmationToken.setToken(tmp.getToken());
+                resetConfirmationToken.setTmpPass(tmp.getTmpPass());
+                resetConfirmationToken.setExpiresAt(tmp.getExpiresAt());
+                resetConfirmationToken.setConfirmed(tmp.isConfirmed());
+            }
+            else {
+                resetConfirmationToken.setExpiresAt(LocalDateTime.now().plusMinutes(15));
+                resetConfirmationToken.setConfirmed(false);
+            }
+        }
+
+        String mailBody = "Dear " + user.getFirstName() + " " + user.getLastName() + ","
+                +"\n\nClick following link to reset your password: "
+                +"https://intralinkk-4f8233098a40.herokuapp.com/api/v1/user/reset?token="+resetConfirmationToken.getToken()
+                +"\nAfter clicking the link, your password will be: " + resetConfirmationToken.getTmpPass()
+                +"\nPlease after logging in, change your password!"
+                +"\n\n\n*** The link will be expired within 15 minutes!";
+
+        ResetConfirmationTokenDto resetConfirmationMail = new ResetConfirmationTokenDto(user.getEmail(), mailBody);
+
+        mailService.sendResetPasswordConfirmation(resetConfirmationMail);
     }
 
     @Transactional

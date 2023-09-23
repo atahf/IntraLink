@@ -27,7 +27,7 @@ public class ConfirmationToken {
     private boolean isConfirmed;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "username")
     private User user;
 
 
