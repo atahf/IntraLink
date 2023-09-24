@@ -110,7 +110,7 @@ public class UserService implements UserDetailsService {
         newUser.setPassword(passwordEncoder.encode(tmpPass));
         newUser.setCredentialsExpiration(LocalDateTime.now().plusWeeks(1));
 
-       userDao.save(newUser);
+        userDao.save(newUser);
         System.out.println(newUserData.getUsername() + " wants to add user, service 4");
 
         ConfirmationToken confirmationToken = new ConfirmationToken(newUser);

@@ -58,23 +58,16 @@ public class UserController {
     @GetMapping("{username}")
     public GeneralHttpResponse<UserInfo> getUser(@PathVariable String username, Authentication authentication) {
         GeneralHttpResponse<UserInfo> userInfo = new GeneralHttpResponse<>("200", null);
-        System.out.println(username + " wants to add user, 1");
         try{
-            System.out.println(username + " wants to add user, 2");
             if(!userService.hasPermission(authentication.getName(), "user:read") && !username.equals(authentication.getName())) throw new Exception("User Does Not Have Permission!");
 
-            System.out.println(username + " wants to add user, 3");
             userInfo.setReturnObject(userService.getUser(username, authentication.getName()));
 
-            System.out.println(username + " wants to add user, 4");
             if(!username.equals(authentication.getName())) {
                 logService.addLog(authentication.getName(), "Accessed User Info with username of " + username);
-                System.out.println(username + " wants to add user, 5");
             }
         }
         catch(Exception e) {
-            System.out.println(username + " wants to add user, 6");
-            System.out.println("error: " + e.getMessage());
             userInfo.setStatus("400: " + e.getMessage());
         }
         return userInfo;
@@ -97,15 +90,22 @@ public class UserController {
     @PostMapping("new-user")
     public GeneralHttpResponse<String> addUser(@RequestBody NewUser newUser, Authentication authentication) {
         GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", null);
+        System.out.println(newUser.getUsername() + " wants to add user, 1");
         try{
+            System.out.println(newUser.getUsername() + " wants to add user, 2");
             if(!userService.hasPermission(authentication.getName(), "user:add")) throw new Exception("User Does Not Have Permission!");
 
+            System.out.println(newUser.getUsername() + " wants to add user, 3");
             userService.addUser(newUser, authentication.getName());
             response.setReturnObject("User Successfully Added!");
 
+            System.out.println(newUser.getUsername() + " wants to add user, 4");
             logService.addLog(authentication.getName(), "Added new User with username of " + newUser.getUsername());
+            System.out.println(newUser.getUsername() + " wants to add user, 5");
         }
         catch (Exception e) {
+            System.out.println(newUser.getUsername() + " wants to add user, 6");
+            System.out.println("error: " + e.getMessage());
             response.setStatus("400");
             response.setReturnObject(e.getMessage());
         }
