@@ -97,17 +97,7 @@ public class UserController {
         GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", null);
         System.out.println(newUser.getUsername() + " wants to add user, 1");
         try{
-            // Create a wrapper to reset the input stream
-            HttpServletRequestWrapper requestWrapper = new HttpServletRequestWrapper(request) {
-                @Override
-                public BufferedReader getReader() throws IOException {
-                    // Create a new reader from the original input stream
-                    return request.getReader();
-                }
-            };
-
-            // Log the request payload
-            logRequestPayload(requestWrapper);
+            logRequestPayload(request);
 
             System.out.println(newUser.getUsername() + " wants to add user, 2");
             if(!userService.hasPermission(authentication.getName(), "user:add")) throw new Exception("User Does Not Have Permission!");
@@ -131,9 +121,13 @@ public class UserController {
 
     private void logRequestPayload(HttpServletRequest request) {
         try {
-            // Read the request payload as a string
-            String payload = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
-            System.out.println("Request Payload: " + payload);
+            StringBuilder payload = new StringBuilder();
+            BufferedReader reader = request.getReader();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                payload.append(line);
+            }
+            System.out.println("Request Payload: " + payload.toString());
         } catch (Exception e) {
             System.err.println("Error logging request payload: " + e.getMessage());
         }
