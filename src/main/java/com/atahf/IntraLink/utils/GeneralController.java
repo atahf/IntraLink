@@ -23,7 +23,7 @@ public class GeneralController {
         this.resetConfirmationTokenService = resetConfirmationTokenService;
     }
 
-    @PostMapping("reset")
+    @PostMapping("reset-password")
     public GeneralHttpResponse<String> getUser(@RequestBody String username) {
         GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", null);
         try{
@@ -36,8 +36,8 @@ public class GeneralController {
         return response;
     }
 
-    @GetMapping("/account-activation/{token}")
-    public String mailConfirmation(@PathVariable String token){
+    @GetMapping("/activation")
+    public String mailConfirmation(@RequestParam String token){
         System.out.println("in activation 1");
         try{
             System.out.println("in activation 2");
@@ -52,8 +52,8 @@ public class GeneralController {
         return "You have successfully confirmed your account.";
     }
 
-    @GetMapping("/password-reset/{token}")
-    public String resetPasswordConfirmation(@PathVariable String token){
+    @GetMapping("/reset")
+    public String resetPasswordConfirmation(@RequestParam String token){
         try{
             resetConfirmationTokenService.mailConfirmation(token);
         }
