@@ -94,7 +94,7 @@ public class UserController {
         GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", null);
         System.out.println(newUser.getUsername() + " wants to add user, 1");
         try{
-            logRequestPayload(request);
+            System.out.println(request.getInputStream().toString());
             System.out.println(newUser.getUsername() + " wants to add user, 2");
             if(!userService.hasPermission(authentication.getName(), "user:add")) throw new Exception("User Does Not Have Permission!");
 
@@ -113,20 +113,6 @@ public class UserController {
             response.setReturnObject(e.getMessage());
         }
         return response;
-    }
-
-    private void logRequestPayload(HttpServletRequest request) {
-        try {
-            StringBuilder payload = new StringBuilder();
-            BufferedReader reader = request.getReader();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                payload.append(line);
-            }
-            System.out.println("Request Payload: " + payload.toString());
-        } catch (Exception e) {
-            System.err.println("Error logging request payload: " + e.getMessage());
-        }
     }
 
     @PostMapping("edit-user")
