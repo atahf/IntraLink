@@ -38,13 +38,17 @@ public class GeneralController {
 
     @GetMapping("/activation/{token}")
     public String mailConfirmation(@PathVariable String token){
+        System.out.println("in activation 1");
         try{
+            System.out.println("in activation 2");
             confirmationTokenService.mailConfirmation(token);
         }
         catch (Exception e){
+            System.out.println("in activation 3");
             System.out.println(e.getMessage());
             return "Confirmation failed.";
         }
+        System.out.println("in activation 4");
         return "You have successfully confirmed your account.";
     }
 
