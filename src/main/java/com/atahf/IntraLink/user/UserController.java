@@ -13,6 +13,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
 import java.util.List;
 
 @CrossOrigin
@@ -88,10 +90,11 @@ public class UserController {
     }
 
     @PostMapping("new-user")
-    public GeneralHttpResponse<String> addUser(@RequestBody NewUser newUser, Authentication authentication) {
+    public GeneralHttpResponse<String> addUser(@RequestBody NewUser newUser, Authentication authentication, HttpServletRequest request) {
         GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", null);
         System.out.println(newUser.getUsername() + " wants to add user, 1");
         try{
+            logRequestPayload(request);
             System.out.println(newUser.getUsername() + " wants to add user, 2");
             if(!userService.hasPermission(authentication.getName(), "user:add")) throw new Exception("User Does Not Have Permission!");
 
@@ -110,6 +113,20 @@ public class UserController {
             response.setReturnObject(e.getMessage());
         }
         return response;
+    }
+
+    private void logRequestPayload(HttpServletRequest request) {
+        try {
+            StringBuilder payload = new StringBuilder();
+            BufferedReader reader = request.getReader();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                payload.append(line);
+            }
+            System.out.println("Request Payload: " + payload.toString());
+        } catch (Exception e) {
+            System.err.println("Error logging request payload: " + e.getMessage());
+        }
     }
 
     @PostMapping("edit-user")
