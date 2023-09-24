@@ -1,5 +1,5 @@
 export const decodeJwtToken = (jwtToken) => {
-    if(!jwtToken) {
+    if(!jwtToken || jwtToken === "") {
         return null;
     }
     const base64Url = jwtToken.split('.')[1];
@@ -28,7 +28,7 @@ export const setToken = (jwtToken) => {
 export const getToken = () => {
     const token = localStorage.getItem('jwtToken');
 
-    if (!token) {
+    if (!token || token === "") {
         return null;
     }
 
@@ -48,7 +48,7 @@ export const deleteToken = () => {
 };
 
 export const hasPermission = (neededPerm, jwtToken) => {
-    if(!jwtToken) {
+    if(!jwtToken || jwtToken === "") {
         return false;
     }
 

@@ -2,12 +2,6 @@ import { useState } from 'react';
 import { Container, Form, FloatingLabel, Button, Col, Row } from 'react-bootstrap';
 import { useAddUser } from '../hooks/useUser';
 
-import 'react-phone-number-input/style.css';
-import PhoneInput from 'react-phone-number-input';
-
-import "react-datepicker/dist/react-datepicker.css";
-import DatePicker from "react-datepicker";
-
 const NewUser = () => {
     const [fName, setFName] = useState('');
     const [lName, setLName] = useState('');
