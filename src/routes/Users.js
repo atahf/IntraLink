@@ -4,7 +4,7 @@ import { Container } from 'react-bootstrap';
 const Users = () => {
     return (
         <div className='users-page'>
-            <UsersBox style={{ height: '100%' }}/>
+            <UsersBox/>
         </div>
     );
 }
