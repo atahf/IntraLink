@@ -88,9 +88,8 @@ public class UserController {
     }
 
     @PostMapping("new-user")
-    public GeneralHttpResponse<String> addUser(@RequestBody NewUser newUser, @RequestBody String tmp, Authentication authentication) {
+    public GeneralHttpResponse<String> addUser(@RequestBody NewUser newUser, Authentication authentication) {
         GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", null);
-        System.out.println("tmp: " + tmp);
         try{
             if(!userService.hasPermission(authentication.getName(), "user:add")) throw new Exception("User Does Not Have Permission!");
 
