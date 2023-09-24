@@ -14,8 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
@@ -94,7 +97,18 @@ public class UserController {
         GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", null);
         System.out.println(newUser.getUsername() + " wants to add user, 1");
         try{
-            System.out.println(request.getInputStream().toString());
+            // Create a wrapper to reset the input stream
+            HttpServletRequestWrapper requestWrapper = new HttpServletRequestWrapper(request) {
+                @Override
+                public BufferedReader getReader() throws IOException {
+                    // Create a new reader from the original input stream
+                    return request.getReader();
+                }
+            };
+
+            // Log the request payload
+            logRequestPayload(requestWrapper);
+
             System.out.println(newUser.getUsername() + " wants to add user, 2");
             if(!userService.hasPermission(authentication.getName(), "user:add")) throw new Exception("User Does Not Have Permission!");
 
@@ -113,6 +127,16 @@ public class UserController {
             response.setReturnObject(e.getMessage());
         }
         return response;
+    }
+
+    private void logRequestPayload(HttpServletRequest request) {
+        try {
+            // Read the request payload as a string
+            String payload = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
+            System.out.println("Request Payload: " + payload);
+        } catch (Exception e) {
+            System.err.println("Error logging request payload: " + e.getMessage());
+        }
     }
 
     @PostMapping("edit-user")
