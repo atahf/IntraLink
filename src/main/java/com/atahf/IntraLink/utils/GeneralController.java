@@ -42,6 +42,7 @@ public class GeneralController {
             confirmationTokenService.mailConfirmation(token);
         }
         catch (Exception e){
+            System.out.println(e.getMessage());
             return "Confirmation failed.";
         }
         return "You have successfully confirmed your account.";

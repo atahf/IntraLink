@@ -59,7 +59,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig),JwtUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/", "/login", "/reset", "/activation").permitAll()
-                .antMatchers(HttpMethod.GET, "/reset", "/activation").permitAll()
+                .antMatchers("/reset", "/activation").permitAll()
                 .antMatchers("/api/**").hasRole(SUPER.name())
                 .anyRequest()
                 .authenticated();
