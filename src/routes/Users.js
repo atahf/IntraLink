@@ -4,7 +4,7 @@ import { Container } from 'react-bootstrap';
 const Users = () => {
     return (
         <div className='users-page'>
-            <UsersBox/>
+            <UsersBox style={{width: '1000px'}}/>
         </div>
     );
 }
