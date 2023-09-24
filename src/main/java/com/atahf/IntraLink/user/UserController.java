@@ -1,7 +1,5 @@
 package com.atahf.IntraLink.user;
 
-import com.atahf.IntraLink.user.ConfirmationToken.ConfirmationTokenService;
-import com.atahf.IntraLink.user.ResetConfirmationToken.ResetConfirmationTokenService;
 import com.atahf.IntraLink.user.UserDto.EditUser;
 import com.atahf.IntraLink.user.UserDto.NewUser;
 import com.atahf.IntraLink.userLogs.LogService;
@@ -22,37 +20,11 @@ public class UserController {
 
     private final UserService userService;
     private final LogService logService;
-    private final ConfirmationTokenService confirmationTokenService;
-    private final ResetConfirmationTokenService resetConfirmationTokenService;
 
     @Autowired
-    public UserController(UserService userService, LogService logService, ConfirmationTokenService confirmationTokenService, ResetConfirmationTokenService resetConfirmationTokenService) {
+    public UserController(UserService userService, LogService logService) {
         this.userService = userService;
         this.logService = logService;
-        this.confirmationTokenService = confirmationTokenService;
-        this.resetConfirmationTokenService = resetConfirmationTokenService;
-    }
-
-    @GetMapping("/activation")
-    public String mailConfirmation(@RequestParam String token){
-        try{
-            confirmationTokenService.mailConfirmation(token);
-        }
-        catch (Exception e){
-            return "Confirmation failed.";
-        }
-        return "You have successfully confirmed your account.";
-    }
-
-    @GetMapping("/reset")
-    public String resetPasswordConfirmation(@RequestParam String token){
-        try{
-            resetConfirmationTokenService.mailConfirmation(token);
-        }
-        catch (Exception e){
-            return "Resetting Password failed.";
-        }
-        return "You have successfully retested your password.";
     }
 
     @GetMapping("{username}")

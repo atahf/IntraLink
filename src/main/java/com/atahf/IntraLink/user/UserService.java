@@ -112,7 +112,7 @@ public class UserService implements UserDetailsService {
         ConfirmationToken confirmationToken = new ConfirmationToken(newUser);
         confirmationTokenDao.save(confirmationToken);
 
-        String confirmationUrl = "https://intralinkk-4f8233098a40.herokuapp.com/api/v1/user/activation?token="+confirmationToken.getToken();
+        String confirmationUrl = "https://intralinkk-4f8233098a40.herokuapp.com/activation?token="+confirmationToken.getToken();
         ConfirmationTokenDto confirmationMail = new ConfirmationTokenDto(newUser.getEmail(), confirmationUrl, tmpPass);
 
         mailService.sendSignupConfirmation(confirmationMail);
@@ -184,7 +184,7 @@ public class UserService implements UserDetailsService {
 
         String mailBody = "Dear " + user.getFirstName() + " " + user.getLastName() + ","
                 +"\n\nClick following link to reset your password: "
-                +"https://intralinkk-4f8233098a40.herokuapp.com/api/v1/user/reset?token="+resetConfirmationToken.getToken()
+                +"https://intralinkk-4f8233098a40.herokuapp.com/reset?token="+resetConfirmationToken.getToken()
                 +"\nAfter clicking the link, your password will be: " + resetConfirmationToken.getTmpPass()
                 +"\nPlease after logging in, change your password!"
                 +"\n\n\n*** The link will be expired within 15 minutes!";
