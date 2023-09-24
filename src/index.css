@@ -233,3 +233,12 @@
 		flex: 0 0 calc(100% - 30px);
 	}
 }
+
+/* Users.js */
+.users-page{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+	height: 100%;
+	max-height: 100%;
+}

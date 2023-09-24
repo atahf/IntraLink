@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Button, Form, FloatingLabel,  Modal } from 'react-bootstrap';
-import UserProfileAvatar from '../assets/user.jpg';
 import { getToken, decodeJwtToken } from '../utils/jwtTools';
 import { getUserDataURL, getDownloadURL } from '../utils/urlTools';
 import Loading from '../components/Loading';
+import User from '../components/User';
 
 const UserProfile = (props) => {
     const [error, setError] = useState(null);
@@ -141,25 +141,14 @@ const UserProfile = (props) => {
                     </Form>
                 </Modal.Body>
             </Modal>
-
+            
             <Card style={style}>
                 {isLoading && (
                     <Loading />
                 )}
-                {!isLoading && data && (<>
-                    <Card.Img variant="top" src={picture ? picture : UserProfileAvatar} alt='UserProfileAvatar' />
-                    <Card.Body>
-                        <Card.Text style={{ padding: '0px 40px', textTransform: 'capitalize' }}>
-                            Name: {data.firstName + ' ' + data.lastName} <br/>
-                            Username: { data.username } <br/>
-                            E-mail: {data.email} <br/>
-                            Role: {data.role}
-                        </Card.Text>
-                    </Card.Body>
-                    <div style={{margin: '15px', display: 'flex', justifyContent: 'center'}}>
-                        <Button onClick={handleShow}>Change Password</Button>
-                    </div>
-                </>)}
+                {!isLoading && data && (
+                    <User userData={data} />
+                )}
             </Card>
         </>
     );

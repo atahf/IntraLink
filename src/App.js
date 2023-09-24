@@ -13,6 +13,7 @@ import Login from './routes/Login';
 import Profile from './routes/Profile';
 import NewTicket from './routes/NewTicket';
 import Tickets from './routes/Tickets';
+import Users from './routes/Users';
 import NewUser from './routes/NewUser';
 
 function App() {
@@ -39,6 +40,10 @@ function App() {
 						<Route 
 							exact path="/tickets" 
 							element={hasPermission("ticket:read", jwtToken) ? <Tickets /> : <Navigate to="/" />}
+						/>
+						<Route 
+							exact path="/users" 
+							element={hasPermission("user:read", jwtToken) ? <Users /> : <Navigate to="/" />}
 						/>
 						<Route 
 							exact path="/new-ticket" 

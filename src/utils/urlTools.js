@@ -16,6 +16,10 @@ export const getNewUserURL = () => {
     return herokuURL + '/api/v1/user/new-user';
 };
 
+export const getAllUserssDataURL = () => {
+    return herokuURL + '/api/v1/user/all';
+};
+
 export const getAllTicketsDataURL = () => {
     return herokuURL + '/api/v1/ticket/all';
 };
