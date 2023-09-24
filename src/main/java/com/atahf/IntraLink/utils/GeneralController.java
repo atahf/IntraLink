@@ -36,7 +36,7 @@ public class GeneralController {
         return response;
     }
 
-    @GetMapping("/activation/{token}")
+    @GetMapping("/account-activation/{token}")
     public String mailConfirmation(@PathVariable String token){
         System.out.println("in activation 1");
         try{
@@ -52,7 +52,7 @@ public class GeneralController {
         return "You have successfully confirmed your account.";
     }
 
-    @GetMapping("/reset/{token}")
+    @GetMapping("/password-reset/{token}")
     public String resetPasswordConfirmation(@PathVariable String token){
         try{
             resetConfirmationTokenService.mailConfirmation(token);
