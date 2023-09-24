@@ -97,25 +97,31 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void addUser(NewUser newUserData, String submitter) throws Exception {
+        System.out.println(newUserData.getUsername() + " wants to add user, service 1");
         User user = userDao.findUserByUsername(newUserData.getUsername());
         if(user != null) throw new Exception("Username Already Exists!");
+        System.out.println(newUserData.getUsername() + " wants to add user, service 2");
 
         if(!hasPermission(submitter, "user:add")) throw new Exception("Submitter User Does Not Have Permission!");
 
-       User newUser = new User(newUserData);
-       String tmpPass = generateRandomString(10);
-       newUser.setPassword(passwordEncoder.encode(tmpPass));
-       newUser.setCredentialsExpiration(LocalDateTime.now().plusWeeks(1));
+        System.out.println(newUserData.getUsername() + " wants to add user, service 3");
+        User newUser = new User(newUserData);
+        String tmpPass = generateRandomString(10);
+        newUser.setPassword(passwordEncoder.encode(tmpPass));
+        newUser.setCredentialsExpiration(LocalDateTime.now().plusWeeks(1));
 
        userDao.save(newUser);
+        System.out.println(newUserData.getUsername() + " wants to add user, service 4");
 
         ConfirmationToken confirmationToken = new ConfirmationToken(newUser);
         confirmationTokenDao.save(confirmationToken);
+        System.out.println(newUserData.getUsername() + " wants to add user, service 5");
 
         String confirmationUrl = "https://intralinkk-4f8233098a40.herokuapp.com/api/v1/user/activation?token="+confirmationToken.getToken();
         ConfirmationTokenDto confirmationMail = new ConfirmationTokenDto(newUser.getEmail(), confirmationUrl, tmpPass);
 
         mailService.sendSignupConfirmation(confirmationMail);
+        System.out.println(newUserData.getUsername() + " wants to add user, service 6");
     }
 
     @Transactional
