@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Container, Form, FloatingLabel, Button, Col, Row } from 'react-bootstrap';
+import { useAddUser } from '../hooks/useUser';
 
 import 'react-phone-number-input/style.css';
 import PhoneInput from 'react-phone-number-input';
@@ -15,12 +16,30 @@ const NewUser = () => {
     const [Role, setRole] = useState('');
     const [Department, setDepartment] = useState('');
     const [PhoneNumber, setPhoneNumber] = useState('');
+    const [Gender, setGender] = useState('');
+    const [Title, setTitle] = useState('');
+    const [Address, setAddress] = useState('');
     const [dob, setDob] = useState(null);
+
+    const {add, isLoading, error} = useAddUser();
 
     const handleAddUser = async (event) => {
         event.preventDefault();
 
-        // TODO: send userAdd request and handle errors
+        const newUser = {
+            username: Username,
+            role: Role,
+            firstName: fName,
+            lastName: lName,
+            email: Email,
+            department: Department,
+            title: Title,
+            birthdate: dob,
+            gender: Gender,
+            phoneNumber: PhoneNumber,
+            address: Address
+        };
+        await add(newUser);
     };
 
     return (
@@ -79,17 +98,47 @@ const NewUser = () => {
                                         onChange={(e) => {setRole(e.target.value)}}
                                     >
                                         <option value="" hidden disabled> --- </option>
-                                        <option value="employee">Employee</option>
+                                        <option value="EMPLOYEE">Employee</option>
                                         <option value="IT">IT</option>
-                                        <option value="IT Admin">IT Admin</option>
+                                        <option value="IT_Admin">IT Admin</option>
                                         <option value="HR">HR</option>
                                     </Form.Select>
+                                </FloatingLabel>
+                            </Form.Group>
+
+                            <Form.Group className="mb-3 new-user-input-box" controlId="newUserForm.address">
+                                <FloatingLabel label="Address" style={{zIndex: "0"}}>
+                                    <Form.Control 
+                                        type="text" 
+                                        as="textarea"
+                                        placeholder="Enter Address" 
+                                        required
+                                        maxLength="128"
+                                        value={Address} 
+                                        onChange={(e) => {setAddress(e.target.value)}}
+                                    />
                                 </FloatingLabel>
                             </Form.Group>
                         </div>
                     </Col>
                     <Col xs={4} md={4}>
                         <div className="input-container">
+                            <Form.Group className="mb-3 new-user-input-box" controlId="newUserForm.gender">
+                                <FloatingLabel label="Select Gender" style={{zIndex: "0"}}>
+                                    <Form.Select 
+                                        aria-label="Select Gender"
+                                        required
+                                        value={Gender}
+                                        onChange={(e) => {setGender(e.target.value)}}
+                                    >
+                                        <option value="" hidden disabled> --- </option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="other">Other</option>
+                                    </Form.Select>
+                                </FloatingLabel>
+                            </Form.Group>
+
                             <Form.Group className="mb-3 new-user-input-box" controlId="newUserForm.department">
                                 <FloatingLabel label="Department" style={{zIndex: "0"}}>
                                     <Form.Control 
@@ -103,11 +152,18 @@ const NewUser = () => {
                             </Form.Group>
 
                             <Form.Group className="mb-3 new-user-input-box" controlId="newUserForm.phoneNumber">
-                                <PhoneInput
-                                    placeholder="Enter Phone Number"
-                                    value={PhoneNumber}
-                                    onChange={setPhoneNumber}
-                                />
+                                <FloatingLabel label="Phone Number" style={{zIndex: "0"}}>
+                                    <Form.Control 
+                                        type="tel" 
+                                        placeholder="Enter Phone Number" 
+                                        required
+                                        pattern="0[0-9]{10}"
+                                        title="Phone number with 11 digits, strating with 0"
+                                        maxLength="11"
+                                        value={PhoneNumber} 
+                                        onChange={(e) => {setPhoneNumber(e.target.value)}}
+                                    />
+                                </FloatingLabel>
                             </Form.Group>
                         </div>
                     </Col>
@@ -125,13 +181,28 @@ const NewUser = () => {
                                 </FloatingLabel>
                             </Form.Group>
 
-                            <Form.Group className="mb-3 new-user-input-box d-flex justify-content-center align-items-center" controlId="newUserForm.dobSelect">
-                                <Form.Label style={{ margin: '0 10px 0 0' }}>Enter Birthdate</Form.Label>
-                                <DatePicker
-                                    className='datepicker-custom-style'
-                                    selected={dob}
-                                    onChange={(date) => { setDob(date) }}
-                                />
+                            <Form.Group className="mb-3 new-user-input-box" controlId="newUserForm.title">
+                                <FloatingLabel label="Title" style={{zIndex: "0"}}>
+                                    <Form.Control 
+                                        type="text" 
+                                        placeholder="Enter Title" 
+                                        required
+                                        value={Title} 
+                                        onChange={(e) => {setTitle(e.target.value)}}
+                                    />
+                                </FloatingLabel>
+                            </Form.Group>
+
+                            <Form.Group className="mb-3 new-user-input-box" controlId="newUserForm.dob">
+                                <FloatingLabel label="Birthdate" style={{zIndex: "0"}}>
+                                    <Form.Control 
+                                        type="date" 
+                                        placeholder="Enter Birthdate" 
+                                        required
+                                        value={dob} 
+                                        onChange={(e) => {setDob(e.target.value)}}
+                                    />
+                                </FloatingLabel>
                             </Form.Group>
                         </div>
                     </Col>

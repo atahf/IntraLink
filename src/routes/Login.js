@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Container, Form, FloatingLabel, Button, Alert, Modal } from 'react-bootstrap';
 import { useLogin } from '../hooks/useLogin';
 import Loading from '../components/Loading';
+import { useResetPass } from '../hooks/useUser';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -10,6 +11,8 @@ const Login = () => {
     const [usernameModal, setUsernameModal] = useState('');
     const [show, setShow] = useState(false);
     const [show2, setShow2] = useState(false);
+
+    const { reset, isLoadingReset, errorReset } = useResetPass();
 
     const {login, error, isLoading} = useLogin();
 
@@ -23,7 +26,14 @@ const Login = () => {
         setUsernameModal('');
         setShow(false);
     }
+
     const handleShow = () => setShow(true);
+
+    const handleReset = async (event) => {
+        event.preventDefault();
+
+        await reset(usernameModal);
+    };
 
     return (
         <div className='login-page'>
@@ -40,11 +50,11 @@ const Login = () => {
                 </Modal.Header>
                 <Modal.Body>
                     <Container>
-                        {show2 && (
+                        {isLoadingReset && (
                             <Loading />
                         )}
-                        {!show2 && (
-                            <Form onSubmit={() => {setShow2(true)}}>
+                        {!isLoadingReset && (
+                            <Form onSubmit={handleReset}>
                                 <Form.Group className="mb-3" controlId="login.reset-pass">
                                     <Form.Label>
                                         Enter Your Username
@@ -60,7 +70,7 @@ const Login = () => {
                                     />
                                 </Form.Group>
 
-                                <Button type='submit' onClick={() => {}}>Reset</Button>
+                                <Button type='submit'>Reset</Button>
                             </Form>
                         )}
                     </Container>

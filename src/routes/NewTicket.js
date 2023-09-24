@@ -22,7 +22,6 @@ const NewTicket = () => {
                             type="text" 
                             placeholder="Enter subject" 
                             required 
-                            autoComplete='true' 
                             value={subject} 
                             onChange={(e) => {setSubject(e.target.value)}}
                         />
@@ -33,10 +32,9 @@ const NewTicket = () => {
                             type="text" 
                             placeholder="Enter description" 
                             required 
-                            autoComplete='true' 
                             value={description} 
                             as="textarea"
-                            maxLength={512}
+                            maxLength="512"
                             onChange={(e) => {setDescription(e.target.value)}}
                             style={{ height: '100px', width: '100%' }}
                         />

@@ -4,8 +4,16 @@ export const getLoginURL = () => {
     return herokuURL + '/login';
 };
 
+export const getReesetURL = () => {
+    return herokuURL + '/reset';
+};
+
 export const getUserDataURL = (username) => {
     return herokuURL + '/api/v1/user/' + username;
+};
+
+export const getNewUserURL = () => {
+    return herokuURL + '/api/v1/user/new-user';
 };
 
 export const getAllTicketsDataURL = () => {
