@@ -1,16 +1,10 @@
 package com.atahf.IntraLink.user.UserDto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
 public class NewUser {
     private String username;
     private String role;
