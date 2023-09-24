@@ -6,6 +6,7 @@ import App from './App';
 import { AuthContextProvider } from './context/AuthContext';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'font-awesome/css/font-awesome.min.css';
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

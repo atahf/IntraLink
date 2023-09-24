@@ -4,7 +4,7 @@ import UserProfile from '../components/UserProfile';
 const Profile = () => {
     return (
         <div className='profile-page'>
-            <UserProfile />
+            <UserProfile style={{width: '1000px'}}/>
         </div>
     );
 }
