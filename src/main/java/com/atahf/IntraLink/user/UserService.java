@@ -147,9 +147,7 @@ public class UserService implements UserDetailsService {
         User user = userDao.findUserByUsername(submitter);
         if(user == null) throw new Exception("User Does Not Exist!");
 
-        System.out.println("pass db: " + user.getPassword());
-        System.out.println("pass req: " + passwordEncoder.encode(changePassword.getOldPassword()));
-        if(!user.getPassword().equals(passwordEncoder.encode(changePassword.getOldPassword()))) throw new Exception("Old Password Is Wrong!");
+        if(!passwordEncoder.matches(changePassword.getOldPassword(), user.getPassword())) throw new Exception("Old Password Is Wrong!");
 
         user.setPassword(passwordEncoder.encode(changePassword.getNewPassword()));
     }
