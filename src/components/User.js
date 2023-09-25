@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Card, Row, Col, Container, Button, Form, FloatingLabel } from 'react-bootstrap';
+import { Card, Row, Col, Container, Button, Modal, Form } from 'react-bootstrap';
 import UserProfileAvatar from '../assets/user.jpg';
 import EditableText from "./EditableText";
+import { useChangePass } from "../hooks/useUser";
+import Loading from "./Loading";
 
 const User = ({ userData, editable }) => {
     const [picture, setPicture] = useState(null);
@@ -14,6 +16,11 @@ const User = ({ userData, editable }) => {
     const [dob, setDob] = useState(userData.birthdate);
     const [isHovered, setIsHovered] = useState(false);
     const fileInputRef = useRef(null);
+
+    const { change, isLoadingChange, errorChange, resultChange } = useChangePass();
+    const [oldPass, setOldPass] = useState('');
+    const [newPass, setNewPass] = useState('');
+    const [show, setShow] = useState(false);
 
     const capitalizeWords = (inputString) => {
         const words = inputString.split(' ');
@@ -66,12 +73,91 @@ const User = ({ userData, editable }) => {
         }
     };
 
+    const handleChange = async (event) => {
+        event.preventDefault();
+
+        const changePassword = {
+            oldPassword: oldPass,
+            newPassword: newPass
+        }
+
+        await change(changePassword);
+    };
+
+    const handleClose = () => {
+        setShow(false);
+        setOldPass('');
+        setNewPass('');
+        if(resultChange) {
+            window.location.reload();
+        }
+    };
+
     useEffect(() => {
         loadPicture();
     }, []);
 
     return (
         <Container style={{padding: '15px', margin: '5px'}}>
+            <Modal
+                show={show}
+                onHide={handleClose}
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        Change Password
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Container>
+                        {isLoadingChange && (
+                            <Loading />
+                        )}
+                        {!isLoadingChange && resultChange && resultChange.status === "200" && (
+                            <p>{resultChange.returnObject}</p>
+                        )}
+                        {!isLoadingChange && !resultChange && (
+                            <Form onSubmit={handleChange}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>
+                                        Enter Your Current Password
+                                    </Form.Label>
+
+                                    <Form.Control 
+                                        type="password" 
+                                        placeholder="current password" 
+                                        value={oldPass} 
+                                        onChange={(e) => {setOldPass(e.target.value)}}
+                                        required 
+                                        autoComplete='true'
+                                    />
+                                </Form.Group>
+
+                                <Form.Group className="mb-3">
+                                    <Form.Label>
+                                        Enter Your New Password
+                                    </Form.Label>
+
+                                    <Form.Control 
+                                        type="password" 
+                                        placeholder="new password" 
+                                        value={newPass} 
+                                        onChange={(e) => {setNewPass(e.target.value)}}
+                                        required 
+                                        autoComplete='true'
+                                    />
+                                </Form.Group>
+
+                                <Button type='submit' disabled={oldPass === newPass}>Change</Button>
+                            </Form>
+                        )}
+                    </Container>
+                </Modal.Body>
+            </Modal>
+
+
             {!editable && (
                 <Row>
                     <Col xs={6} md={4} className="d-flex justify-content-center align-items-center">
@@ -180,7 +266,8 @@ const User = ({ userData, editable }) => {
                                 Phone Number: <b>{userData.phoneNumber}</b> <br/>
                                 Address: <b>{userData.address}</b>
                             </Card.Text>
-                            <Button style={{width: '100px'}} onClick={() => setEditInfo(true)}>Edit</Button>
+                            <Button style={{width: '100px', margin: 'auto 10px'}} onClick={() => setEditInfo(true)}>Edit</Button>
+                            <Button style={{width: '200px', margin: 'auto 10px'}} onClick={() => setShow(true)}>Change Password</Button>
                         </Card.Body>
                     </Col>
                 </Row>

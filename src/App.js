@@ -15,7 +15,6 @@ import NewTicket from './routes/NewTicket';
 import Tickets from './routes/Tickets';
 import Users from './routes/Users';
 import NewUser from './routes/NewUser';
-import AccountSettings from './routes/AccountSettings';
 
 function App() {
 	const { jwtToken } = useAuthContext();
@@ -37,10 +36,6 @@ function App() {
 						<Route 
 							exact path="/profile" 
 							element={jwtToken ? <Profile /> : <Navigate to="/login" />}
-						/>
-						<Route 
-							exact path="/account-settings" 
-							element={jwtToken ? <AccountSettings /> : <Navigate to="/login" />}
 						/>
 						<Route 
 							exact path="/tickets" 

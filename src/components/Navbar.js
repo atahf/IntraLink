@@ -2,18 +2,12 @@ import React, { useState } from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import { useLogout } from '../hooks/useLogout';
 import { useAuthContext } from '../hooks/useAuthContext';
-import { decodeJwtToken, hasPermission } from '../utils/jwtTools';
+import { decodeJwtToken } from '../utils/jwtTools';
 
 const CustomNavbar = (props) => {
 	const { logout } = useLogout();
 	const { jwtToken } = useAuthContext();
 	const [isHovered, setIsHovered] = useState(false);
-
-	const perms = {...(props.perms)};
-
-	const handleLogout = () => {
-		logout();
-	}
 
 	const getUsername = () => {
 		const tokenJSON = decodeJwtToken(jwtToken);
@@ -47,7 +41,6 @@ const CustomNavbar = (props) => {
 									{isHovered && (
 										<div className="dropdown-content">
 											<Nav.Link className="dropdown-content-link" href="/profile">Profile</Nav.Link>
-											<Nav.Link className="dropdown-content-link" href="/account-settings">Account Settings</Nav.Link>
 											<Nav.Link className="dropdown-content-link" onClick={logout}>Log Out</Nav.Link>
 										</div>
 									)}

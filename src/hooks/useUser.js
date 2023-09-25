@@ -1,12 +1,11 @@
 import { useState } from 'react';
-import { getNewUserURL, getReesetURL } from '../utils/urlTools';
+import { getNewUserURL, getReesetURL, getChangePassURL } from '../utils/urlTools';
 import { getToken, decodeJwtToken } from '../utils/jwtTools';
 
 export const useAddUser = () => {
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(null);
     const token = getToken();
-    const username = decodeJwtToken(token).sub;
 
     const add = async (newUser) => {
         setIsLoading(true);
@@ -78,4 +77,44 @@ export const useResetPass = () => {
     }
 
     return { reset, isLoadingReset, errorReset };
+};
+
+export const useChangePass = () => {
+    const [errorChange, setErrorChange] = useState(null);
+    const [isLoadingChange, setIsLoadingChange] = useState(null);
+    const [resultChange, setResultChange] = useState(null);
+    const token = getToken();
+
+    const change = async (changePassword) => {
+        setIsLoadingChange(true);
+        setErrorChange(null);
+        setResultChange(null);
+        
+        try {
+            fetch(getChangePassURL(), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': token
+                },
+                body: JSON.stringify(changePassword)
+            })
+                .then(response => response.json())
+                .then(jsonData => {
+                    setResultChange(jsonData);
+                    setIsLoadingChange(false);
+                    return;
+                })
+                .catch(error => {
+                    setErrorChange(error);
+                    setIsLoadingChange(false);
+                    return;
+                });
+        } catch (error) {
+            setIsLoadingChange(false);
+            setErrorChange(error);
+        }
+    }
+
+    return { change, isLoadingChange, errorChange, resultChange };
 };

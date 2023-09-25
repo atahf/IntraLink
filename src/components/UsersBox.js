@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Card, Pagination } from 'react-bootstrap';
 import { getToken } from '../utils/jwtTools';
-import {  getAllUserssDataURL } from '../utils/urlTools';
+import {  getAllUsersDataURL } from '../utils/urlTools';
 import Loading from './Loading';
 import User from '../components/User';
 
@@ -22,7 +22,7 @@ const UsersBox = (props) => {
         setIsLoading(true);
         const token = getToken();
 
-        fetch(getAllUserssDataURL(), {
+        fetch(getAllUsersDataURL(), {
             method: 'GET',
             headers: {
                 'Authorization': token
