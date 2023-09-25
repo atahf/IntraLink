@@ -2,7 +2,6 @@ package com.atahf.IntraLink.message;
 
 import com.atahf.IntraLink.message.MessageDto.ChatMessage;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -36,13 +35,13 @@ public class MessageController {
     }
 
     @MessageMapping("/history")
-    public void sendChatHistory(Authentication authentication, ChatMessage message) {
-        Long roomId = messageService.findRoomId(authentication.getName(), message.getUsername2());
+    public void sendChatHistory(ChatMessage message) {
+        Long roomId = messageService.findRoomId(message.getUsername1(), message.getUsername2());
         List<Message> chatHistory = messageService.getAll(roomId);
 
         // Send the chat history to the user's WebSocket session
         messagingTemplate.convertAndSendToUser(
-                authentication.getName(),
+                message.getUsername1(),
                 "/queue/history",
                 chatHistory
         );
