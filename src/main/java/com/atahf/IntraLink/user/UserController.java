@@ -71,7 +71,6 @@ public class UserController {
             logService.addLog(authentication.getName(), "Added new User with username of " + newUser.getUsername());
         }
         catch (Exception e) {
-            System.out.println("error: " + e.getMessage());
             response.setStatus("400");
             response.setReturnObject(e.getMessage());
         }
@@ -81,15 +80,20 @@ public class UserController {
     @PostMapping("edit-user")
     public GeneralHttpResponse<String> addUser(@RequestBody EditUser editUser, Authentication authentication) {
         GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", null);
+        System.out.println("1.");
         try{
+            System.out.println("2.");
             if(!userService.hasPermission(authentication.getName(), "user:edit") && !editUser.getUsername().equals(authentication.getName())) throw new Exception("User Does Not Have Permission!");
 
+            System.out.println("3.");
             userService.editUser(editUser, authentication.getName());
             response.setReturnObject("User Successfully Edited!");
 
+            System.out.println("4.");
             logService.addLog(authentication.getName(), "Edited User with username of " + "");
         }
         catch (Exception e) {
+            System.out.println("5. " + e.getMessage());
             response.setStatus("400");
             response.setReturnObject(e.getMessage());
         }
