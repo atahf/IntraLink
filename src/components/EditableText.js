@@ -3,24 +3,12 @@ import React, { useState } from 'react';
 const EditableText = ({ text, setText }) => {
     const [isEditing, setIsEditing] = useState(false);
 
-    const handleDoubleClick = () => {
-        setIsEditing(true);
-    };
-
-    const handleChange = (e) => {
-        setText(e.target.textContent);
-    };
-
-    const handleBlur = () => {
-        setIsEditing(false);
-    };
-
     return (
         <b
-            onDoubleClick={handleDoubleClick}
+            onClick={() => setIsEditing(true)}
             contentEditable={isEditing}
-            onBlur={handleBlur}
-            onInput={handleChange}
+            onBlur={() => setIsEditing(false)}
+            onInput={(e) => setText(e.target.textContent)}
         >
             {text}
         </b>

@@ -7,6 +7,7 @@ import Loading from "./Loading";
 
 const User = ({ userData, editable }) => {
     const [picture, setPicture] = useState(null);
+    const [newPicture, setNewPicture] = useState(null);
     const [editInfo, setEditInfo] = useState(false);
     const [fName, setFName] = useState(userData.firstName);
     const [lName, setLName] = useState(userData.lastName);
@@ -45,8 +46,16 @@ const User = ({ userData, editable }) => {
         setEditInfo(false);
 
         // TODO: send edit request
-        window.location.reload();
+        //window.location.reload();
+        if(newPicture) {
+            setPicture(newPicture);
+        }
     }
+
+    const handleCancel = () => {
+        setNewPicture(null);
+        setEditInfo(false);
+    };
 
     const handleHover = () => {
         setIsHovered(true);
@@ -68,7 +77,8 @@ const User = ({ userData, editable }) => {
                 alert('Image size exceeds 4MB. Please choose a smaller image.');
                 return;
             } else {
-                console.log('Selected image:', file);
+                const imageUrl = URL.createObjectURL(file);
+                setNewPicture(imageUrl);
             }
         }
     };
@@ -197,7 +207,7 @@ const User = ({ userData, editable }) => {
                         >
                             <Card.Img 
                                 variant="top" 
-                                src={picture ? picture : UserProfileAvatar} 
+                                src={newPicture ? newPicture : (picture ? picture : UserProfileAvatar)} 
                                 alt='UserProfileAvatar'
                                 style={{width: '300px', height: 'auto', border: '1px solid black'}}
                             />
@@ -234,8 +244,8 @@ const User = ({ userData, editable }) => {
                                 Phone Number: <EditableText text={PhoneNumber} setText={setPhoneNumber}/> <br/>
                                 Address: <EditableText text={Address} setText={setAddress}/> <br/>
                             </Card.Text>
-                            <Button style={{width: '100px'}} variant="primary" onClick={handleEdit}>Save</Button>
-                            <Button style={{width: '100px'}} variant="secondary" onClick={() => setEditInfo(false)}>Cancel</Button>
+                            <Button style={{width: '100px', margin: 'auto 10px'}} variant="primary" onClick={handleEdit}>Save</Button>
+                            <Button style={{width: '100px', margin: 'auto 10px'}} variant="secondary" onClick={handleCancel}>Cancel</Button>
                         </Card.Body>
                     </Col>
                 </Row>
