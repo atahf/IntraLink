@@ -100,12 +100,10 @@ public class UserController {
     public GeneralHttpResponse<String> changePassword(@RequestBody ChangePassword changePassword, Authentication authentication) {
         GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", null);
         try {
-            if(!changePassword.getUsername().equals(authentication.getName())) throw new Exception("Users Only Can Change Their Own Passwords!");
-
             userService.changePassword(changePassword, authentication.getName());
             response.setReturnObject("Password Successfully Changed!");
 
-            logService.addLog(authentication.getName(), "Changed password of user with username of " + changePassword.getUsername());
+            logService.addLog(authentication.getName(), "Changed password of user with username of " + authentication.getName());
         }
         catch (Exception e) {
             response.setStatus("400");

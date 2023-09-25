@@ -10,6 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChangePassword {
-    String username;
-    String password;
+    String oldPassword;
+    String newPassword;
 }

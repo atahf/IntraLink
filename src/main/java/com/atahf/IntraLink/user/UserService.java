@@ -144,12 +144,12 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void changePassword(ChangePassword changePassword, String submitter) throws Exception {
-        User user = userDao.findUserByUsername(changePassword.getUsername());
+        User user = userDao.findUserByUsername(submitter);
         if(user == null) throw new Exception("User Does Not Exist!");
 
-        if(!changePassword.getUsername().equals(submitter) && hasPermission(submitter, "user:edit")) throw new Exception("Submitter User Does Not Have Permission!");
+        if(!user.getPassword().equals(passwordEncoder.encode(changePassword.getOldPassword()))) throw new Exception("Old Password Is Wrong!");
 
-        user.setPassword(passwordEncoder.encode(changePassword.getPassword()));
+        user.setPassword(passwordEncoder.encode(changePassword.getNewPassword()));
     }
 
     @Transactional
