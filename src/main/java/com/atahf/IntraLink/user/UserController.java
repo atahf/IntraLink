@@ -98,7 +98,6 @@ public class UserController {
     @PostMapping("change-password")
     public GeneralHttpResponse<String> changePassword(@RequestBody ChangePassword changePassword, Authentication authentication) {
         GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", null);
-        System.out.println(changePassword.getOldPassword() + " -> " + changePassword.getNewPassword());
         try {
             userService.changePassword(changePassword, authentication.getName());
             response.setReturnObject("Password Successfully Changed!");
@@ -106,7 +105,6 @@ public class UserController {
             logService.addLog(authentication.getName(), "Changed password of user with username of " + authentication.getName());
         }
         catch (Exception e) {
-            System.out.println("error: " + e.getMessage());
             response.setStatus("400");
             response.setReturnObject(e.getMessage());
         }
