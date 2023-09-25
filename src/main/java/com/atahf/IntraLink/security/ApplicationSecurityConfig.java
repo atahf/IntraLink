@@ -59,7 +59,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig),JwtUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/", "/login", "/general/**").permitAll()
-                .antMatchers("/general/**", "/websocket-endpoint/**").permitAll()
+                .antMatchers("/general/**").permitAll()
                 .antMatchers("/api/**").hasAnyRole(SUPER.name(), IT_ADMIN.name(), IT.name(), HR.name(), EMPLOYEE.name())
                 .anyRequest()
                 .authenticated();

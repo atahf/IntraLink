@@ -1,5 +1,6 @@
 package com.atahf.IntraLink.message;
 
+import com.atahf.IntraLink.message.MessageDto.MessageDto;
 import com.atahf.IntraLink.user.UserDao;
 import org.springframework.stereotype.Service;
 
@@ -19,37 +20,15 @@ public class MessageService {
     }
 
     @Transactional
-    public void add(String username1, String username2, String body) {
-        Message newMsg;
-        Long roomId = findRoomId(username1, username2);
-        if(roomId == null) {
-            newMsg = new Message(username1, username2, body, LocalDateTime.now());
-        }
-        else{
-            newMsg = new Message(roomId, username1, username2, body, LocalDateTime.now());
-        }
+    public void addMessage(MessageDto messageDto) throws Exception {
+        if(userDao.findUserByUsername(messageDto.getSender()) == null) throw new Exception("Sender Does Not Exist!");
+        if(userDao.findUserByUsername(messageDto.getReceiver()) == null) throw new Exception("Receiver Does Not Exist!");
+
+        Message newMsg = new Message(messageDto);
         messageDao.save(newMsg);
     }
 
-    public Long findRoomId(String username1, String username2) {
-        List<Message> roomFinder1 = messageDao.findAllByUsername1AndUsername2(username1, username2);
-        if(roomFinder1 != null) {
-            return roomFinder1.get(0).getRoomId();
-        }
-
-        List<Message> roomFinder2 = messageDao.findAllByUsername1AndUsername2(username2, username1);
-        if(roomFinder2 != null) {
-            return roomFinder2.get(0).getRoomId();
-        }
-
-        return null;
-    }
-
-    public List<Message> getAll(Long roomId) {
-        return messageDao.findAllByRoomIdOrderBySentDate(roomId);
-    }
-
-    public Message get(Long msgId) {
-        return messageDao.findMessageById(msgId);
+    public List<Message> getAllMessages(String username1, String username2) {
+        return messageDao.findAllMessagesBetween(username1, username2);
     }
 }

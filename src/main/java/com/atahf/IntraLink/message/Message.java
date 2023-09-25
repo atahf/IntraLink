@@ -2,6 +2,7 @@ package com.atahf.IntraLink.message;
 
 import javax.persistence.*;
 
+import com.atahf.IntraLink.message.MessageDto.MessageDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,31 +14,23 @@ import java.time.LocalDateTime;
 @Table(name = "messages")
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long roomId;
-    private String username1;
-    private String username2;
+    private String sender;
+    private String receiver;
     private String body;
-    private LocalDateTime sentDate;
+    private LocalDateTime date;
 
-    public Message(String username1, String username2, String body, LocalDateTime sentDate) {
-        this.username1 = username1;
-        this.username2 = username2;
-        this.body = body;
-        this.sentDate = sentDate;
-    }
-    public Message(Long roomId, String username1, String username2, String body, LocalDateTime sentDate) {
-        this.roomId = roomId;
-        this.username1 = username1;
-        this.username2 = username2;
-        this.body = body;
-        this.sentDate = sentDate;
+    public Message(MessageDto messageDto) {
+        this.sender = messageDto.getSender();
+        this.receiver = messageDto.getReceiver();
+        this.body = messageDto.getBody();
+        this.date = messageDto.getDate();
     }
 }
 
