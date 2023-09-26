@@ -41,7 +41,6 @@ const ChatBox = ({ messages, sendMessage, otherUser }) => {
 
     function adjustTimeZone(dateString, hours) {
         const date = new Date(dateString);
-        // Add 3 hours (3 * 60 * 60 * 1000 milliseconds) to adjust the time zone
         date.setTime(date.getTime() + hours * 60 * 60 * 1000);
         return date;
     }
