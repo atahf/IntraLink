@@ -144,7 +144,7 @@ const ChatBox = ({ messages, sendMessage, otherUser }) => {
                     <Container>
                         <Row className="justify-content-center align-items-center">
                             <Col sm={10} className="justify-content-center align-items-center">
-                                <FloatingLabel label="New Message">
+                                <FloatingLabel label="Type a message">
                                     <Form.Control
                                         as="textarea"
                                         placeholder="Leave a comment here"
@@ -155,7 +155,7 @@ const ChatBox = ({ messages, sendMessage, otherUser }) => {
                                 </FloatingLabel>
                             </Col>
                             <Col className="d-flex justify-content-center align-items-center" style={{marginLeft: '5px'}}>
-                                <Button variant="primary" onClick={handleSend} className="d-flex align-items-center">
+                                <Button variant="primary" onClick={handleSend} className="d-flex align-items-center" disabled={!newMessage}>
                                     <i className="fa fa-paper-plane" />
                                     <span className="ms-2">Send</span>
                                 </Button>
