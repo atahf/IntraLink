@@ -21,7 +21,7 @@ const UserHome = () => {
                 {hasPermission("user:add", getToken()) && (<div className="box" onClick={() => setUrl("/new-user")}>New User</div>)}
                 {hasPermission("user:read", getToken()) && (<div className="box" onClick={() => setUrl("/users")}>Users</div>)}
                 <div className="box" onClick={() => setUrl("#")}>Tasks</div>
-                <div className="box" onClick={() => setUrl("#")}>Messages</div>
+                <div className="box" onClick={() => setUrl("/chat")}>Messages</div>
                 <div className="box" onClick={() => setUrl("#")}>Files</div>
             </div>
         </Container>

@@ -15,6 +15,7 @@ import NewTicket from './routes/NewTicket';
 import Tickets from './routes/Tickets';
 import Users from './routes/Users';
 import NewUser from './routes/NewUser';
+import Chat from './routes/Chat';
 
 function App() {
 	const { jwtToken } = useAuthContext();
@@ -52,6 +53,10 @@ function App() {
 						<Route 
 							exact path="/new-user" 
 							element={hasPermission("user:add", jwtToken) ? <NewUser /> : <Navigate to="/" />}
+						/>
+						<Route 
+							exact path="/chat" 
+							element={jwtToken ? <Chat /> : <Navigate to="/" />}
 						/>
 						<Route 
 							path="*" 

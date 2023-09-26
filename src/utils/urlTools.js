@@ -39,3 +39,11 @@ export const getUploadURL = () => {
 export const getDownloadURL = (fileName) => {
     return herokuURL + '/download/' + fileName;
 };
+
+export const getMyMessagesURL = () => {
+    return herokuURL + "/api/v1/message/receive"
+};
+
+export const getSendMessageURL = () => {
+    return herokuURL + "/api/v1/message/send"
+};
