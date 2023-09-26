@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { decodeJwtToken, getToken } from '../utils/jwtTools';
 import { getMyMessagesURL, getSendMessageURL } from '../utils/urlTools';
-import { Container, Card, Pagination } from 'react-bootstrap';
+import { Container, Card, ListGroup, Row, Col } from 'react-bootstrap';
 import Loading from '../components/Loading';
 import ChatBox from '../components/ChatBox';
+import { Scrollbars } from 'react-custom-scrollbars-2';
 
 const PollingInterval = 5000;
 
@@ -87,7 +88,6 @@ class Chat extends Component {
 		})
 				.then(response => response.json())
 				.then(jsonData => {
-						console.log(jsonData);
 						const newChats = this.groupMessagesBySenderReceiver(jsonData.returnObject);
 						this.updateChats(newChats);
 				})
@@ -121,50 +121,59 @@ class Chat extends Component {
 				});
 	};
 
+	handleNewConversation() {
+
+	};
+
 	render() {
 		const { chats, chatNum, isLoading } = this.state;
 
 		return (
-			<Container style={{height: '100%'}}>
-				<Card style={{height: '100%'}}>
-					<Card.Body>
-						{isLoading && (
-							<Loading />
-						)}
-						{!isLoading && chats && (<>
-							{chats[chatNum] && (
-								<ChatBox messages={chats[chatNum]} sendMessage={this.sendMessage} otherUser={this.findOtherUser(chats[chatNum])}/>
+			<div className='message-page'>
+				<Container style={{height: '800px'}}>
+					<Card style={{height: '800px'}}>
+						<Card.Body style={{height: '800px', padding: '25px'}}>
+							{isLoading && (
+								<Loading />
 							)}
-							<Pagination style={{margin: '15px', display: 'flex', justifyContent: 'center' }}>
-								<Pagination.First onClick={() => this.updateChatNum(0)} disabled={chatNum === 0}/>
-								<Pagination.Prev onClick={() => this.updateChatNum(chatNum-1)} disabled={chatNum-1 < 0}/>
-
-								{chats.map((msg, index) => {
-									const startIndex = Math.max(0, chatNum - 2);
-									const endIndex = Math.min(chats.length, chatNum + 3);
-
-									if (index >= startIndex && index < endIndex) {
-										return (
-											<Pagination.Item
-												key={index}
-												active={index === chatNum}
-												onClick={() => this.updateChatNum(index)}
+							{!isLoading && chats && (<Row>
+								<Col xs={6} md={4}>
+									<ListGroup style={{height: '750px'}}>
+										<Scrollbars>
+											{chats.map((chat, index) => {
+												return (
+													<ListGroup.Item 
+														action 
+														onClick={() => {this.updateChatNum(index)}} 
+														key={index}
+														active={index === chatNum}
+														style={{borderRadius: '10px', margin: '5px auto', padding: 'auto 20px'}}
+													>
+														{this.findOtherUser(chat)[0]}
+													</ListGroup.Item>
+												)
+											})}
+											<ListGroup.Item
+												action 
+												onClick={this.handleNewConversation}
+												style={{borderRadius: '10px', margin: '5px auto', padding: 'auto 20px'}}
 											>
-												{index+1}
-											</Pagination.Item>
-										);
-									}
-
-									return null;
-								})}
-
-								<Pagination.Next onClick={() => this.updateChatNum(chatNum+1)} disabled={chatNum+1 > chats.length-1}/>
-								<Pagination.Last onClick={() => this.updateChatNum(chats.length-1)} disabled={chatNum === chats.length-1}/>
-							</Pagination>
-						</>)}
-					</Card.Body>
-				</Card>
-			</Container>
+												<i className='fa fa-user' style={{marginRight: '10px'}}></i>
+												<span>New Conversation</span>
+											</ListGroup.Item>
+										</Scrollbars>
+									</ListGroup>
+								</Col>
+								<Col xs={12} md={8}>
+									{chats[chatNum] && (
+										<ChatBox messages={chats[chatNum]} sendMessage={this.sendMessage} otherUser={this.findOtherUser(chats[chatNum])[0]}/>
+									)}
+								</Col>
+							</Row>)}
+						</Card.Body>
+					</Card>
+				</Container>
+			</div>
 		);
 	}
 }

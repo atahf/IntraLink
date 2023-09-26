@@ -1,9 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Container, Row, Col, Card, Toast, Form, FloatingLabel, Button } from 'react-bootstrap';
 import { decodeJwtToken, getToken } from '../utils/jwtTools';
+import { Scrollbars } from 'react-custom-scrollbars-2';
 
 const ChatBox = ({ messages, sendMessage, otherUser }) => {
     const [newMessage, setNewMessage] = useState('');
+    const [messageSize, setMessageSize] = useState(null);
+    const scrollbarsRef = useRef(null);
+
+    useEffect(() => {
+        if(messageSize !== messages.length) {
+            setMessageSize(messages.length)
+        }
+    }, [messages]);
+
+    useEffect(() => {
+        const scrollDuration = 750;
+        const scrollStartTime = performance.now();
+        const startScrollTop = scrollbarsRef.current.getScrollTop();
+        const targetScrollTop = scrollbarsRef.current.getScrollHeight();
+
+        const animateScroll = (timestamp) => {
+        const elapsed = timestamp - scrollStartTime;
+        const progress = Math.min(elapsed / scrollDuration, 1);
+        const newScrollTop = startScrollTop + progress * (targetScrollTop - startScrollTop);
+
+        scrollbarsRef.current.scrollTop(newScrollTop);
+
+        if (progress < 1) {
+            requestAnimationFrame(animateScroll);
+        }
+        };
+
+        requestAnimationFrame(animateScroll);
+    }, [messageSize]);
 
     const senderMe = (sender) => {
         return decodeJwtToken(getToken()).sub === sender;
@@ -57,7 +87,6 @@ const ChatBox = ({ messages, sendMessage, otherUser }) => {
             return mins.toString() + " minutes ago";
         }
         else {
-            console.log(myDate);
             if(days === 0) {
                 return myDate.toString().match(/(\d{2}:\d{2})/)[0];
             }
@@ -78,7 +107,7 @@ const ChatBox = ({ messages, sendMessage, otherUser }) => {
         event.preventDefault();
 
         const body = newMessage;
-        const receiver = otherUser[0];
+        const receiver = otherUser;
 
         sendMessage(receiver, body);
         setNewMessage('');
@@ -86,40 +115,47 @@ const ChatBox = ({ messages, sendMessage, otherUser }) => {
 
     return (
         <Container>
-            <Card>
-                <Card.Body>
-                <Row>
-                    <Col style={{overflowY: 'scroll'}}>
-                        {messages.map((message, index) => (
-                            <Toast
-                                key={index}
-                                className={`${senderMe(message.sender) ? 'ms-auto' : 'me-auto'}`}
-                                style={{margin: '5px'}}
-                            >
-                                <Toast.Body>
-                                    {message.body} <br />
-                                    <p className='text-end' style={{marginBottom: '2px'}}>{giveDate(message.date)}</p>
-                                </Toast.Body>
-                            </Toast>
-                        ))}
-                    </Col>
-                </Row>
+            <Card style={{height: '750px'}}>
+                <Card.Body style={{height: '600px'}}>
+                    <Row style={{height: '600px'}}>
+                        <Col style={{height: '600px'}}>
+                            <Scrollbars style={{height: '600px'}} ref={scrollbarsRef}>
+                                {messages.map((message, index) => (
+                                    <Toast
+                                        key={index}
+                                        bg={`${senderMe(message.sender) ? 'dark' : ''}`}
+                                        className={`${senderMe(message.sender) ? 'ms-auto text-white' : 'me-auto'}`}
+                                        style={{margin: '5px 15px'}}
+                                    >
+                                        <Toast.Body>
+                                            {message.body.split('\n').map((line, lineIndex) => (
+                                                <div key={lineIndex}>
+                                                    {line} <br />
+                                                </div>
+                                            ))}
+                                            <p className='text-end' style={{marginBottom: '2px'}}>{giveDate(message.date)}</p>
+                                        </Toast.Body>
+                                    </Toast>
+                                ))}
+                            </Scrollbars>
+                        </Col>
+                    </Row>
                 </Card.Body>
                 <Card.Footer>
                     <Container>
-                        <Row>
-                            <Col sm={11} className="justify-content-center align-items-center">
+                        <Row className="justify-content-center align-items-center">
+                            <Col sm={10} className="justify-content-center align-items-center">
                                 <FloatingLabel label="New Message">
                                     <Form.Control
                                         as="textarea"
                                         placeholder="Leave a comment here"
-                                        style={{ height: '100px' }}
+                                        style={{ height: '100px', resize: 'none' }}
                                         value={newMessage}
                                         onChange={(e) => setNewMessage(e.target.value)}
                                     />
                                 </FloatingLabel>
                             </Col>
-                            <Col sm={1} className="d-flex justify-content-center align-items-center">
+                            <Col className="d-flex justify-content-center align-items-center" style={{marginLeft: '5px'}}>
                                 <Button variant="primary" onClick={handleSend} className="d-flex align-items-center">
                                     <i className="fa fa-paper-plane" />
                                     <span className="ms-2">Send</span>
