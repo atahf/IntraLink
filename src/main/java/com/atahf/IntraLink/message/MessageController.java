@@ -41,11 +41,11 @@ public class MessageController {
         return response;
     }
 
-    @GetMapping("{username2}")
-    public GeneralHttpResponse<List<Message>> getAllMessages(@PathVariable String username2, Authentication authentication) {
+    @GetMapping("receive")
+    public GeneralHttpResponse<List<Message>> getAllMessages(Authentication authentication) {
         GeneralHttpResponse<List<Message>> response = new GeneralHttpResponse<>("200", null);
         try{
-            response.setReturnObject(messageService.getAllMessages(authentication.getName(), username2));
+            response.setReturnObject(messageService.getAllMessages(authentication.getName()));
         }
         catch (Exception e) {
             response.setStatus("400: " + e.getMessage());

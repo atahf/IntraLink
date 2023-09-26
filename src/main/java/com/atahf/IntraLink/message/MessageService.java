@@ -28,7 +28,7 @@ public class MessageService {
         messageDao.save(newMsg);
     }
 
-    public List<Message> getAllMessages(String username1, String username2) {
-        return messageDao.findAllMessagesBetween(username1, username2);
+    public List<Message> getAllMessages(String receiver) {
+        return messageDao.findAllMessagesBetween(receiver);
     }
 }
