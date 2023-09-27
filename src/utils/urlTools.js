@@ -20,6 +20,10 @@ export const getAllUsersDataURL = () => {
     return herokuURL + '/api/v1/user/all';
 };
 
+export const getAllUsersPublicDataURL = () => {
+    return herokuURL + '/api/v1/user/all-public';
+};
+
 export const getChangePassURL = () => {
     return herokuURL + '/api/v1/user/change-password';
 };

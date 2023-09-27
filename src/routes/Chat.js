@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { decodeJwtToken, getToken } from '../utils/jwtTools';
-import { getMyMessagesURL, getSendMessageURL } from '../utils/urlTools';
+import { getMyMessagesURL, getSendMessageURL, getAllUsersPublicDataURL } from '../utils/urlTools';
 import { Container, Card, ListGroup, Row, Col, Modal } from 'react-bootstrap';
 import Loading from '../components/Loading';
 import ChatBox from '../components/ChatBox';
@@ -14,14 +14,25 @@ class Chat extends Component {
 		super(props);
 		this.state = {
 			chats: [],
+			users: [],
 			chatNum: 0,
 			isLoading: null,
-			showModal: false
+			showModal: false,
+			searchTerm: '',
+			newConversation: null
 		};
 	}
 
+	handleSearch = event => {
+		this.setState({ searchTerm: event.target.value });
+	};
+
 	updateChats = (newChats) => {
 		this.setState({ chats: newChats });
+	};
+
+	updateUsers = (newUsers) => {
+		this.setState({ users: newUsers });
 	};
 
 	updateChatNum = (newChatNum) => {
@@ -32,13 +43,17 @@ class Chat extends Component {
 		this.setState({ isLoading: newIsLoading });
 	};
 
+	updateNewConversation = (NewConversation) => {
+		this.setState({ newConversation: NewConversation });
+	};
+
 	updateShowModal = (newShowModal) => {
 		this.setState({ showModal: newShowModal });
 	};
 
 	groupMessagesBySenderReceiver = (messages) => {
 		const groupedMessages = [];
-	  
+
 		messages.forEach((message) => {
 			const group = groupedMessages.find(
 			(group) =>
@@ -76,6 +91,7 @@ class Chat extends Component {
 
 	componentDidMount() {
 		this.fetchMessages();
+		this.fetchUsers();
 		this.messagePollingInterval = setInterval(this.fetchMessages, PollingInterval);
 	}
 
@@ -94,6 +110,7 @@ class Chat extends Component {
 				.then(response => response.json())
 				.then(jsonData => {
 						const newChats = this.groupMessagesBySenderReceiver(jsonData.returnObject);
+						console.log(newChats);
 						this.updateChats(newChats);
 				})
 				.catch(error => {
@@ -101,7 +118,24 @@ class Chat extends Component {
 				});
 	};
 
-	sendMessage(receiver, body) {
+	fetchUsers = () => {
+		fetch(getAllUsersPublicDataURL(), {
+			method: 'GET',
+			headers: {
+					'Content-Type': 'application/json',
+					'Authorization': getToken()
+			},
+		})
+				.then(response => response.json())
+				.then(jsonData => {
+						this.updateUsers(jsonData.returnObject);
+				})
+				.catch(error => {
+						console.log(error);
+				});
+	}
+
+	sendMessage = (receiver, body) => {
 		const token = getToken();
 
 		fetch(getSendMessageURL(), {
@@ -126,8 +160,17 @@ class Chat extends Component {
 				});
 	};
 
+	createConversation = (user) => {
+		this.updateNewConversation(
+			<ChatBox messages={[]} sendMessage={this.sendMessage} otherUser={user.username}/>
+		)
+		this.updateShowModal(false);
+	};
+
 	render() {
-		const { chats, chatNum, isLoading, showModal } = this.state;
+		const { users, chats, chatNum, isLoading, showModal, searchTerm, newConversation } = this.state;
+
+		const filteredList = users.filter(item => item.username.includes(searchTerm) || `${item.firstName} ${item.lastName}`.includes(searchTerm) || item.email.includes(searchTerm));
 
 		return (
 			<div className='message-page'>
@@ -142,20 +185,26 @@ class Chat extends Component {
 						<Modal.Title>Users</Modal.Title>
 					</Modal.Header>
 					<Modal.Body style={{height: '350px'}}>
-						<Scrollbars>
-							<Container>
-								<p>asdsad</p>
-								<p>asdsad</p>
-								<p>asdsad</p>
-								<p>asdsad</p>
-								<p>asdsad</p>
-								<p>asdsad</p>
-								<p>asdsad</p>
-								<p>asdsad</p>
-								<p>asdsad</p>
-								<p>asdsad</p>
-							</Container>
-						</Scrollbars>
+						<input
+							type="text"
+							placeholder="Search..."
+							value={this.state.searchTerm}
+							onChange={this.handleSearch}
+						/>
+						<ListGroup style={{height: '300px'}}>
+							<Scrollbars>
+								{filteredList.map((user, index) => {
+									const myUsername = decodeJwtToken(getToken()).sub;
+									if(user.username !== myUsername) {
+										return(
+											<ListGroup.Item key={index} onClick={() => this.createConversation(user)}>
+												{user.username + ' ' + user.firstName + ' ' + user.lastName + ' ' + user.email}
+											</ListGroup.Item>
+										);
+									}
+								})}
+							</Scrollbars>
+						</ListGroup>
 					</Modal.Body>
 				</Modal>
 
@@ -183,21 +232,24 @@ class Chat extends Component {
 														</ListGroup.Item>
 													)
 												})}
-												<ListGroup.Item
-													action 
-													onClick={() => this.updateShowModal(true)}
-													style={{borderRadius: '10px', margin: '5px auto', padding: 'auto 20px'}}
-												>
-													<i className='fa fa-user' style={{marginRight: '10px'}}></i>
-													<span>New Conversation</span>
-												</ListGroup.Item>
+												{users && (
+													<ListGroup.Item
+														action 
+														onClick={() => this.updateShowModal(true)}
+														style={{borderRadius: '10px', margin: '5px auto', padding: 'auto 20px'}}
+													>
+														<i className='fa fa-user-plus' style={{marginRight: '10px'}}></i>
+														<span>New Conversation</span>
+													</ListGroup.Item>
+												)}
 											</Scrollbars>
 										</ListGroup>
 									</Col>
 									<Col xs={12} md={8}>
-										{chats[chatNum] && (
+										{!newConversation && chats[chatNum] && (
 											<ChatBox messages={chats[chatNum]} sendMessage={this.sendMessage} otherUser={this.findOtherUser(chats[chatNum])[0]}/>
 										)}
+										{newConversation}
 									</Col>
 								</Row>
 							)}
