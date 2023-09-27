@@ -121,35 +121,27 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void editUser(EditUser editUser, String submitter) throws Exception {
-        System.out.println("1s");
         User user = userDao.findUserByUsername(editUser.getUsername());
         if(user == null) throw new Exception("User Does Not Exist!");
 
-        System.out.println("2s");
         if(!hasPermission(submitter, "user:edit") && !editUser.getUsername().equals(submitter)) throw new Exception("Submitter User Does Not Have Permission!");
 
-        System.out.println("3s");
         if(!editUser.getFirstName().equals("-")) {
             user.setFirstName(editUser.getFirstName());
         }
-        System.out.println("4s");
         if(!editUser.getLastName().equals("-")) {
             user.setLastName(editUser.getLastName());
         }
-        System.out.println("5s");
         if(editUser.getBirthdate() != null) {
             user.setBirthdate(editUser.getBirthdate());
             user.setAge((int) ChronoUnit.YEARS.between(editUser.getBirthdate(), LocalDateTime.now()));
         }
-        System.out.println("6s");
         if(!editUser.getPhoneNumber().equals("-")) {
-            user.setProfilePicture(editUser.getPhoneNumber());
+            user.setPhoneNumber(editUser.getPhoneNumber());
         }
-        System.out.println("7s");
         if(!editUser.getAddress().equals("-")) {
             user.setAddress(editUser.getAddress());
         }
-        System.out.println("8s");
     }
 
     @Transactional

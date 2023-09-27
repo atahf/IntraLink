@@ -112,9 +112,6 @@ public class UserController {
     @PostMapping("edit-user")
     public GeneralHttpResponse<String> editUser(@RequestBody EditUser editUser, Authentication authentication) {
         GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", null);
-        System.out.println("Edit Info: " + editUser.getUsername() + ' ' + editUser.getFirstName()
-                + ' ' + editUser.getLastName() + ' ' + editUser.getBirthdate().toString()
-                + ' ' + editUser.getPhoneNumber() + ' ' + editUser.getAddress());
         try{
             if(!userService.hasPermission(authentication.getName(), "user:edit") && !editUser.getUsername().equals(authentication.getName())) throw new Exception("User Does Not Have Permission!");
 
@@ -128,7 +125,6 @@ public class UserController {
         catch (Exception e) {
             response.setStatus("400");
             response.setReturnObject(e.getMessage());
-            System.out.println("Error: " + e.getMessage());
         }
         return response;
     }
