@@ -126,4 +126,22 @@ public class UserController {
         }
         return response;
     }
+
+    @PostMapping("edit-user")
+    public GeneralHttpResponse<String> editUser(@RequestBody EditUser editUser, Authentication authentication) {
+        GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", null);
+        try{
+            userService.editUser(editUser, authentication.getName());
+            response.setReturnObject("Successfully Edited User Information!");
+
+            if(!editUser.getUsername().equals(authentication.getName())) {
+                logService.addLog(authentication.getName(), "Edited User with username of " + editUser.getUsername());
+            }
+        }
+        catch (Exception e) {
+            response.setStatus("400");
+            response.setReturnObject(e.getMessage());
+        }
+        return response;
+    }
 }

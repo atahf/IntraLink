@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -125,14 +126,15 @@ public class UserService implements UserDetailsService {
 
         if(!hasPermission(submitter, "user:edit") && !editUser.getUsername().equals(submitter)) throw new Exception("Submitter User Does Not Have Permission!");
 
-        if(!editUser.getRole().equals("-")) {
-            user.setRole(editUser.getRole());
+        if(!editUser.getFirstName().equals("-")) {
+            user.setFirstName(editUser.getFirstName());
         }
-        if(!editUser.getDepartment().equals("-")) {
-            user.setDepartment(editUser.getDepartment());
+        if(!editUser.getLastName().equals("-")) {
+            user.setLastName(editUser.getLastName());
         }
-        if(!editUser.getTitle().equals("-")) {
-            user.setTitle(editUser.getTitle());
+        if(editUser.getBirthdate() != null) {
+            user.setBirthdate(editUser.getBirthdate());
+            user.setAge((int) ChronoUnit.YEARS.between(editUser.getBirthdate(), LocalDateTime.now()));
         }
         if(!editUser.getPhoneNumber().equals("-")) {
             user.setProfilePicture(editUser.getPhoneNumber());
