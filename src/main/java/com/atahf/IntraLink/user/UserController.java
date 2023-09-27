@@ -89,6 +89,7 @@ public class UserController {
         catch (Exception e) {
             response.setStatus("400");
             response.setReturnObject(e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
         return response;
     }
