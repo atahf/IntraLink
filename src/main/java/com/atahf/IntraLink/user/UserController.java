@@ -1,10 +1,8 @@
 package com.atahf.IntraLink.user;
 
-import com.atahf.IntraLink.user.UserDto.EditUser;
-import com.atahf.IntraLink.user.UserDto.NewUser;
+import ch.qos.logback.core.encoder.EchoEncoder;
+import com.atahf.IntraLink.user.UserDto.*;
 import com.atahf.IntraLink.userLogs.LogService;
-import com.atahf.IntraLink.user.UserDto.ChangePassword;
-import com.atahf.IntraLink.user.UserDto.UserInfo;
 import com.atahf.IntraLink.utils.GeneralHttpResponse;
 import org.springframework.security.core.Authentication;
 
@@ -125,6 +123,18 @@ public class UserController {
         catch (Exception e) {
             response.setStatus("400");
             response.setReturnObject(e.getMessage());
+        }
+        return response;
+    }
+
+    @GetMapping("all-public")
+    GeneralHttpResponse<List<UserInfoForAll>> getAllUsers() {
+        GeneralHttpResponse<List<UserInfoForAll>> response = new GeneralHttpResponse<>("200", null);
+        try{
+            response.setReturnObject(userService.getAllUserForAll());
+        }
+        catch (Exception e) {
+            response.setStatus("400: " + e.getMessage());
         }
         return response;
     }

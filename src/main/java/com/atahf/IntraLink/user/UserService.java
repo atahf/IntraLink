@@ -7,10 +7,7 @@ import com.atahf.IntraLink.user.ConfirmationToken.ConfirmationTokenDto.Confirmat
 import com.atahf.IntraLink.user.ResetConfirmationToken.ResetConfirmationToken;
 import com.atahf.IntraLink.user.ResetConfirmationToken.ResetConfirmationTokenDao;
 import com.atahf.IntraLink.user.ResetConfirmationToken.ResetConfirmationTokenDto.ResetConfirmationTokenDto;
-import com.atahf.IntraLink.user.UserDto.ChangePassword;
-import com.atahf.IntraLink.user.UserDto.EditUser;
-import com.atahf.IntraLink.user.UserDto.NewUser;
-import com.atahf.IntraLink.user.UserDto.UserInfo;
+import com.atahf.IntraLink.user.UserDto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -94,6 +91,17 @@ public class UserService implements UserDetailsService {
         }
 
         return userInfos;
+    }
+
+    public List<UserInfoForAll> getAllUserForAll() {
+        List<User> users = userDao.findAll();
+        List<UserInfoForAll> res = new ArrayList<>();
+
+        for(User u: users) {
+            res.add(new UserInfoForAll(u));
+        }
+
+        return res;
     }
 
     @Transactional
