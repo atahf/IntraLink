@@ -80,21 +80,15 @@ public class UserController {
     @PostMapping("change-password")
     public GeneralHttpResponse<String> changePassword(@RequestBody ChangePassword changePassword, Authentication authentication) {
         GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", null);
-        System.out.println("1c");
         try {
-            System.out.println("2c");
             userService.changePassword(changePassword, authentication.getName());
             response.setReturnObject("Password Successfully Changed!");
 
-            System.out.println("3c");
             logService.addLog(authentication.getName(), "Changed password of user with username of " + authentication.getName());
-            System.out.println("4c");
         }
         catch (Exception e) {
-            System.out.println("5c");
             response.setStatus("400");
             response.setReturnObject(e.getMessage());
-            System.out.println("Error: " + e.getMessage());
         }
         return response;
     }
@@ -118,6 +112,9 @@ public class UserController {
     @PostMapping("edit-user")
     public GeneralHttpResponse<String> editUser(@RequestBody EditUser editUser, Authentication authentication) {
         GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", null);
+        System.out.println("Edit Info: " + editUser.getUsername() + ' ' + editUser.getFirstName()
+                + ' ' + editUser.getLastName() + ' ' + editUser.getBirthdate().toString()
+                + ' ' + editUser.getPhoneNumber() + ' ' + editUser.getAddress());
         try{
             if(!userService.hasPermission(authentication.getName(), "user:edit") && !editUser.getUsername().equals(authentication.getName())) throw new Exception("User Does Not Have Permission!");
 
@@ -131,6 +128,7 @@ public class UserController {
         catch (Exception e) {
             response.setStatus("400");
             response.setReturnObject(e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
         return response;
     }
