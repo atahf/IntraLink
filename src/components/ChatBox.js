@@ -86,19 +86,11 @@ const ChatBox = ({ messages, sendMessage, otherUser }) => {
             return mins.toString() + " minutes ago";
         }
         else {
-            if(days === 0) {
-                return myDate.toString().match(/(\d{2}:\d{2})/)[0];
-            }
-            else if(days === 1) {
-                return "Yesterday " + myDate.toString().match(/(\d{2}:\d{2})/)[0];
-            }
-            else {
-                const day = myDate.getDate().toString().padStart(2, '0');
-                const month = (myDate.getMonth() + 1).toString().padStart(2, '0');
-                const year = myDate.getFullYear();
-                const formattedDate = `${day}/${month}/${year}`;
-                return formattedDate + ' ' + myDate.toString().match(/(\d{2}:\d{2})/)[0];
-            }
+            const day = myDate.getDate().toString().padStart(2, '0');
+            const month = (myDate.getMonth() + 1).toString().padStart(2, '0');
+            const year = myDate.getFullYear();
+            const formattedDate = `${day}/${month}/${year}`;
+            return formattedDate + ' ' + myDate.toString().match(/(\d{2}:\d{2})/)[0];
         }
     };
 

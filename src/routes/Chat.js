@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { decodeJwtToken, getToken } from '../utils/jwtTools';
 import { getMyMessagesURL, getSendMessageURL } from '../utils/urlTools';
-import { Container, Card, ListGroup, Row, Col } from 'react-bootstrap';
+import { Container, Card, ListGroup, Row, Col, Modal } from 'react-bootstrap';
 import Loading from '../components/Loading';
 import ChatBox from '../components/ChatBox';
 import { Scrollbars } from 'react-custom-scrollbars-2';
@@ -15,7 +15,8 @@ class Chat extends Component {
 		this.state = {
 			chats: [],
 			chatNum: 0,
-			isLoading: null
+			isLoading: null,
+			showModal: false
 		};
 	}
 
@@ -29,6 +30,10 @@ class Chat extends Component {
 
 	updateIsLoading = (newIsLoading) => {
 		this.setState({ isLoading: newIsLoading });
+	};
+
+	updateShowModal = (newShowModal) => {
+		this.setState({ showModal: newShowModal });
 	};
 
 	groupMessagesBySenderReceiver = (messages) => {
@@ -121,55 +126,81 @@ class Chat extends Component {
 				});
 	};
 
-	handleNewConversation() {
-
-	};
-
 	render() {
-		const { chats, chatNum, isLoading } = this.state;
+		const { chats, chatNum, isLoading, showModal } = this.state;
 
 		return (
 			<div className='message-page'>
+				<Modal 
+					show={showModal} 
+					onHide={() => this.updateShowModal(false)}
+					size="lg"
+					aria-labelledby="contained-modal-title-vcenter"
+					centered
+				>
+					<Modal.Header closeButton>
+						<Modal.Title>Users</Modal.Title>
+					</Modal.Header>
+					<Modal.Body style={{height: '350px'}}>
+						<Scrollbars>
+							<Container>
+								<p>asdsad</p>
+								<p>asdsad</p>
+								<p>asdsad</p>
+								<p>asdsad</p>
+								<p>asdsad</p>
+								<p>asdsad</p>
+								<p>asdsad</p>
+								<p>asdsad</p>
+								<p>asdsad</p>
+								<p>asdsad</p>
+							</Container>
+						</Scrollbars>
+					</Modal.Body>
+				</Modal>
+
 				<Container style={{height: '800px'}}>
 					<Card style={{height: '800px'}}>
 						<Card.Body style={{height: '800px', padding: '25px'}}>
 							{isLoading && (
 								<Loading />
 							)}
-							{!isLoading && chats && (<Row>
-								<Col xs={6} md={4}>
-									<ListGroup style={{height: '750px'}}>
-										<Scrollbars>
-											{chats.map((chat, index) => {
-												return (
-													<ListGroup.Item 
-														action 
-														onClick={() => {this.updateChatNum(index)}} 
-														key={index}
-														active={index === chatNum}
-														style={{borderRadius: '10px', margin: '5px auto', padding: 'auto 20px'}}
-													>
-														{this.findOtherUser(chat)[0]}
-													</ListGroup.Item>
-												)
-											})}
-											<ListGroup.Item
-												action 
-												onClick={this.handleNewConversation}
-												style={{borderRadius: '10px', margin: '5px auto', padding: 'auto 20px'}}
-											>
-												<i className='fa fa-user' style={{marginRight: '10px'}}></i>
-												<span>New Conversation</span>
-											</ListGroup.Item>
-										</Scrollbars>
-									</ListGroup>
-								</Col>
-								<Col xs={12} md={8}>
-									{chats[chatNum] && (
-										<ChatBox messages={chats[chatNum]} sendMessage={this.sendMessage} otherUser={this.findOtherUser(chats[chatNum])[0]}/>
-									)}
-								</Col>
-							</Row>)}
+							{!isLoading && chats && (
+								<Row>
+									<Col xs={6} md={4}>
+										<ListGroup style={{height: '750px'}}>
+											<Scrollbars>
+												{chats.map((chat, index) => {
+													return (
+														<ListGroup.Item 
+															action 
+															onClick={() => {this.updateChatNum(index)}} 
+															key={index}
+															active={index === chatNum}
+															style={{borderRadius: '10px', margin: '5px auto', padding: 'auto 20px'}}
+														>
+															{this.findOtherUser(chat)[0]}
+														</ListGroup.Item>
+													)
+												})}
+												<ListGroup.Item
+													action 
+													onClick={() => this.updateShowModal(true)}
+													style={{borderRadius: '10px', margin: '5px auto', padding: 'auto 20px'}}
+												>
+													<i className='fa fa-user' style={{marginRight: '10px'}}></i>
+													<span>New Conversation</span>
+												</ListGroup.Item>
+											</Scrollbars>
+										</ListGroup>
+									</Col>
+									<Col xs={12} md={8}>
+										{chats[chatNum] && (
+											<ChatBox messages={chats[chatNum]} sendMessage={this.sendMessage} otherUser={this.findOtherUser(chats[chatNum])[0]}/>
+										)}
+									</Col>
+								</Row>
+							)}
 						</Card.Body>
 					</Card>
 				</Container>
