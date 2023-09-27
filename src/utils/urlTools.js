@@ -24,6 +24,10 @@ export const getChangePassURL = () => {
     return herokuURL + '/api/v1/user/change-password';
 };
 
+export const getEditUserURL = () => {
+    return herokuURL + '/api/v1/user/edit-user';
+};
+
 export const getAllTicketsDataURL = () => {
     return herokuURL + '/api/v1/ticket/all';
 };

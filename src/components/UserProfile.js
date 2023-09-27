@@ -147,7 +147,7 @@ const UserProfile = (props) => {
                     <Loading />
                 )}
                 {!isLoading && data && (
-                    <User userData={data} editable={true} />
+                    <User userData={data} editable={true} changePassword={true}/>
                 )}
             </Card>
         </>

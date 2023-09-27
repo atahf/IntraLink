@@ -52,7 +52,7 @@ const UsersBox = (props) => {
             )}
             {!isLoading && users && (<>
                 {users[userNum] && (
-                    <User userData={users[userNum]}/>
+                    <User userData={users[userNum]} editable={true} changePassword={false}/>
                 )}
                 <Pagination style={{margin: '15px', display: 'flex', justifyContent: 'center' }}>
                     <Pagination.First onClick={() => {setUserNum(0)}} disabled={userNum === 0}/>

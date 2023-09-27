@@ -1,18 +1,19 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Card, Row, Col, Container, Button, Modal, Form } from 'react-bootstrap';
+import { Card, Row, Col, Container, Button, Modal, Form, FloatingLabel } from 'react-bootstrap';
 import UserProfileAvatar from '../assets/user.jpg';
-import EditableText from "./EditableText";
 import { useChangePass } from "../hooks/useUser";
 import Loading from "./Loading";
+import { getToken, decodeJwtToken } from "../utils/jwtTools";
+import { getEditUserURL } from "../utils/urlTools";
 
-const User = ({ userData, editable }) => {
+const User = ({ userData, editable, changePassword }) => {
     const [picture, setPicture] = useState(null);
     const [newPicture, setNewPicture] = useState(null);
     const [editInfo, setEditInfo] = useState(false);
+    const [isLoadingEdit, setIsLoadingEdit] = useState(false);
     const [fName, setFName] = useState(userData.firstName);
     const [lName, setLName] = useState(userData.lastName);
     const [PhoneNumber, setPhoneNumber] = useState(userData.phoneNumber);
-    const [Gender, setGender] = useState(userData.gender);
     const [Address, setAddress] = useState(userData.address);
     const [dob, setDob] = useState(userData.birthdate);
     const [isHovered, setIsHovered] = useState(false);
@@ -50,6 +51,37 @@ const User = ({ userData, editable }) => {
         if(newPicture) {
             setPicture(newPicture);
         }
+
+        setIsLoadingEdit(true);
+        const token = getToken();
+        const editUserInfo = {
+            username: decodeJwtToken(token).sub,
+            firstName: (fName ? fName : '-'),
+            lastName: (lName ? lName : '-'),
+            birthdate: (dob ? dob : null),
+            phoneNumber: (PhoneNumber ? PhoneNumber : '-'),
+            address: (Address ? Address : '-')
+        };
+
+        fetch(getEditUserURL(), {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+            body: JSON.stringify(editUserInfo)
+        })
+            .then(response => response.json())
+            .then(jsonData => {
+                console.log(jsonData);
+                setIsLoadingEdit(false);
+                window.location.reload();
+            })
+            .catch(error => {
+                console.log(error);
+                setIsLoadingEdit(false);
+                return;
+            });
     }
 
     const handleCancel = () => {
@@ -237,12 +269,53 @@ const User = ({ userData, editable }) => {
                         <Card.Body>
                             <Card.Text style={{ padding: '0px 40px' }}>
                                 To edit double click on field that you want to change. <br/><br/>
-                                First Name: <EditableText text={fName} setText={setFName}/> <br/>
-                                Last Name: <EditableText text={lName} setText={setLName}/> <br/>
-                                Birthdate: <EditableText text={dob} setText={setDob}/> <br/>
-                                Gender: <EditableText text={Gender} setText={setGender}/> <br/>
-                                Phone Number: <EditableText text={PhoneNumber} setText={setPhoneNumber}/> <br/>
-                                Address: <EditableText text={Address} setText={setAddress}/> <br/>
+
+                                <FloatingLabel className="mb-3" label="First Name">
+                                    <Form.Control
+                                        placeholder="Enter first name"
+                                        type="text"
+                                        value={fName} 
+                                        onChange={(e) => {setFName(e.target.value)}}
+                                    />
+                                </FloatingLabel>
+
+                                <FloatingLabel className="mb-3" label="Last Name">
+                                    <Form.Control
+                                        placeholder="Enter last name"
+                                        type="text"
+                                        value={lName} 
+                                        onChange={(e) => {setLName(e.target.value)}}
+                                    />
+                                </FloatingLabel>
+
+                                <FloatingLabel className="mb-3" label="Birthdate">
+                                    <Form.Control
+                                        type="date"
+                                        placeholder="Enter birthdate"
+                                        value={dob} 
+                                        onChange={(e) => {setDob(e.target.value)}}
+                                    />
+                                </FloatingLabel>
+
+                                <FloatingLabel className="mb-3" label="Phone Number">
+                                    <Form.Control
+                                        placeholder="Enter phone number"
+                                        type="tel"
+                                        pattern="0[0-9]{10}"
+                                        maxLength={11}
+                                        value={PhoneNumber} 
+                                        onChange={(e) => {setPhoneNumber(e.target.value)}}
+                                    />
+                                </FloatingLabel>
+
+                                <FloatingLabel className="mb-3" label="Address">
+                                    <Form.Control
+                                        placeholder="Enter address"
+                                        type="text"
+                                        value={Address} 
+                                        onChange={(e) => {setAddress(e.target.value)}}
+                                    />
+                                </FloatingLabel>
                             </Card.Text>
                             <Button style={{width: '100px', margin: 'auto 10px'}} variant="primary" onClick={handleEdit}>Save</Button>
                             <Button style={{width: '100px', margin: 'auto 10px'}} variant="secondary" onClick={handleCancel}>Cancel</Button>
@@ -277,7 +350,9 @@ const User = ({ userData, editable }) => {
                                 Address: <b>{userData.address}</b>
                             </Card.Text>
                             <Button style={{width: '100px', margin: 'auto 10px'}} onClick={() => setEditInfo(true)}>Edit</Button>
-                            <Button style={{width: '200px', margin: 'auto 10px'}} onClick={() => setShow(true)}>Change Password</Button>
+                            {changePassword && (
+                                <Button style={{width: '200px', margin: 'auto 10px'}} onClick={() => setShow(true)}>Change Password</Button>
+                            )}
                         </Card.Body>
                     </Col>
                 </Row>
