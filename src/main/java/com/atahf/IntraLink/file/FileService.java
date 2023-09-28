@@ -42,7 +42,8 @@ public class FileService {
             fileDao.save(newFile);
         }
         else {
-            file.setFileData(file.getFileData());
+            file.setFileName(fileSaveDto.getFileName());
+            file.setFileData(fileSaveDto.getFileData());
         }
     }
 
