@@ -49,9 +49,21 @@ export const getDownloadURL = (fileName) => {
 };
 
 export const getMyMessagesURL = () => {
-    return herokuURL + "/api/v1/message/receive"
+    return herokuURL + "/api/v1/message/receive";
 };
 
 export const getSendMessageURL = () => {
-    return herokuURL + "/api/v1/message/send"
+    return herokuURL + "/api/v1/message/send";
+};
+
+export const getFileAddURL = () => {
+    return herokuURL + "/api/v1/file/upload";
+};
+
+export const getPPAddURL = () => {
+    return herokuURL + "/api/v1/file/add-profile-picture";
+};
+
+export const getFileURL = (fileName) => {
+    return herokuURL + "/api/v1/file/" + fileName;
 };

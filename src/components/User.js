@@ -4,11 +4,15 @@ import UserProfileAvatar from '../assets/user.jpg';
 import { useChangePass } from "../hooks/useUser";
 import Loading from "./Loading";
 import { getToken, decodeJwtToken } from "../utils/jwtTools";
-import { getEditUserURL } from "../utils/urlTools";
+import { getEditUserURL, getFileURL, getPPAddURL } from "../utils/urlTools";
+import { json } from "react-router-dom";
 
 const User = ({ userData, editable, changePassword }) => {
+    const [pictureLoaded, setPictureLoaded] = useState(false);
     const [picture, setPicture] = useState(null);
+    const [pictureURL, setPictureURL] = useState(null);
     const [newPicture, setNewPicture] = useState(null);
+    const [newPictureURL, setNewPictureURL] = useState('');
     const [editInfo, setEditInfo] = useState(false);
     const [isLoadingEdit, setIsLoadingEdit] = useState(false);
     const [fName, setFName] = useState(userData.firstName);
@@ -36,23 +40,48 @@ const User = ({ userData, editable, changePassword }) => {
     };
 
     const loadPicture = async () => {
+        setPictureLoaded(false);
+
         if(!userData.profilePicture || userData.profilePicture === "") {
+            setPictureLoaded(true);
             return;
         }
 
         // TODO: download profile picture
+        fetch(getFileURL(userData.profilePicture), {
+            method: 'GET',
+            headers: {
+                'Authorization': getToken()
+            },
+        })
+            .then(response => response.json())
+            .then(jsonData => {
+                console.log(jsonData);
+
+                const base64 = jsonData.returnObject.fileData;
+                const decodedData = atob(base64);
+
+                const byteArrays = new Uint8Array(decodedData.length);
+                for (let i = 0; i < decodedData.length; i++) {
+                    byteArrays[i] = decodedData.charCodeAt(i);
+                }
+
+                const file = new Blob([byteArrays], { type: 'image/jpeg' });
+                setPicture(file);
+                setPictureURL(URL.createObjectURL(file));
+                setPictureLoaded(true);
+                
+            })
+            .catch(error => {
+                console.log(error);
+                setPictureLoaded(true);
+            });
     };
 
     const handleEdit = async () => {
         setEditInfo(false);
-
-        // TODO: send edit request
-        //window.location.reload();
-        if(newPicture) {
-            setPicture(newPicture);
-        }
-
         setIsLoadingEdit(true);
+
         const token = getToken();
         const editUserInfo = {
             username: decodeJwtToken(token).sub,
@@ -74,13 +103,31 @@ const User = ({ userData, editable, changePassword }) => {
             .then(response => response.json())
             .then(jsonData => {
                 console.log(jsonData);
-                setIsLoadingEdit(false);
-                window.location.reload();
+                
+                const formData = new FormData()
+                formData.append("file", newPicture);
+
+                fetch(getPPAddURL(), {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': token
+                    },
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(jsonData => {
+                        console.log(jsonData);
+                        
+                        setIsLoadingEdit(false);
+                        setEditInfo(true);
+                        window.location.reload();
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
             })
             .catch(error => {
                 console.log(error);
-                setIsLoadingEdit(false);
-                return;
             });
     }
 
@@ -110,7 +157,8 @@ const User = ({ userData, editable, changePassword }) => {
                 return;
             } else {
                 const imageUrl = URL.createObjectURL(file);
-                setNewPicture(imageUrl);
+                setNewPicture(file);
+                setNewPictureURL(imageUrl);
             }
         }
     };
@@ -203,12 +251,16 @@ const User = ({ userData, editable, changePassword }) => {
             {!editable && (
                 <Row>
                     <Col xs={6} md={4} className="d-flex justify-content-center align-items-center">
-                        <Card.Img 
-                            variant="top" 
-                            src={picture ? picture : UserProfileAvatar} 
-                            alt='UserProfileAvatar'
-                            style={{width: '300px', height: 'auto'}}
-                        />
+                        {pictureLoaded && (
+                            <Card.Img 
+                                variant="top" 
+                                src={picture ? pictureURL : UserProfileAvatar} 
+                                style={{width: '300px', height: 'auto'}}
+                            />
+                        )}
+                        {!pictureLoaded && (
+                            <Loading />
+                        )}
                     </Col>
                     <Col xs={12} md={8} className="d-flex justify-content-center align-items-center">
                         <Card.Body>
@@ -239,8 +291,7 @@ const User = ({ userData, editable, changePassword }) => {
                         >
                             <Card.Img 
                                 variant="top" 
-                                src={newPicture ? newPicture : (picture ? picture : UserProfileAvatar)} 
-                                alt='UserProfileAvatar'
+                                src={newPicture ? newPictureURL : (picture ? pictureURL : UserProfileAvatar)}
                                 style={{width: '300px', height: 'auto', border: '1px solid black'}}
                             />
                             <input
@@ -326,12 +377,16 @@ const User = ({ userData, editable, changePassword }) => {
             {editable && !editInfo && (
                 <Row>
                     <Col xs={6} md={4} className="d-flex justify-content-center align-items-center">
-                        <Card.Img 
-                            variant="top" 
-                            src={picture ? picture : UserProfileAvatar} 
-                            alt='UserProfileAvatar'
-                            style={{width: '300px', height: 'auto'}}
-                        />
+                        {pictureLoaded && (
+                            <Card.Img 
+                                variant="top" 
+                                src={picture ? pictureURL : UserProfileAvatar} 
+                                style={{width: '300px', height: 'auto'}}
+                            />
+                        )}
+                        {!pictureLoaded && (
+                            <Loading />
+                        )}
                     </Col>
                     <Col xs={12} md={8} className="d-flex justify-content-center align-items-center">
                         <Card.Body>
