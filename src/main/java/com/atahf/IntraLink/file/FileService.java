@@ -27,6 +27,7 @@ public class FileService {
         fileDao.save(newFile);
     }
 
+    @Transactional
     public File getFile(String username, String fileName) throws Exception {
         User user = userDao.findUserByUsername(username);
         if(user == null) throw new Exception("User Does Not Exist!");
