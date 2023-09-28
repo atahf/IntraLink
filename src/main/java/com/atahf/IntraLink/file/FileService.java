@@ -28,6 +28,25 @@ public class FileService {
     }
 
     @Transactional
+    public void addFilePP(FileSaveDto fileSaveDto) throws Exception {
+        User user = userDao.findUserByUsername(fileSaveDto.getUsername());
+        if(user == null) throw new Exception("User Does Not Exist!");
+
+        File tmp = fileDao.findFileByFileNameAndUsername(fileSaveDto.getFileName(), fileSaveDto.getUsername());
+        if(tmp != null) throw new Exception("User Cannot Have Files With Same Names!");
+
+        String currentPP = user.getProfilePicture();
+        File file = fileDao.findFileByFileNameAndUsername(currentPP, fileSaveDto.getUsername());
+        if(file == null) {
+            File newFile = new File(fileSaveDto);
+            fileDao.save(newFile);
+        }
+        else {
+            file.setFileData(file.getFileData());
+        }
+    }
+
+    @Transactional
     public File getFile(String username, String fileName) throws Exception {
         User user = userDao.findUserByUsername(username);
         if(user == null) throw new Exception("User Does Not Exist!");
