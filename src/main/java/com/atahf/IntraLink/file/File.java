@@ -33,6 +33,7 @@ public class File {
         this.username = fileSaveDto.getUsername();
         this.fileName = fileSaveDto.getFileName();
         this.uploadDate = fileSaveDto.getUploadDate();
+        this.fileData = fileSaveDto.getFileData();
         this.sharedUsernames = "";
     }
 }
