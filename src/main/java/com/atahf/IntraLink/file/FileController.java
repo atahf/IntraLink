@@ -57,7 +57,7 @@ public class FileController {
             fileSaveDto.setFileName(file.getResource().getFilename());
             fileSaveDto.setUploadDate(LocalDateTime.now());
 
-            fileService.addFile(fileSaveDto);
+            fileService.addFilePP(fileSaveDto);
             userService.setProfilePicture(fileSaveDto.getUsername(), fileSaveDto.getFileName());
         }
         catch (Exception e) {
