@@ -4,9 +4,15 @@ import com.atahf.IntraLink.file.FileDto.FileInfoDto;
 import com.atahf.IntraLink.file.FileDto.FileSaveDto;
 import com.atahf.IntraLink.user.UserService;
 import com.atahf.IntraLink.utils.GeneralHttpResponse;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -21,10 +27,17 @@ public class FileController {
         this.userService = userService;
     }
 
-    @PostMapping("add")
-    public GeneralHttpResponse<String> addFile(@RequestBody FileSaveDto fileSaveDto, Authentication authentication) {
+    @PostMapping("upload")
+    public GeneralHttpResponse<String> addFile(@RequestParam("file") MultipartFile file, Authentication authentication) {
         GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", null);
         try{
+            FileSaveDto fileSaveDto = new FileSaveDto();
+            fileSaveDto.setFileData(file.getBytes());
+            fileSaveDto.setUsername(authentication.getName());
+            fileSaveDto.setFileName(file.getName());
+            fileSaveDto.setUploadDate(LocalDateTime.now());
+            fileSaveDto.setSharedUsernames(new ArrayList<>());
+
             fileService.addFile(fileSaveDto);
         }
         catch (Exception e) {
