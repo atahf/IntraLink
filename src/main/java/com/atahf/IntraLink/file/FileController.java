@@ -30,21 +30,17 @@ public class FileController {
 
     @PostMapping("upload")
     public GeneralHttpResponse<String> addFile(@RequestParam("file") MultipartFile file, Authentication authentication) {
-        System.out.println(file.getName() + ' ' + file.getContentType());
         GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", null);
         try{
-            System.out.println("1");
             FileSaveDto fileSaveDto = new FileSaveDto();
             fileSaveDto.setFileData(file.getBytes());
             fileSaveDto.setUsername(authentication.getName());
             fileSaveDto.setFileName(file.getName());
             fileSaveDto.setUploadDate(LocalDateTime.now());
 
-            System.out.println("2");
             fileService.addFile(fileSaveDto);
         }
         catch (Exception e) {
-            System.out.println("3");
             response.setStatus("400");
             response.setReturnObject(e.getMessage());
         }
@@ -52,10 +48,14 @@ public class FileController {
     }
 
     @PostMapping("add-profile-picture")
-    public GeneralHttpResponse<String> addProfilePicture(@RequestBody FileSaveDto fileSaveDto, Authentication authentication) {
+    public GeneralHttpResponse<String> addProfilePicture(@RequestParam("file") MultipartFile file, Authentication authentication) {
         GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", null);
         try{
-            if(!fileSaveDto.getUsername().equals(authentication.getName())) throw new Exception("No Permissions!");
+            FileSaveDto fileSaveDto = new FileSaveDto();
+            fileSaveDto.setFileData(file.getBytes());
+            fileSaveDto.setUsername(authentication.getName());
+            fileSaveDto.setFileName(file.getName());
+            fileSaveDto.setUploadDate(LocalDateTime.now());
 
             fileService.addFile(fileSaveDto);
             userService.setProfilePicture(fileSaveDto.getUsername(), fileSaveDto.getFileName());

@@ -20,11 +20,9 @@ public class FileService {
 
     @Transactional
     public void addFile(FileSaveDto fileSaveDto) throws Exception {
-        System.out.println("4");
         File tmp = fileDao.findFileByFileNameAndUsername(fileSaveDto.getFileName(), fileSaveDto.getUsername());
         if(tmp != null) throw new Exception("User Cannot Have Files With Same Names!");
 
-        System.out.println("5");
         File newFile = new File(fileSaveDto);
         fileDao.save(newFile);
     }
