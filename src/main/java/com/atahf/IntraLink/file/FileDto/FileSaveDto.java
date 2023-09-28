@@ -17,5 +17,4 @@ public class FileSaveDto {
     private String fileName;
     private LocalDateTime uploadDate;
     private byte[] fileData;
-    private List<String> sharedUsernames;
 }

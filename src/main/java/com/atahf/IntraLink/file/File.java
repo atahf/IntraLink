@@ -25,19 +25,14 @@ public class File {
     private String username;
     private String fileName;
     private LocalDateTime uploadDate;
-
     @Lob
     private byte[] fileData;
-
-    @ElementCollection
-    @CollectionTable(name = "shared-usernames", joinColumns = @JoinColumn(name = "id"))
-    @Column(name = "usernames")
-    private List<String> sharedUsernames;
+    private String sharedUsernames;
 
     public File(FileSaveDto fileSaveDto) {
         this.username = fileSaveDto.getUsername();
         this.fileName = fileSaveDto.getFileName();
         this.uploadDate = fileSaveDto.getUploadDate();
-        this.sharedUsernames = fileSaveDto.getSharedUsernames();
+        this.sharedUsernames = "";
     }
 }

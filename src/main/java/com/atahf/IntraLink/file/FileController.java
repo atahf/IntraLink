@@ -38,7 +38,6 @@ public class FileController {
             fileSaveDto.setUsername(authentication.getName());
             fileSaveDto.setFileName(file.getName());
             fileSaveDto.setUploadDate(LocalDateTime.now());
-            fileSaveDto.setSharedUsernames(new ArrayList<>());
 
             System.out.println("2");
             fileService.addFile(fileSaveDto);
