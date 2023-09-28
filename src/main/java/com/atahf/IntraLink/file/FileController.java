@@ -6,6 +6,7 @@ import com.atahf.IntraLink.user.UserService;
 import com.atahf.IntraLink.utils.GeneralHttpResponse;
 import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,7 +28,8 @@ public class FileController {
         this.userService = userService;
     }
 
-    @PostMapping("upload")
+    @RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, path = "upload")
+    @ResponseBody
     public GeneralHttpResponse<String> addFile(@RequestParam("file") MultipartFile file, Authentication authentication) {
         System.out.println(file.getName() + ' ' + file.getContentType());
         GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", null);
