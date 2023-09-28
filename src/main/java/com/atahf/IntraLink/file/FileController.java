@@ -29,8 +29,10 @@ public class FileController {
 
     @PostMapping("upload")
     public GeneralHttpResponse<String> addFile(@RequestParam("file") MultipartFile file, Authentication authentication) {
+        System.out.println(file.getName() + ' ' + file.getContentType());
         GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", null);
         try{
+            System.out.println("1");
             FileSaveDto fileSaveDto = new FileSaveDto();
             fileSaveDto.setFileData(file.getBytes());
             fileSaveDto.setUsername(authentication.getName());
@@ -38,9 +40,11 @@ public class FileController {
             fileSaveDto.setUploadDate(LocalDateTime.now());
             fileSaveDto.setSharedUsernames(new ArrayList<>());
 
+            System.out.println("2");
             fileService.addFile(fileSaveDto);
         }
         catch (Exception e) {
+            System.out.println("3");
             response.setStatus("400");
             response.setReturnObject(e.getMessage());
         }
