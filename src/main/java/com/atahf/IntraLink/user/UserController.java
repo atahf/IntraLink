@@ -138,4 +138,36 @@ public class UserController {
         }
         return response;
     }
+
+    @PostMapping("ban-user")
+    GeneralHttpResponse<String> banUser(@RequestBody String username, Authentication authentication) {
+        GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", null);
+        try{
+            userService.banUser(username, authentication.getName());
+            response.setReturnObject("Successfully Banned User!");
+
+            logService.addLog(authentication.getName(), "Banned User with username of " + authentication.getName());
+        }
+        catch (Exception e) {
+            response.setStatus("400");
+            response.setReturnObject(e.getMessage());
+        }
+        return response;
+    }
+
+    @PostMapping("unban-user")
+    GeneralHttpResponse<String> unbanUser(@RequestBody String username, Authentication authentication) {
+        GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", null);
+        try{
+            userService.unbanUser(username, authentication.getName());
+            response.setReturnObject("Successfully Unbanned User!");
+
+            logService.addLog(authentication.getName(), "Unbanned User with username of " + authentication.getName());
+        }
+        catch (Exception e) {
+            response.setStatus("400");
+            response.setReturnObject(e.getMessage());
+        }
+        return response;
+    }
 }

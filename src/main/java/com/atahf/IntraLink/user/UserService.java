@@ -153,6 +153,27 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
+    public void banUser(String username, String submitter) throws Exception {
+        User user = userDao.findUserByUsername(username);
+        if(user == null) throw new Exception("User Does Not Exist!");
+
+        if(!hasPermission(submitter, "user:delete")) throw new Exception("Submitter Has No Permission To Ban!");
+
+        user.setIsEnabled(false);
+    }
+
+    @Transactional
+    public void unbanUser(String username, String submitter) throws Exception {
+        User user = userDao.findUserByUsername(username);
+        if(user == null) throw new Exception("User Does Not Exist!");
+        if(user.getIsEnabled()) throw new Exception("Users is already active!");
+
+        if(!hasPermission(submitter, "user:delete")) throw new Exception("Submitter Has No Permission To Unban!");
+
+        user.setIsEnabled(true);
+    }
+
+    @Transactional
     public void changePassword(ChangePassword changePassword, String submitter) throws Exception {
         User user = userDao.findUserByUsername(submitter);
         if(user == null) throw new Exception("User Does Not Exist!");
