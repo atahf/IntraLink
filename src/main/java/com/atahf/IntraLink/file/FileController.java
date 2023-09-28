@@ -28,7 +28,7 @@ public class FileController {
         this.userService = userService;
     }
 
-    @RequestMapping(method = RequestMethod.PUT, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, path = "upload")
+    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, path = "upload")
     @ResponseBody
     public GeneralHttpResponse<String> addFile(@RequestParam("file") MultipartFile file, Authentication authentication) {
         System.out.println(file.getName() + ' ' + file.getContentType());
