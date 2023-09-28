@@ -54,7 +54,7 @@ public class FileController {
             FileSaveDto fileSaveDto = new FileSaveDto();
             fileSaveDto.setFileData(file.getBytes());
             fileSaveDto.setUsername(authentication.getName());
-            fileSaveDto.setFileName(file.getName());
+            fileSaveDto.setFileName(file.getResource().getFilename());
             fileSaveDto.setUploadDate(LocalDateTime.now());
 
             fileService.addFile(fileSaveDto);
