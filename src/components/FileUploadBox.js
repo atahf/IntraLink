@@ -58,7 +58,7 @@ const FileUploadBox = (props) => {
 
     const headerTemplate = (options) => {
         const { className, chooseButton, uploadButton, cancelButton } = options;
-        const value = totalSize / 10000;
+        const value = 100 * (totalSize / (maxSize * 1000000));
         const formatedValue = fileUploadRef && fileUploadRef.current ? fileUploadRef.current.formatSize(totalSize) : '0 B';
 
         return (
@@ -93,7 +93,7 @@ const FileUploadBox = (props) => {
     const emptyTemplate = () => {
         return (
             <div className="flex align-items-center flex-column">
-                <i className="pi pi-image mt-3 p-5" style={{ fontSize: '5em', borderRadius: '50%', backgroundColor: 'var(--surface-b)', color: 'var(--surface-d)' }}></i>
+                <i className="pi pi-file mt-3 p-5" style={{ fontSize: '5em', borderRadius: '50%', backgroundColor: 'var(--surface-b)', color: 'var(--surface-d)' }}></i>
                 <span style={{ fontSize: '1.2em', color: 'var(--text-color-secondary)' }} className="my-5">
                     Drag and Drop File Here
                 </span>
@@ -105,6 +105,22 @@ const FileUploadBox = (props) => {
     const uploadOptions = { icon: 'pi pi-fw pi-cloud-upload', iconOnly: true, className: 'custom-upload-btn p-button-success p-button-rounded p-button-outlined' };
     const cancelOptions = { icon: 'pi pi-fw pi-times', iconOnly: true, className: 'custom-cancel-btn p-button-danger p-button-rounded p-button-outlined' };
 
+    const handleUpload = ({files}) => {
+        const [file] = files;
+        const fileReader = new FileReader();
+        fileReader.onload = (e) => {uploadFile(e.target.result)};
+        fileReader.readAsDataURL(file);
+
+        window.location.reload();
+    };
+
+    const uploadFile = async (file) => {
+        let formData = new FormData();
+        formData.append('file', file);
+
+        // TODO: send request
+    };
+
     return (
         <div style={style} className='bg-dark'>
             <Toast ref={toast}></Toast>
@@ -113,10 +129,24 @@ const FileUploadBox = (props) => {
             <Tooltip target=".custom-upload-btn" content="Upload" position="bottom" />
             <Tooltip target=".custom-cancel-btn" content="Clear" position="bottom" />
 
-            <FileUpload ref={fileUploadRef} multiple accept="*" maxFileSize={maxSize*1000000}
-                onUpload={onTemplateUpload} onSelect={onTemplateSelect} onError={onTemplateClear} onClear={onTemplateClear}
-                headerTemplate={headerTemplate} itemTemplate={itemTemplate} emptyTemplate={emptyTemplate}
-                chooseOptions={chooseOptions} uploadOptions={uploadOptions} cancelOptions={cancelOptions} />
+            <FileUpload 
+                ref={fileUploadRef} 
+                customUpload={true}
+                uploadHandler={handleUpload}
+                multiple={true} 
+                accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" 
+                maxFileSize={maxSize*1000000}
+                onUpload={onTemplateUpload} 
+                onSelect={onTemplateSelect} 
+                onError={onTemplateClear} 
+                onClear={onTemplateClear}
+                headerTemplate={headerTemplate} 
+                itemTemplate={itemTemplate} 
+                emptyTemplate={emptyTemplate}
+                chooseOptions={chooseOptions} 
+                uploadOptions={uploadOptions} 
+                cancelOptions={cancelOptions} 
+            />
         </div>
     );
 }
