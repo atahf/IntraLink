@@ -206,7 +206,7 @@
 .box {
 	flex: 0 0 calc(25% - 30px);
 	margin: 15px;
-	padding: 25px;
+	padding: 30px;
 	color: #000000;
 	background-color: #ccc;
 	border: 2px solid #ccc;

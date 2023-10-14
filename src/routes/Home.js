@@ -14,7 +14,7 @@ const Home = () => {
     }, [url]);
 
     return (
-        <Container>
+        <div className='users-page'>
             <div className="grid-container">
                 <div className="box" onClick={() => setUrl("/new-ticket")}>
                     <i className='fa fa-solid fa-info user-home-icon'/>
@@ -47,7 +47,7 @@ const Home = () => {
                     <p>Messages</p>
                 </div>
 
-                <div className="box" onClick={() => setUrl("#")}>
+                <div className="box" onClick={() => setUrl("/files")}>
                     <i className='fa fa-regular fa-folder-open user-home-icon'/>
                     <p>Files</p>
                 </div>
@@ -59,7 +59,7 @@ const Home = () => {
                     </div>
                 )}
             </div>
-        </Container>
+        </div>
     );
 }
  

@@ -16,6 +16,7 @@ import Users from './routes/Users';
 import NewUser from './routes/NewUser';
 import Chat from './routes/Chat';
 import Logs from './routes/Logs';
+import Files from './routes/Files';
 
 function App() {
 	const { jwtToken } = useAuthContext();
@@ -57,6 +58,10 @@ function App() {
 						<Route 
 							exact path="/chat" 
 							element={jwtToken ? <Chat /> : <Navigate to="/" />}
+						/>
+						<Route 
+							exact path="/files" 
+							element={jwtToken ? <Files /> : <Navigate to="/" />}
 						/>
 						<Route 
 							exact path="/logs" 
