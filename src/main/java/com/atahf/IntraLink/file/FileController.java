@@ -79,6 +79,44 @@ public class FileController {
         return response;
     }
 
+    @GetMapping("all")
+    public GeneralHttpResponse<List<FileInfoDto>> getAllFileInfos(Authentication authentication) {
+        GeneralHttpResponse<List<FileInfoDto>> response = new GeneralHttpResponse<>("200", null);
+        try{
+            response.setReturnObject(fileService.getAllFileInfos(authentication.getName()));
+        }
+        catch (Exception e) {
+            response.setStatus("400: " + e.getMessage());
+        }
+        return response;
+    }
+
+    @PostMapping("share/{fileId}")
+    public GeneralHttpResponse<String> ShareFile(@PathVariable Long fileId, @RequestBody String usernames, Authentication authentication) {
+        GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", null);
+        try{
+            fileService.share(fileId, usernames, authentication.getName());
+        }
+        catch (Exception e) {
+            response.setStatus("400");
+            response.setReturnObject(e.getMessage());
+        }
+        return response;
+    }
+
+    @PostMapping("unshare/{fileId}")
+    public GeneralHttpResponse<String> UnshareFile(@PathVariable Long fileId, @RequestBody String usernames, Authentication authentication) {
+        GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", null);
+        try{
+            fileService.unshare(fileId, usernames, authentication.getName());
+        }
+        catch (Exception e) {
+            response.setStatus("400");
+            response.setReturnObject(e.getMessage());
+        }
+        return response;
+    }
+
     @PostMapping("delete")
     public GeneralHttpResponse<String> addFile(@RequestBody FileInfoDto fileInfoDto, Authentication authentication) {
         GeneralHttpResponse<String> response = new GeneralHttpResponse<>("200", null);

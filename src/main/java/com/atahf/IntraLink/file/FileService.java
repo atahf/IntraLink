@@ -8,6 +8,9 @@ import com.atahf.IntraLink.user.UserDao;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class FileService {
     private final FileDao fileDao;
@@ -56,6 +59,60 @@ public class FileService {
         if(file == null) throw new Exception("File Does Not Exist!");
 
         return file;
+    }
+
+    public boolean isShared(String shared, String username) {
+        String[] parts = shared.split(" ");
+        for (String part: parts) {
+            if(part.equals(username)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public List<FileInfoDto> getAllFileInfos(String username) {
+        List<FileInfoDto> res = new ArrayList<>();
+
+        List<File> files = fileDao.findAll();
+        for(File f: files) {
+            if(f.getUsername().equals(username)) {
+                res.add(new FileInfoDto(f));
+            }
+            else if(isShared(f.getSharedUsernames(), username)) {
+                res.add(new FileInfoDto(f));
+            }
+        }
+
+        return res;
+    }
+
+    @Transactional
+    public void share(Long fileId, String usernames, String operator) throws Exception {
+        File file = fileDao.findFileById(fileId);
+        if(file == null) throw new Exception("File Does Not Exist!");
+        if(!file.getUsername().equals(operator)) throw new Exception("Cannot Share A File That Is Not Yours!");
+
+        String[] parts = usernames.split(" ");
+        for(String part: parts) {
+            if(!isShared(file.getSharedUsernames(), part)) {
+                file.setSharedUsernames(file.getSharedUsernames() + " " + part);
+            }
+        }
+    }
+
+    @Transactional
+    public void unshare(Long fileId, String usernames, String operator) throws Exception {
+        File file = fileDao.findFileById(fileId);
+        if(file == null) throw new Exception("File Does Not Exist!");
+        if(!file.getUsername().equals(operator)) throw new Exception("Cannot Share A File That Is Not Yours!");
+
+        String[] parts = usernames.split(" ");
+        for(String part: parts) {
+            if(isShared(file.getSharedUsernames(), part)) {
+                file.setSharedUsernames(file.getSharedUsernames().replace(part, ""));
+            }
+        }
     }
 
     @Transactional
