@@ -37,6 +37,7 @@ public class FileController {
             fileSaveDto.setUsername(authentication.getName());
             fileSaveDto.setFileName(file.getResource().getFilename());
             fileSaveDto.setUploadDate(LocalDateTime.now());
+            fileSaveDto.setPp(false);
 
             fileService.addFile(fileSaveDto);
         }
@@ -56,6 +57,7 @@ public class FileController {
             fileSaveDto.setUsername(authentication.getName());
             fileSaveDto.setFileName(file.getResource().getFilename());
             fileSaveDto.setUploadDate(LocalDateTime.now());
+            fileSaveDto.setPp(true);
 
             fileService.addFilePP(fileSaveDto);
             userService.setProfilePicture(fileSaveDto.getUsername(), fileSaveDto.getFileName());

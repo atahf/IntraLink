@@ -74,7 +74,7 @@ public class FileService {
     public List<FileInfoDto> getAllFileInfos(String username) {
         List<FileInfoDto> res = new ArrayList<>();
 
-        List<File> files = fileDao.findAll();
+        List<File> files = fileDao.findAllByPp(false);
         for(File f: files) {
             if(f.getUsername().equals(username)) {
                 res.add(new FileInfoDto(f));

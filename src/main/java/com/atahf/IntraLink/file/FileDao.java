@@ -10,4 +10,5 @@ public interface FileDao extends JpaRepository<File,Long> {
     File findFileById(Long id);
     List<File> findAllByUsername(String username);
     File findFileByFileNameAndUsername(String fileName, String username);
+    List<File> findAllByPp(boolean pp);
 }

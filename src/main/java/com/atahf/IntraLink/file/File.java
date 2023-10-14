@@ -28,6 +28,7 @@ public class File {
     @Lob
     private byte[] fileData;
     private String sharedUsernames;
+    private boolean pp;
 
     public File(FileSaveDto fileSaveDto) {
         this.username = fileSaveDto.getUsername();
@@ -35,5 +36,6 @@ public class File {
         this.uploadDate = fileSaveDto.getUploadDate();
         this.fileData = fileSaveDto.getFileData();
         this.sharedUsernames = "";
+        this.pp = fileSaveDto.isPp();
     }
 }

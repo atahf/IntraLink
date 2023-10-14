@@ -17,4 +17,5 @@ public class FileSaveDto {
     private String fileName;
     private LocalDateTime uploadDate;
     private byte[] fileData;
+    private boolean pp;
 }
