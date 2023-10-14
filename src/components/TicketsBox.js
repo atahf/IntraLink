@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Card, Pagination } from 'react-bootstrap';
-import { getToken } from '../utils/jwtTools';
-import {  getAllTicketsDataURL } from '../utils/urlTools';
+import { Container, Card, Pagination, Button } from 'react-bootstrap';
+import { getToken, hasPermission } from '../utils/jwtTools';
+import {  getAllTicketsDataURL, getHandleTicketURL, getRemoveTicketURL } from '../utils/urlTools';
 import Loading from './Loading';
 
 const TicketsBox = (props) => {
@@ -17,8 +17,65 @@ const TicketsBox = (props) => {
         }),
     };
 
+    const handleTicket = async (num) => {
+        setIsLoading(true);
+        setError(null);
+        const token = getToken();
+        const ticketId = num;
+
+        fetch(getHandleTicketURL(), {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+            body: ticketId
+        })
+            .then(response => response.json())
+            .then(jsonData => {
+                console.log(jsonData);
+                setIsLoading(false);
+                return;
+            })
+            .catch(error => {
+                setError(error);
+                setIsLoading(false);
+                return;
+            });
+    };
+
+    const removeTicket = async (num) => {
+        setIsLoading(true);
+        setError(null);
+
+        const token = getToken();
+        const ticketId = num;
+
+        fetch(getRemoveTicketURL(), {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+            body: ticketId
+        })
+            .then(response => response.json())
+            .then(jsonData => {
+                console.log(jsonData);
+                setIsLoading(false);
+                window.location.reload();
+                return;
+            })
+            .catch(error => {
+                setError(error);
+                setIsLoading(false);
+                return;
+            });
+    };
+
     const loadTickets = async () => {
         setIsLoading(true);
+        setError(null);
         const token = getToken();
 
         fetch(getAllTicketsDataURL(), {
@@ -50,8 +107,8 @@ const TicketsBox = (props) => {
                 <Loading />
             )}
             {!isLoading && tickets && (<>
-                <Card.Body>
-                    {tickets[ticketNum] && (
+                {tickets[ticketNum] && (
+                    <Card.Body style={{ position: 'relative' }}>
                         <Card.Text style={{ padding: '0px 40px', textTransform: 'capitalize' }}>
                             <Container>
                                 Submitted By: {tickets[ticketNum].username} <br />
@@ -62,8 +119,17 @@ const TicketsBox = (props) => {
                                 {tickets[ticketNum].description}
                             </Container>
                         </Card.Text>
-                    )}
-                </Card.Body>
+                        <div style={{ position: 'absolute', bottom: '0', left: '0', right: '0', textAlign: 'center' }}>
+                            {hasPermission("ticket:handle", getToken()) && !tickets[ticketNum].handled && (
+                                <Button variant='primary' onClick={() => {handleTicket(tickets[ticketNum].id)}}>Solved</Button>
+                            )}
+                            &nbsp;
+                            {hasPermission("ticket:remove", getToken()) && (
+                                <Button variant='danger' onClick={() => {removeTicket(tickets[ticketNum].id)}}>Remove</Button>
+                            )}
+                        </div>
+                    </Card.Body>
+                )}
                 <Pagination style={{margin: '15px', display: 'flex', justifyContent: 'center' }}>
                     <Pagination.First onClick={() => {setTicketNum(0)}} disabled={ticketNum === 0}/>
                     <Pagination.Prev onClick={() => {setTicketNum(ticketNum-1)}} disabled={ticketNum-1 < 0}/>

@@ -37,7 +37,7 @@ const NewUser = () => {
     };
 
     return (
-        <Container>
+        <div className='users-page'>
             <Form onSubmit={handleAddUser}>
                 <Row className="new-user-input-container">
                     <Col xs={6} md={6}>
@@ -202,13 +202,13 @@ const NewUser = () => {
                     </Col>
                 </Row>
 
-                <Form.Group className="mb-3" controlId="newUserForm.btnSubmit" style={{display: "flex", margin: "10px auto"}}>
+                <Form.Group className="mb-3" controlId="newUserForm.btnSubmit" style={{ display: "flex", justifyContent: "center", margin: "10px auto" }}>
                     <Button type='submit'>
                         Add User
                     </Button>
                 </Form.Group>
             </Form>
-        </Container>
+        </div>
     );
 }
  

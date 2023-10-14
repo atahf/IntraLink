@@ -40,6 +40,14 @@ export const getSubmissionTicketsURL = () => {
     return herokuURL + '/api/v1/ticket/submit';
 };
 
+export const getHandleTicketURL = () => {
+    return herokuURL + '/api/v1/ticket/handle';
+};
+
+export const getRemoveTicketURL = () => {
+    return herokuURL + '/api/v1/ticket/remove';
+};
+
 export const getUploadURL = () => {
     return herokuURL + '/upload';
 };

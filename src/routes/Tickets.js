@@ -3,9 +3,9 @@ import { Container } from 'react-bootstrap';
 
 const Tickets = () => {
     return (
-        <Container>
-            <TicketsBox style={{ height: '100%' }}/>
-        </Container>
+        <div className='users-page'>
+            <TicketsBox style={{ height: '60%', width: '45%' }}/>
+        </div>
     );
 }
  
