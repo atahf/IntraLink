@@ -14,10 +14,12 @@ public class FileInfoDto {
     private Long id;
     private String fileName;
     private String username;
+    private String sharedUsernames;
 
     public FileInfoDto(File file) {
         this.id = file.getId();
         this.fileName = file.getFileName();
         this.username = file.getUsername();
+        this.sharedUsernames = file.getSharedUsernames();
     }
 }
