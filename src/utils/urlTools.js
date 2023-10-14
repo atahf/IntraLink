@@ -76,6 +76,22 @@ export const getFileURL = (fileName) => {
     return herokuURL + "/api/v1/file/" + fileName;
 };
 
+export const getAllFileInfosURL = () => {
+    return herokuURL + "/api/v1/file/all";
+};
+
+export const getFileShareURL = (fileId) => {
+    return herokuURL + "/api/v1/file/share/" + fileId;
+};
+
+export const getFileUnshareURL = (fileId) => {
+    return herokuURL + "/api/v1/file/unshare/" + fileId;
+};
+
+export const getFileDeleteURL = () => {
+    return herokuURL + "/api/v1/file/delete";
+};
+
 export const getAllLogsURL = () => {
     return herokuURL + "/api/v1/log/all";
 };
