@@ -60,7 +60,7 @@ function App() {
 						/>
 						<Route 
 							exact path="/logs" 
-							element={hasPermission("logs:read", jwtToken) ? <Logs /> : <Navigate to="/" />}
+							element={hasPermission("log:read", jwtToken) ? <Logs /> : <Navigate to="/" />}
 						/>
 						<Route 
 							path="*" 

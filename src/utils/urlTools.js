@@ -75,3 +75,7 @@ export const getPPAddURL = () => {
 export const getFileURL = (fileName) => {
     return herokuURL + "/api/v1/file/" + fileName;
 };
+
+export const getAllLogsURL = () => {
+    return herokuURL + "/api/v1/log/all";
+};

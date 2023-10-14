@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Card, Pagination, Button } from 'react-bootstrap';
 import { getToken, hasPermission } from '../utils/jwtTools';
-import {  getAllTicketsDataURL, getHandleTicketURL, getRemoveTicketURL } from '../utils/urlTools';
+import { getAllTicketsDataURL, getHandleTicketURL, getRemoveTicketURL } from '../utils/urlTools';
 import Loading from './Loading';
 
 const TicketsBox = (props) => {
