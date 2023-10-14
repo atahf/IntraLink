@@ -13,7 +13,6 @@ import 'primeflex/primeflex.css';
 
 const FileUploadBox = (props) => {
     const toast = useRef(null);
-    const [totalSize, setTotalSize] = useState(0);
     const fileUploadRef = useRef(null);
     
     const style = {
@@ -26,50 +25,26 @@ const FileUploadBox = (props) => {
     const maxSize = props.maxSize;
 
     const onTemplateSelect = (e) => {
-        let _totalSize = totalSize;
+        let _totalSize = 0;
         let files = e.files;
 
         Object.keys(files).forEach((key) => {
             _totalSize += files[key].size || 0;
         });
-
-        setTotalSize(_totalSize);
-    };
-
-    const onTemplateUpload = (e) => {
-        let _totalSize = 0;
-
-        e.files.forEach((file) => {
-            _totalSize += file.size || 0;
-        });
-
-        setTotalSize(_totalSize);
-        toast.current.show({ severity: 'info', summary: 'Success', detail: 'File Uploaded' });
     };
 
     const onTemplateRemove = (file, callback) => {
-        setTotalSize(totalSize - file.size);
         callback();
-    };
-
-    const onTemplateClear = () => {
-        setTotalSize(0);
     };
 
     const headerTemplate = (options) => {
         const { className, chooseButton, uploadButton, cancelButton } = options;
-        const value = 100 * (totalSize / (maxSize * 1000000));
-        const formatedValue = fileUploadRef && fileUploadRef.current ? fileUploadRef.current.formatSize(totalSize) : '0 B';
 
         return (
             <div className={className} style={{ backgroundColor: 'transparent', display: 'flex', alignItems: 'center' }}>
                 {chooseButton}
                 {uploadButton}
                 {cancelButton}
-                <div className="flex align-items-center gap-3 ml-auto" style={{ color: 'white' }}>
-                    <span>{formatedValue} / {maxSize} MB</span>
-                    <ProgressBar value={value} showValue={false} style={{ width: '10rem', height: '12px' }}></ProgressBar>
-                </div>
             </div>
         );
     };
@@ -134,12 +109,9 @@ const FileUploadBox = (props) => {
                 customUpload={true}
                 uploadHandler={handleUpload}
                 multiple={true} 
-                accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" 
-                maxFileSize={maxSize*1000000}
-                onUpload={onTemplateUpload} 
-                onSelect={onTemplateSelect} 
-                onError={onTemplateClear} 
-                onClear={onTemplateClear}
+                accept=".jpg, .jpeg, .png, .pdf, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .txt" 
+                maxFileSize={maxSize}
+                onSelect={onTemplateSelect}
                 headerTemplate={headerTemplate} 
                 itemTemplate={itemTemplate} 
                 emptyTemplate={emptyTemplate}

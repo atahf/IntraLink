@@ -55,7 +55,7 @@ const Home = () => {
                 {hasPermission("log:read", getToken()) && (
                     <div className="box" onClick={() => setUrl("/logs")}>
                         <i className='fa fa-solid fa-history user-home-icon'/>
-                        <p>Users</p>
+                        <p>Logs</p>
                     </div>
                 )}
             </div>
