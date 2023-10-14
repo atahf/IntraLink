@@ -74,13 +74,14 @@ public class FileService {
     public List<FileInfoDto> getAllFileInfos(String username) {
         List<FileInfoDto> res = new ArrayList<>();
 
-        List<File> files = fileDao.findAllByPp(false);
+        List<File> files = fileDao.findAll();
         for(File f: files) {
-            if(f.getUsername().equals(username)) {
-                res.add(new FileInfoDto(f));
-            }
-            else if(isShared(f.getSharedUsernames(), username)) {
-                res.add(new FileInfoDto(f));
+            if(!f.isPp()) {
+                if (f.getUsername().equals(username)) {
+                    res.add(new FileInfoDto(f));
+                } else if (isShared(f.getSharedUsernames(), username)) {
+                    res.add(new FileInfoDto(f));
+                }
             }
         }
 
