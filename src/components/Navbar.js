@@ -3,11 +3,13 @@ import { Container, Nav, Navbar } from 'react-bootstrap';
 import { useLogout } from '../hooks/useLogout';
 import { useAuthContext } from '../hooks/useAuthContext';
 import { decodeJwtToken } from '../utils/jwtTools';
+import {useLocation} from 'react-router-dom';
 
 const CustomNavbar = (props) => {
 	const { logout } = useLogout();
 	const { jwtToken } = useAuthContext();
 	const [isHovered, setIsHovered] = useState(false);
+	const location = useLocation();
 
 	const getUsername = () => {
 		const tokenJSON = decodeJwtToken(jwtToken);
@@ -46,7 +48,7 @@ const CustomNavbar = (props) => {
 									)}
 								</Navbar.Text>
 							)}
-							{!jwtToken && (
+							{!jwtToken && location.pathname !== "/login" && (
 								<Nav.Link href="/login">Login</Nav.Link>
 							)}
 						</Nav>

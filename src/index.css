@@ -120,6 +120,10 @@
     margin: 0 auto;
 }
 
+.ticket-form-obj{
+	width: 90%;
+}
+
 .ticket-btn{
 	margin: 15px auto;
 }

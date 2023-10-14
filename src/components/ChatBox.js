@@ -139,7 +139,7 @@ const ChatBox = ({ messages, sendMessage, otherUser }) => {
                                 <FloatingLabel label="Type a message">
                                     <Form.Control
                                         as="textarea"
-                                        placeholder="Leave a comment here"
+                                        placeholder="Type a message"
                                         style={{ height: '100px', resize: 'none' }}
                                         value={newMessage}
                                         onChange={(e) => setNewMessage(e.target.value)}

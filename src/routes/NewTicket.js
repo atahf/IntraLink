@@ -17,7 +17,7 @@ const NewTicket = () => {
         <div className="ticket-page">
             <Container fluid className='ticket-container'>
                 <Form className='ticket-form' onSubmit={handleTicket}>
-                    <FloatingLabel className="mb-3" controlId="ticket.subject" label="Subject">
+                    <FloatingLabel className="mb-3 ticket-form-obj" controlId="ticket.subject" label="Subject">
                         <Form.Control 
                             type="text" 
                             placeholder="Enter subject" 
@@ -27,7 +27,7 @@ const NewTicket = () => {
                         />
                     </FloatingLabel>
 
-                    <FloatingLabel className="mb-3" controlId="ticket.description" label="Description">
+                    <FloatingLabel className="mb-3 ticket-form-obj" controlId="ticket.description" label="Description">
                         <Form.Control 
                             type="text" 
                             placeholder="Enter description" 
@@ -36,7 +36,7 @@ const NewTicket = () => {
                             as="textarea"
                             maxLength="512"
                             onChange={(e) => {setDescription(e.target.value)}}
-                            style={{ height: '100px', width: '100%' }}
+                            style={{ height: "250px", resize: "none", width: '100%' }}
                         />
                     </FloatingLabel>
 

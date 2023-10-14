@@ -8,7 +8,6 @@ import { decodeJwtToken, hasPermission } from './utils/jwtTools';
 import CustomNavbar from './components/Navbar';
 
 import Home from './routes/Home';
-import UserHome from './routes/UserHome';
 import Login from './routes/Login';
 import Profile from './routes/Profile';
 import NewTicket from './routes/NewTicket';
@@ -28,7 +27,7 @@ function App() {
 					<Routes>
 						<Route 
 							exact path="/" 
-							element={jwtToken ? <UserHome /> : <Home />}
+							element={jwtToken ? <Home /> : <Navigate to="/login" />}
 						/>
 						<Route 
 							exact path="/login" 
