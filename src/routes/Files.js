@@ -4,7 +4,7 @@ import FileUploadBox from "../components/FileUploadBox";
 const Files = () => {
     return (
         <div className='users-page'>
-            <FileUploadBox maxSize={15728640} style={{ width: '50%' }}/>
+            <FileUploadBox maxSize={10485760} style={{ width: '50%' }}/>
         </div>
     );
 }

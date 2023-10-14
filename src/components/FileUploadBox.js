@@ -1,10 +1,11 @@
 import React, { useRef, useState } from 'react';
 import { Toast } from 'primereact/toast';
 import { FileUpload } from 'primereact/fileupload';
-import { ProgressBar } from 'primereact/progressbar';
 import { Button } from 'primereact/button';
 import { Tooltip } from 'primereact/tooltip';
 import { Tag } from 'primereact/tag';
+import { getFileAddURL } from '../utils/urlTools';
+import { getToken, hasPermission } from '../utils/jwtTools';
 
 import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
@@ -14,6 +15,8 @@ import 'primeflex/primeflex.css';
 const FileUploadBox = (props) => {
     const toast = useRef(null);
     const fileUploadRef = useRef(null);
+    const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(null);
     
     const style = {
         ...(props.style && {
@@ -81,19 +84,65 @@ const FileUploadBox = (props) => {
     const cancelOptions = { icon: 'pi pi-fw pi-times', iconOnly: true, className: 'custom-cancel-btn p-button-danger p-button-rounded p-button-outlined' };
 
     const handleUpload = ({files}) => {
-        const [file] = files;
+        /*const [file] = files;
         const fileReader = new FileReader();
         fileReader.onload = (e) => {uploadFile(e.target.result)};
-        fileReader.readAsDataURL(file);
-
-        window.location.reload();
+        fileReader.readAsDataURL(file);*/
+        files.forEach((file) => {
+            const fileReader = new FileReader();
+            fileReader.onload = (e) => {uploadFile(e.target.result, file.name, file.type)};
+            fileReader.readAsDataURL(file);
+        });
     };
 
-    const uploadFile = async (file) => {
-        let formData = new FormData();
-        formData.append('file', file);
+    function base64ToFile(base64String, fileName, mimeType) {
+        // Convert the Base64 string to a Uint8Array
+        const binaryString = atob(base64String);
+        const length = binaryString.length;
+        const uint8Array = new Uint8Array(length);
+      
+        for (let i = 0; i < length; i++) {
+          uint8Array[i] = binaryString.charCodeAt(i);
+        }
+      
+        // Create a Blob from the Uint8Array
+        const blob = new Blob([uint8Array], { type: mimeType });
+      
+        // Create a File from the Blob
+        return new File([blob], fileName, { type: mimeType });
+    }
 
-        // TODO: send request
+    const uploadFile = async (file2upload, name, type) => {
+        setError(null);
+        setIsLoading(true);
+        
+        const token = getToken();
+        const file = base64ToFile(file2upload.split(',')[1], name, type);
+
+        console.log(file);
+
+        var formData = new FormData();
+        formData.append("file", file);
+
+        fetch(getFileAddURL(), {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Authorization': token
+            }
+        })
+            .then(response => response.json())
+            .then(jsonData => {
+                console.log(jsonData);
+                
+                setIsLoading(false);
+                window.location.reload();
+            })
+            .catch(error => {
+                setIsLoading(false);
+                setError(error);
+                console.log(error);
+            });
     };
 
     return (
