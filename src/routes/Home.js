@@ -51,6 +51,13 @@ const Home = () => {
                     <i className='fa fa-regular fa-folder-open user-home-icon'/>
                     <p>Files</p>
                 </div>
+
+                {hasPermission("log:read", getToken()) && (
+                    <div className="box" onClick={() => setUrl("#")}>
+                        <i className='fa fa-solid fa-history user-home-icon'/>
+                        <p>Users</p>
+                    </div>
+                )}
             </div>
         </Container>
     );
