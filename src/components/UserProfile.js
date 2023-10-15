@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Button, Form, FloatingLabel,  Modal } from 'react-bootstrap';
 import { getToken, decodeJwtToken } from '../utils/jwtTools';
-import { getUserDataURL, getDownloadURL } from '../utils/urlTools';
+import { getUserDataURL } from '../utils/urlTools';
 import Loading from '../components/Loading';
 import User from '../components/User';
 
 const UserProfile = (props) => {
-    const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(null);
     const [data, setData] = useState(null);
-    const [picture, setPicture] = useState(null);
     const [show, setShow] = useState(false);
     const [showPass, setShowPass] = useState(false);
     const [oldPass, setOldPass] = useState('');
@@ -30,7 +28,6 @@ const UserProfile = (props) => {
         setNewPass2('');
         setShowPass(false);
     }
-    const handleShow = () => setShow(true);
 
     const loadData = async () => {
         setIsLoading(true);
@@ -50,28 +47,9 @@ const UserProfile = (props) => {
                     setIsLoading(false);
                     return;
                 }
-                        
-                fetch(getDownloadURL(data.profilePicture), {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': token
-                    }
-                })
-                
-                    .then(response => response.blob())
-                    .then(imageResponse => {
-                        setPicture(imageResponse);
-                        setIsLoading(false);
-                        return;
-                    })
-                    .catch(error => {
-                        setError(error);
-                        setIsLoading(false);
-                        return;
-                    });
             })
             .catch(error => {
-                setError(error);
+                console.log(error);
                 setIsLoading(false);
                 return;
             });

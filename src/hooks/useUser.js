@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { getNewUserURL, getResetURL, getChangePassURL } from '../utils/urlTools';
-import { getToken, decodeJwtToken } from '../utils/jwtTools';
+import { getToken } from '../utils/jwtTools';
 
 export const useAddUser = () => {
     const [error, setError] = useState(null);
@@ -49,30 +49,31 @@ export const useResetPass = () => {
         setIsLoadingReset(true);
         setErrorReset(null);
 
-        const postData = { username: username };
-        const postOptions = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(postData)
-        };
-        
+        const token = getToken();
+
         try {
-            const response = await fetch(getResetURL(), postOptions);
-            if(response.ok) {
-                console.log(response);
-                console.log(response.body);
-                console.log(response.body.returnObject);
-                setIsLoadingReset(false);
-            }
-            else if(!response.ok && response.status === 403) {
-                setIsLoadingReset(false);
-                setErrorReset("Something went wrong!");
-            }
+            fetch(getResetURL(), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': token
+                },
+                body: username
+            })
+                .then(response => response.json())
+                .then(jsonData => {
+                    console.log(jsonData);
+                    setIsLoadingReset(false);
+                    return;
+                })
+                .catch(error => {
+                    setErrorReset(error);
+                    setIsLoadingReset(false);
+                    return;
+                });
         } catch (error) {
-            setIsLoadingReset(false);
             setErrorReset(error);
+            setIsLoadingReset(false);
         }
     }
 
