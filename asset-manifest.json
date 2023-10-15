@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/IntraLink/static/css/main.4057837b.css",
-    "main.js": "/IntraLink/static/js/main.806a68ab.js",
+    "main.js": "/IntraLink/static/js/main.b14b6ef3.js",
     "static/media/fontawesome-webfont.svg?v=4.7.0": "/IntraLink/static/media/fontawesome-webfont.c1e38fd9e0e74ba58f7a.svg",
     "static/media/primeicons.svg": "/IntraLink/static/media/primeicons.e1441b135b3ca9ad643c.svg",
     "static/media/fontawesome-webfont.eot": "/IntraLink/static/media/fontawesome-webfont.8b43027f47b20503057d.eot",
@@ -14,10 +14,10 @@
     "static/media/primeicons.woff2": "/IntraLink/static/media/primeicons.78172950b335ccdb94e2.woff2",
     "index.html": "/IntraLink/index.html",
     "main.4057837b.css.map": "/IntraLink/static/css/main.4057837b.css.map",
-    "main.806a68ab.js.map": "/IntraLink/static/js/main.806a68ab.js.map"
+    "main.b14b6ef3.js.map": "/IntraLink/static/js/main.b14b6ef3.js.map"
   },
   "entrypoints": [
     "static/css/main.4057837b.css",
-    "static/js/main.806a68ab.js"
+    "static/js/main.b14b6ef3.js"
   ]
 }
