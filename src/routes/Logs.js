@@ -1,18 +1,16 @@
 import React, {useState, useEffect} from "react";
-import { Container, Card, Pagination, Button } from 'react-bootstrap';
-import { getToken, hasPermission } from '../utils/jwtTools';
+import { Container, Card, Pagination } from 'react-bootstrap';
+import { getToken } from '../utils/jwtTools';
 import { getAllLogsURL } from '../utils/urlTools';
 import Loading from '../components/Loading';
 
 const Logs = () => {
-    const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(null);
     const [logs, setLogs] = useState(null);
     const [logNum, setlogNum] = useState(0);
 
     const loadLogs = async () => {
         setIsLoading(true);
-        setError(null);
         const token = getToken();
 
         fetch(getAllLogsURL(), {
@@ -29,7 +27,7 @@ const Logs = () => {
                 return;
             })
             .catch(error => {
-                setError(error);
+                console.log(error);
                 setIsLoading(false);
                 return;
             });
@@ -50,8 +48,8 @@ const Logs = () => {
                         <Card.Body style={{ position: 'relative' }}>
                             <Card.Text style={{ padding: '0px 40px', textTransform: 'capitalize' }}>
                                 <Container style={{padding: '15px'}}>
-                                    Submitted By: {logs[logNum].username} <br />
-                                    Submission Date: {logs[logNum].submissionDate.replace("T", " ")} <br />
+                                    Done By: {logs[logNum].username} <br />
+                                    Date: {logs[logNum].submissionDate.replace("T", " ")} <br />
                                     Log ID: {logs[logNum].id} <br />
                                     {logs[logNum].description}
                                 </Container>

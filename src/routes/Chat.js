@@ -186,21 +186,21 @@ class Chat extends Component {
 					<Modal.Header closeButton>
 						<Modal.Title>Users</Modal.Title>
 					</Modal.Header>
-					<Modal.Body style={{height: '350px'}}>
+					<Modal.Body style={{height: '400px'}}>
 						<input
 							type="text"
 							placeholder="Search..."
 							value={this.state.searchTerm}
 							onChange={this.handleSearch}
 						/>
-						<ListGroup style={{height: '300px', margin: '10px 0'}}>
+						<ListGroup style={{height: '325px', margin: '10px 0'}}>
 							<Scrollbars>
 								{filteredList.map((user, index) => {
 									const myUsername = decodeJwtToken(getToken()).sub;
 									if(user.username !== myUsername) {
 										return(
 											<ListGroup.Item key={index} onClick={() => this.createConversation(user)}>
-												{user.username + ' ' + user.firstName + ' ' + user.lastName + ' ' + user.email}
+												{user.username}&nbsp;&nbsp;&nbsp;&nbsp;{user.firstName}&nbsp;{user.lastName}&nbsp;&nbsp;&nbsp;&nbsp;{user.email}
 											</ListGroup.Item>
 										);
 									}
