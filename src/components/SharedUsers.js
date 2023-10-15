@@ -60,36 +60,13 @@ const SharedUsers = ({ currentShares, fileId }) => {
         }
     }
 
-    const shareNew = async () => {
-        const added = selectedUsers.filter(item => !current.includes(item));
+    const handleSave = async () => {
         const id = fileId;
-        const usernames = added.join(' ');
         const token = getToken();
-
-        if(usernames !== "") {
-            fetch(getFileShareURL(id), {
-                method: 'POST',
-                body: JSON.stringify(usernames),
-                headers: {
-                    'Authorization': token
-                }
-            })
-                .then(response => response.json())
-                    .then(jsonData => {
-                        console.log(jsonData);
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
-        }
-    };
-
-    const unshare = async () => {
         const removed = current.filter(item => !selectedUsers.includes(item));
-        const id = fileId;
-        const usernames = removed.join(' ');
-        const token = getToken();
+        const added = selectedUsers.filter(item => !current.includes(item));
 
+        var usernames = removed.join(' ');
         if(usernames !== "") {
             fetch(getFileUnshareURL(id), {
                 method: 'POST',
@@ -101,17 +78,79 @@ const SharedUsers = ({ currentShares, fileId }) => {
                 .then(response => response.json())
                     .then(jsonData => {
                         console.log(jsonData);
+                        var usernames = added.join(' ');
+                        if(usernames !== "") {
+                            fetch(getFileShareURL(id), {
+                                method: 'POST',
+                                body: JSON.stringify(usernames),
+                                headers: {
+                                    'Authorization': token
+                                }
+                            })
+                                .then(response => response.json())
+                                    .then(jsonData => {
+                                        console.log(jsonData);
+                                        window.location.reload();
+                                    })
+                                    .catch(error => {
+                                        console.log(error);
+                                        window.location.reload();
+                                    });
+                        }
+                        else {
+                            window.location.reload();
+                        }
                     })
                     .catch(error => {
                         console.log(error);
+                        var usernames = added.join(' ');
+                        if(usernames !== "") {
+                            fetch(getFileShareURL(id), {
+                                method: 'POST',
+                                body: JSON.stringify(usernames),
+                                headers: {
+                                    'Authorization': token
+                                }
+                            })
+                                .then(response => response.json())
+                                    .then(jsonData => {
+                                        console.log(jsonData);
+                                        window.location.reload();
+                                    })
+                                    .catch(error => {
+                                        console.log(error);
+                                        window.location.reload();
+                                    });
+                        }
+                        else {
+                            window.location.reload();
+                        }
                     });
         }
-    };
-
-    const handleSave = async () => {
-        await shareNew();
-        await unshare();
-        return window.location.reload();
+        else {
+            var usernames = added.join(' ');
+            if(usernames !== "") {
+                fetch(getFileShareURL(id), {
+                    method: 'POST',
+                    body: JSON.stringify(usernames),
+                    headers: {
+                        'Authorization': token
+                    }
+                })
+                    .then(response => response.json())
+                        .then(jsonData => {
+                            console.log(jsonData);
+                            window.location.reload();
+                        })
+                        .catch(error => {
+                            console.log(error);
+                            window.location.reload();
+                        });
+            }
+            else {
+                window.location.reload();
+            }
+        }
     };
 
     useEffect(() => {
