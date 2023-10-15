@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/IntraLink/static/css/main.4057837b.css",
+    "main.js": "/IntraLink/static/js/main.0d19464e.js",
+    "static/media/fontawesome-webfont.svg?v=4.7.0": "/IntraLink/static/media/fontawesome-webfont.c1e38fd9e0e74ba58f7a.svg",
+    "static/media/primeicons.svg": "/IntraLink/static/media/primeicons.e1441b135b3ca9ad643c.svg",
+    "static/media/fontawesome-webfont.eot": "/IntraLink/static/media/fontawesome-webfont.8b43027f47b20503057d.eot",
+    "static/media/fontawesome-webfont.ttf?v=4.7.0": "/IntraLink/static/media/fontawesome-webfont.1e59d2330b4c6deb84b3.ttf",
+    "static/media/fontawesome-webfont.woff?v=4.7.0": "/IntraLink/static/media/fontawesome-webfont.f691f37e57f04c152e23.woff",
+    "static/media/fontawesome-webfont.woff2?v=4.7.0": "/IntraLink/static/media/fontawesome-webfont.20fd1704ea223900efa9.woff2",
+    "static/media/primeicons.eot": "/IntraLink/static/media/primeicons.d44157bdfa026dc877af.eot",
+    "static/media/primeicons.woff": "/IntraLink/static/media/primeicons.10d3152104f2208ac82a.woff",
+    "static/media/primeicons.ttf": "/IntraLink/static/media/primeicons.ea5358601d0a3fd6670b.ttf",
+    "static/media/primeicons.woff2": "/IntraLink/static/media/primeicons.78172950b335ccdb94e2.woff2",
+    "index.html": "/IntraLink/index.html",
+    "main.4057837b.css.map": "/IntraLink/static/css/main.4057837b.css.map",
+    "main.0d19464e.js.map": "/IntraLink/static/js/main.0d19464e.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4057837b.css",
+    "static/js/main.0d19464e.js"
+  ]
+}
