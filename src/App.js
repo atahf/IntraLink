@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthContext } from './hooks/useAuthContext';
 
 import { decodeJwtToken, hasPermission } from './utils/jwtTools';
@@ -22,7 +22,7 @@ function App() {
 
 	return (
 		<div className='App'>
-			<BrowserRouter>
+			<HashRouter>
 				<CustomNavbar perms={jwtToken ? decodeJwtToken(jwtToken).authorities : null}/>
 				<div className='pages'>
 					<Routes>
@@ -72,7 +72,7 @@ function App() {
 						/>
 					</Routes>
 				</div>
-			</BrowserRouter>
+			</HashRouter>
 		</div>
 	);
 }
