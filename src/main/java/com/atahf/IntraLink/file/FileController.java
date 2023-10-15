@@ -60,7 +60,8 @@ public class FileController {
             fileSaveDto.setPp(true);
 
             fileService.addFilePP(fileSaveDto);
-            userService.setProfilePicture(fileSaveDto.getUsername(), fileSaveDto.getFileName());
+            Long fileId = fileService.getFileId(fileSaveDto.getFileName(), fileSaveDto.getUsername());
+            userService.setProfilePicture(fileSaveDto.getUsername(), fileId);
         }
         catch (Exception e) {
             response.setStatus("400");
@@ -69,11 +70,11 @@ public class FileController {
         return response;
     }
 
-    @GetMapping("{fileName}")
-    public GeneralHttpResponse<File> getFile(@PathVariable String fileName, Authentication authentication) {
+    @GetMapping("{fileId}")
+    public GeneralHttpResponse<File> getFile(@PathVariable Long fileId, Authentication authentication) {
         GeneralHttpResponse<File> response = new GeneralHttpResponse<>("200", null);
         try{
-            response.setReturnObject(fileService.getFile(authentication.getName(), fileName));
+            response.setReturnObject(fileService.getFile(authentication.getName(), fileId));
         }
         catch (Exception e) {
             response.setStatus("400: " + e.getMessage());

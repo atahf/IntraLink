@@ -228,11 +228,11 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public void setProfilePicture(String username, String fileName) throws Exception {
+    public void setProfilePicture(String username, Long fileId) throws Exception {
         User user = userDao.findUserByUsername(username);
         if(user == null) throw new Exception("User Does Not Exist!");
 
-        user.setProfilePicture(fileName);
+        user.setProfilePicture(fileId.toString());
     }
 
     @Transactional

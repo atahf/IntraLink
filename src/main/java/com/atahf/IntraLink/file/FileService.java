@@ -5,6 +5,7 @@ import com.atahf.IntraLink.file.FileDto.FileSaveDto;
 import com.atahf.IntraLink.user.User;
 import com.atahf.IntraLink.user.UserDao;
 
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,15 +51,35 @@ public class FileService {
         }
     }
 
-    @Transactional
-    public File getFile(String username, String fileName) throws Exception {
-        User user = userDao.findUserByUsername(username);
-        if(user == null) throw new Exception("User Does Not Exist!");
-
+    public Long getFileId(String fileName, String username) throws Exception {
         File file = fileDao.findFileByFileNameAndUsername(fileName, username);
         if(file == null) throw new Exception("File Does Not Exist!");
 
-        return file;
+        return file.getId();
+    }
+
+    @Transactional
+    public File getFile(String username, Long fileId) throws Exception {
+        User user = userDao.findUserByUsername(username);
+        if(user == null) throw new Exception("User Does Not Exist!");
+
+        File file = fileDao.findFileById(fileId);
+        if(file == null) throw new Exception("File Does Not Exist!");
+
+        if(file.getUsername().equals(username)) {
+            return file;
+        }
+        else {
+            if(isShared(file.getSharedUsernames(), username)) {
+                return file;
+            }
+            else if(file.isPp() && user.getAuthorities().contains(new SimpleGrantedAuthority("user:read"))) {
+                return file;
+            }
+            else {
+                throw new Exception("No Permission!");
+            }
+        }
     }
 
     public boolean isShared(String shared, String username) {
