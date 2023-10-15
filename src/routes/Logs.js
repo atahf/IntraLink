@@ -41,7 +41,7 @@ const Logs = () => {
 
     return (
         <div className='users-page'>
-            <Card style={{height: "50%", width: "55%"}}>
+            <Card style={{height: "35%", width: "45%"}}>
                 {isLoading && (
                     <Loading />
                 )}
@@ -49,7 +49,7 @@ const Logs = () => {
                     {logs[logNum] && (
                         <Card.Body style={{ position: 'relative' }}>
                             <Card.Text style={{ padding: '0px 40px', textTransform: 'capitalize' }}>
-                                <Container>
+                                <Container style={{padding: '15px'}}>
                                     Submitted By: {logs[logNum].username} <br />
                                     Submission Date: {logs[logNum].submissionDate.replace("T", " ")} <br />
                                     Log ID: {logs[logNum].id} <br />
