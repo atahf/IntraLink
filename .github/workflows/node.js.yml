@@ -30,6 +30,12 @@ jobs:
         
     - name: Install dependencies
       run: npm install
+
+    - name: Debug
+      run: |
+        echo "Current branch: $GITHUB_REF"
+        echo "GitHub token: ${{ secrets.ACTIONS_DEPLOY_ACCESS_TOKEN }}"
+        echo "Repository: ${{ github.repository }}"
       
     - name: Build
       run: npm run build
