@@ -170,7 +170,9 @@ class Chat extends Component {
 	render() {
 		const { users, chats, chatNum, isLoading, showModal, searchTerm, newConversation } = this.state;
 
-		const filteredList = users.filter(item => item.username.includes(searchTerm) || `${item.firstName} ${item.lastName}`.includes(searchTerm) || item.email.includes(searchTerm));
+		const userList = chats.map((chat, index) => this.findOtherUser(chat)[0]);
+		const newUsers = users.filter(item => !userList.includes(item.username));
+		const filteredList = newUsers.filter(item => item.username.includes(searchTerm) || `${item.firstName} ${item.lastName}`.includes(searchTerm) || item.email.includes(searchTerm));
 
 		return (
 			<div className='message-page'>
@@ -191,7 +193,7 @@ class Chat extends Component {
 							value={this.state.searchTerm}
 							onChange={this.handleSearch}
 						/>
-						<ListGroup style={{height: '300px'}}>
+						<ListGroup style={{height: '300px', margin: '10px 0'}}>
 							<Scrollbars>
 								{filteredList.map((user, index) => {
 									const myUsername = decodeJwtToken(getToken()).sub;
