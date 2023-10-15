@@ -188,17 +188,16 @@ public class UserService implements UserDetailsService {
         User user = userDao.findUserByUsername(username);
         if(user == null) throw new Exception("User Does Not Exist!");
 
-        System.out.println(username + " wants to reset password! 1");
-
         ResetConfirmationToken resetConfirmationToken = resetConfirmationTokenDao.findResetConfirmationTokenByUser(user);
         String tmpPass = generateRandomString(10);
+        String tmpPassEncoded = passwordEncoder.encode(tmpPass);
         if(resetConfirmationToken == null) {
             resetConfirmationToken = new ResetConfirmationToken(user, tmpPass);
             resetConfirmationTokenDao.save(resetConfirmationToken);
         }
         else {
             if(resetConfirmationToken.isConfirmed()) {
-                ResetConfirmationToken tmp = new ResetConfirmationToken(user, tmpPass);
+                ResetConfirmationToken tmp = new ResetConfirmationToken(user, tmpPassEncoded);
 
                 resetConfirmationToken.setToken(tmp.getToken());
                 resetConfirmationToken.setTmpPass(tmp.getTmpPass());
@@ -211,8 +210,6 @@ public class UserService implements UserDetailsService {
             }
         }
 
-        System.out.println(username + " wants to reset password! 2");
-
         String mailBody = "Dear " + user.getFirstName() + " " + user.getLastName() + ","
                 +"\n\nClick following link to reset your password: "
                 +"https://intralinkk-4f8233098a40.herokuapp.com/general/reset?token="+resetConfirmationToken.getToken()
@@ -223,8 +220,6 @@ public class UserService implements UserDetailsService {
         ResetConfirmationTokenDto resetConfirmationMail = new ResetConfirmationTokenDto(user.getEmail(), mailBody);
 
         mailService.sendResetPasswordConfirmation(resetConfirmationMail);
-
-        System.out.println(username + " wants to reset password! 3");
     }
 
     @Transactional
