@@ -18,7 +18,9 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.security.SecureRandom;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -245,20 +247,33 @@ public class UserService implements UserDetailsService {
         return user.getProfilePicture();
     }
 
-    /*@Transactional
+    @Transactional
     @PostConstruct
     public void testRun() {
-        User user = userDao.findUserByUsername("atahf");
-        if(user == null) {
-            User ata = new User();
-            ata.setIsEnabled(true);
-            ata.setIsCredentialsNonExpired(true);
-            ata.setIsAccountNonExpired(true);
-            ata.setIsAccountNonExpired(true);
-            ata.setPassword(passwordEncoder.encode("atta2001"));
-            ata.setUsername("atahf");
+        for(int i = 1; i <= 10; i++) {
+            User newUser = new User();
 
-            userDao.save(ata);
+            newUser.setUsername("test-user" + i);
+            newUser.setAddress("test" + i);
+            newUser.setAge(i + 20);
+            newUser.setBirthdate(LocalDate.now().minusYears(i + 20));
+            newUser.setCredentialsExpiration(LocalDateTime.now().plusMonths(3));
+            newUser.setDepartment("test");
+            newUser.setEmail("test" + i + "@test.com");
+            newUser.setFirstName("dummy" + i);
+            newUser.setGender("other");
+            newUser.setIsAccountNonExpired(true);
+            newUser.setIsAccountNonLocked(true);
+            newUser.setIsCredentialsNonExpired(true);
+            newUser.setIsEnabled(true);
+            newUser.setLastName("test");
+            newUser.setPassword(passwordEncoder.encode("testPass"));
+            newUser.setPhoneNumber("05XXXXXXXXX");
+            newUser.setProfilePicture("");
+            newUser.setRole("EMPLOYEE");
+            newUser.setTitle("tester");
+
+            userDao.save(newUser);
         }
-    }*/
+    }
 }
