@@ -39,8 +39,9 @@ const SharedUsers = ({ currentShares, fileId }) => {
 
     const handleSearch = (event) => {
         setSearchTerm(event.target.value);
-        if(searchTerm !== '') {
-            setFilteredList(users.filter(item => item.username.includes(searchTerm) || `${item.firstName} ${item.lastName}`.includes(searchTerm) || item.email.includes(searchTerm)));
+        const st = event.target.value;
+        if(st !== '') {
+            setFilteredList(users.filter(item => item.username.includes(st) || `${item.firstName} ${item.lastName}`.includes(st) || item.email.includes(st)));
         }
         else {
             setFilteredList(users);

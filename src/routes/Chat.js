@@ -6,7 +6,7 @@ import Loading from '../components/Loading';
 import ChatBox from '../components/ChatBox';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 
-const PollingInterval = 5000;
+const PollingInterval = 2500;
 
 class Chat extends Component {
 
