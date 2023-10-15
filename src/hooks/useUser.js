@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getNewUserURL, getReesetURL, getChangePassURL } from '../utils/urlTools';
+import { getNewUserURL, getResetURL, getChangePassURL } from '../utils/urlTools';
 import { getToken, decodeJwtToken } from '../utils/jwtTools';
 
 export const useAddUser = () => {
@@ -59,7 +59,7 @@ export const useResetPass = () => {
         };
         
         try {
-            const response = await fetch(getReesetURL(), postOptions);
+            const response = await fetch(getResetURL(), postOptions);
             if(response.ok) {
                 console.log(response);
                 console.log(response.body);

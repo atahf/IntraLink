@@ -4,8 +4,8 @@ export const getLoginURL = () => {
     return herokuURL + '/login';
 };
 
-export const getReesetURL = () => {
-    return herokuURL + '/reset';
+export const getResetURL = () => {
+    return herokuURL + '/general/reset-password';
 };
 
 export const getUserDataURL = (username) => {
@@ -46,14 +46,6 @@ export const getHandleTicketURL = () => {
 
 export const getRemoveTicketURL = () => {
     return herokuURL + '/api/v1/ticket/remove';
-};
-
-export const getUploadURL = () => {
-    return herokuURL + '/upload';
-};
-
-export const getDownloadURL = (fileName) => {
-    return herokuURL + '/download/' + fileName;
 };
 
 export const getMyMessagesURL = () => {
