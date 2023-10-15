@@ -63,8 +63,8 @@ const Logs = () => {
                         <Pagination.Prev onClick={() => {setlogNum(logNum-1)}} disabled={logNum-1 < 0}/>
 
                         {logs.map((log, index) => {
-                            const startIndex = Math.max(0, logNum - 2);
-                            const endIndex = Math.min(logs.length, logNum + 3);
+                            const startIndex = Math.max(0, logNum - 3);
+                            const endIndex = Math.min(logs.length, logNum + 4);
 
                             if (index >= startIndex && index < endIndex) {
                                 return (

@@ -15,12 +15,12 @@ const Files = () => {
     const [files, setFiles] = useState(null);
     const [currentFile, setCurrentFile] = useState(null);
 
-    const handleDownload = (fileName) => {
+    const handleDownload = (fileId, fileName) => {
         setError(null);
 
         const token = getToken();
 
-        fetch(getFileURL(fileName), {
+        fetch(getFileURL(fileId), {
             method: 'GET',
             headers: {
                 'Authorization': token
@@ -192,7 +192,7 @@ const Files = () => {
                                                     <Button 
                                                         style={{padding: '5px 10px'}} 
                                                         variant="outline-primary" 
-                                                        onClick={() => {handleDownload(file.fileName)}}
+                                                        onClick={() => {handleDownload(file.id, file.fileName)}}
                                                     >
                                                         <i className="pi pi-cloud-download" style={{fontSize: "25px"}}></i>
                                                     </Button>

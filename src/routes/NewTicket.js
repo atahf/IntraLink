@@ -11,6 +11,10 @@ const NewTicket = () => {
         event.preventDefault();
 
         await submit(subject, description);
+
+        if(!isLoading) {
+            window.location.reload();
+        }
     };
 
     return (

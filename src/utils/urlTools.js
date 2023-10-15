@@ -72,8 +72,8 @@ export const getPPAddURL = () => {
     return herokuURL + "/api/v1/file/add-profile-picture";
 };
 
-export const getFileURL = (fileName) => {
-    return herokuURL + "/api/v1/file/" + fileName;
+export const getFileURL = (fileId) => {
+    return herokuURL + "/api/v1/file/" + fileId;
 };
 
 export const getAllFileInfosURL = () => {
