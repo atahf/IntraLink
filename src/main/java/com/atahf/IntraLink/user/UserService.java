@@ -192,7 +192,7 @@ public class UserService implements UserDetailsService {
         String tmpPass = generateRandomString(10);
         String tmpPassEncoded = passwordEncoder.encode(tmpPass);
         if(resetConfirmationToken == null) {
-            resetConfirmationToken = new ResetConfirmationToken(user, tmpPass);
+            resetConfirmationToken = new ResetConfirmationToken(user, tmpPassEncoded);
             resetConfirmationTokenDao.save(resetConfirmationToken);
         }
         else {
