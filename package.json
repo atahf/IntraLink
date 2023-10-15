@@ -30,7 +30,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
-  "homepage": "https://atahf.github.io/IntraLink/#",
+  "homepage": "https://atahf.github.io/IntraLink",
   "eslintConfig": {
     "extends": [
       "react-app",
