@@ -247,6 +247,7 @@ public class UserService implements UserDetailsService {
         return user.getProfilePicture();
     }
 
+    /*
     @Transactional
     @PostConstruct
     public void testRun() {
@@ -276,4 +277,5 @@ public class UserService implements UserDetailsService {
             userDao.save(newUser);
         }
     }
+    */
 }
