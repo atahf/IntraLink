@@ -22,48 +22,48 @@ function App() {
 
 	return (
 		<div className='App'>
-			<BrowserRouter>
+			<BrowserRouter basename={`/${process.env.PUBLIC_URL}`}>
 				<CustomNavbar perms={jwtToken ? decodeJwtToken(jwtToken).authorities : null}/>
 				<div className='pages'>
 					<Routes>
 						<Route 
-							exact path="/" 
+							exact path="" 
 							element={jwtToken ? <Home /> : <Navigate to="/login" />}
 						/>
 						<Route 
-							exact path="/login" 
+							exact path="login" 
 							element={!jwtToken ? <Login /> : <Navigate to="/" />} 
 						/>
 						<Route 
-							exact path="/profile" 
+							exact path="profile" 
 							element={jwtToken ? <Profile /> : <Navigate to="/login" />}
 						/>
 						<Route 
-							exact path="/tickets" 
+							exact path="tickets" 
 							element={hasPermission("ticket:read", jwtToken) ? <Tickets /> : <Navigate to="/" />}
 						/>
 						<Route 
-							exact path="/users" 
+							exact path="users" 
 							element={hasPermission("user:read", jwtToken) ? <Users /> : <Navigate to="/" />}
 						/>
 						<Route 
-							exact path="/new-ticket" 
+							exact path="new-ticket" 
 							element={hasPermission("ticket:add", jwtToken) ? <NewTicket /> : <Navigate to="/" />}
 						/>
 						<Route 
-							exact path="/new-user" 
+							exact path="new-user" 
 							element={hasPermission("user:add", jwtToken) ? <NewUser /> : <Navigate to="/" />}
 						/>
 						<Route 
-							exact path="/chat" 
+							exact path="chat" 
 							element={jwtToken ? <Chat /> : <Navigate to="/" />}
 						/>
 						<Route 
-							exact path="/files" 
+							exact path="files" 
 							element={jwtToken ? <Files /> : <Navigate to="/" />}
 						/>
 						<Route 
-							exact path="/logs" 
+							exact path="logs" 
 							element={hasPermission("log:read", jwtToken) ? <Logs /> : <Navigate to="/" />}
 						/>
 						<Route 
