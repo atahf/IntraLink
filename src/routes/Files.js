@@ -196,9 +196,9 @@ const Files = () => {
                                                     >
                                                         <i className="pi pi-cloud-download" style={{fontSize: "25px"}}></i>
                                                     </Button>
-                                                    &nbsp;
                                                     {decodeJwtToken(getToken()).sub === file.username && (
                                                         <>
+                                                            &nbsp;
                                                             <Button 
                                                                 style={{padding: '5px 10px'}} 
                                                                 variant="outline-success" 
