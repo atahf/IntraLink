@@ -88,8 +88,20 @@ public class FileService {
         return res;
     }
 
+    public static String removeCharFromString(String original, char charToRemove) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < original.length(); i++) {
+            char currentChar = original.charAt(i);
+            if (currentChar != charToRemove) {
+                stringBuilder.append(currentChar);
+            }
+        }
+        return stringBuilder.toString();
+    }
+
     @Transactional
-    public void share(Long fileId, String usernames, String operator) throws Exception {
+    public void share(Long fileId, String _usernames, String operator) throws Exception {
+        String usernames = removeCharFromString(_usernames, '"');
         File file = fileDao.findFileById(fileId);
         if(file == null) throw new Exception("File Does Not Exist!");
         if(!file.getUsername().equals(operator)) throw new Exception("Cannot Share A File That Is Not Yours!");
@@ -103,7 +115,8 @@ public class FileService {
     }
 
     @Transactional
-    public void unshare(Long fileId, String usernames, String operator) throws Exception {
+    public void unshare(Long fileId, String _usernames, String operator) throws Exception {
+        String usernames = removeCharFromString(_usernames, '"');
         File file = fileDao.findFileById(fileId);
         if(file == null) throw new Exception("File Does Not Exist!");
         if(!file.getUsername().equals(operator)) throw new Exception("Cannot Share A File That Is Not Yours!");
