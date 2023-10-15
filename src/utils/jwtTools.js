@@ -62,4 +62,3 @@ export const hasPermission = (neededPerm, jwtToken) => {
 
     return false;
 }
-
