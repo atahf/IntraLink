@@ -27,7 +27,7 @@ function App() {
 				<div className='pages'>
 					<Routes>
 						<Route 
-							exact path="" 
+							exact path="/" 
 							element={jwtToken ? <Home /> : <Navigate to="/login" />}
 						/>
 						<Route 
