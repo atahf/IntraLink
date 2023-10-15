@@ -213,7 +213,7 @@ public class UserService implements UserDetailsService {
         String mailBody = "Dear " + user.getFirstName() + " " + user.getLastName() + ","
                 +"\n\nClick following link to reset your password: "
                 +"https://intralinkk-4f8233098a40.herokuapp.com/general/reset?token="+resetConfirmationToken.getToken()
-                +"\nAfter clicking the link, your password will be: " + resetConfirmationToken.getTmpPass()
+                +"\nAfter clicking the link, your password will be: "+tmpPass
                 +"\nPlease after logging in, change your password!"
                 +"\n\n\n*** The link will be expired within 15 minutes!";
 
