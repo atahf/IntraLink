@@ -6,7 +6,6 @@ import { useAuthContext } from './hooks/useAuthContext';
 import { decodeJwtToken, hasPermission } from './utils/jwtTools';
 
 import CustomNavbar from './components/Navbar';
-
 import Home from './routes/Home';
 import Login from './routes/Login';
 import Profile from './routes/Profile';
