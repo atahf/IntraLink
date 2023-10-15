@@ -69,6 +69,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     public CorsFilter corsFilter() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.addAllowedOrigin("http://localhost:3000"); // Add your frontend URL here
+        corsConfiguration.addAllowedOrigin("https://atahf.github.io");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addAllowedMethod("*");
 
